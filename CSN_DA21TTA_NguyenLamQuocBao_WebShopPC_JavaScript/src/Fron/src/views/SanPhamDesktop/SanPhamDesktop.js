@@ -1,229 +1,230 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
-import './SanPhamDesktop.scss';
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import "./SanPhamDesktop.scss";
 
-import imageErr from '../../assets/images/Kothayanh.jpg'
-
+import imageErr from "../../assets/images/Kothayanh.jpg";
+import CookiesAxios from "../../services/CookiesAxios";
 import Nav2 from "../Nav/Nav2";
 import Footer from "../Footer/Footer";
 
-class SanPhamDesktop extends React.Component {
+const SanPhamDesktop = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceFilter, setPriceFilter] = useState("0");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const history = useHistory();
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            data: null,
-            loading: true,
-            error: null,
-            searchTerm: "",
-            priceFilter: "", // Thêm state để lưu trữ giá trị của nút radio
-        };
-    }
-
-    fetchData = async () => {
-        try {
-            const response = await fetch("http://localhost:8080/api/v1/sanphamDesktop", {
-                method: "GET",
-                mode: "cors",
-            });
-            if (!response.ok) {
-                throw new Error("Yêu cầu không thành công");
-            }
-
-            const jsonResponse = await response.json();
-
-            this.setState({
-                data: jsonResponse.data,
-                loading: false,
-            });
-
-            console.log(jsonResponse);
-        } catch (error) {
-            console.error(error.message);
-            this.setState({
-                error: error.message,
-                loading: false,
-            });
+  const fetchData = async () => {
+    try {
+      const response = await CookiesAxios.get(
+        "http://localhost:8000/api/sanphamDesktop",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-    };
-
-    componentDidMount() {
-        this.fetchData();
+      );
+      console.log(response.data);
+      setData(response.data.data || []); // Dữ liệu nằm trong response.data.data
+    } catch (error) {
+      console.error(error);
+      setError("Không thể tải dữ liệu. Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    handleViewSanPham = (SanPham) => {
-        const { history } = this.props;
-        history.push(`/SanPham/${SanPham.MaSP}`)
-    }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    handleSearchChange = (event) => {
-        this.setState({ searchTerm: event.target.value });
-    };
+  const handleViewSanPham = (SanPham) => {
+    history.push(`/SanPham/${SanPham.MaSP}`);
+  };
 
-    handlePriceFilterChange = (value) => {
-        this.setState({ priceFilter: value });
-    };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
-    handleSortChange = () => {
-        const newSortOrder = this.state.sortOrder === "asc" ? "desc" : "asc";
-        this.setState({ sortOrder: newSortOrder });
-    };
+  const handlePriceFilterChange = (value) => {
+    setPriceFilter(value);
+  };
 
-    render() {
-        const { data, loading, error, searchTerm, priceFilter } = this.state;
+  const handleSortChange = () => {
+    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+  };
 
-        const filteredData =
-            data &&
-            data.length > 0 &&
-            data
-                .filter((item) =>
-                    item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-                .filter((item) =>
-                    priceFilter === "0"
-                        ? item.DonGiaSP > 0
-                        : priceFilter === "10000000"
-                            ? item.DonGiaSP < 10000000
-                            : priceFilter === "20000000"
-                                ? item.DonGiaSP < 20000000 && item.DonGiaSP >= 10000000
-                                : priceFilter === "30000000"
-                                    ? item.DonGiaSP > 20000000
-                                    : true
-                );
-        // Sắp xếp dữ liệu
-        const sortedData =
-            filteredData &&
-            filteredData.length > 0 &&
-            filteredData.sort((a, b) => {
-                const order = this.state.sortOrder === "asc" ? 1 : -1;
-                return order * (a.DonGiaSP - b.DonGiaSP);
-            });
-        return (
-            <>
-                <Nav2 />
-                <div className="relative">
-                    <div className="container-bottom">
-                        <div className="tieude"><h1>Danh Sách Desktop</h1></div>
+  const filteredData = data
+    .filter((item) =>
+      item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((item) => {
+      if (priceFilter === "0") return true; // Tất cả
+      if (priceFilter === "10000000") return item.DonGiaSP < 10000000;
+      if (priceFilter === "20000000")
+        return item.DonGiaSP >= 10000000 && item.DonGiaSP < 20000000;
+      if (priceFilter === "30000000") return item.DonGiaSP > 20000000;
+      return true;
+    });
 
-                        <div className="Searchfillter">
-                            <div className="container_TimKiem">
-                                <label className="TimKiem_label"><b>Tìm kiếm</b></label>
-                                <input
-                                    className="TimKiem_input TimKiem_input-hover-green"
-                                    placeholder="tìm kiếm sản phẩm"
-                                    value={searchTerm}
-                                    onChange={this.handleSearchChange}
-                                />
-                            </div>
-                            <div className="fillter_TimKiem">
+  const sortedData = [...filteredData].sort((a, b) => {
+    const order = sortOrder === "asc" ? 1 : -1;
+    return order * (a.DonGiaSP - b.DonGiaSP);
+  });
 
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="0"
-                                        checked={priceFilter === "0"}
-                                        onChange={() => this.handlePriceFilterChange("0")}
-                                    />
-                                    Tất cả
-                                    <span className="checkmark"></span>
-                                </label>
+  return (
+    <>
+      <Nav2 />
+      <div className="relative">
+        <div className="container-bottom">
+          <div className="tieude">
+            <h1>Danh Sách Desktop</h1>
+          </div>
 
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="10000000"
-                                        checked={priceFilter === "10000000"}
-                                        onChange={() => this.handlePriceFilterChange("10000000")}
-                                    />
-                                    Dưới 10 Triệu
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="20000000"
-                                        checked={priceFilter === "20000000"}
-                                        onChange={() => this.handlePriceFilterChange("20000000")}
-                                    />
-                                    Từ 10 triệu đến 20 triệu
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="30000000"
-                                        checked={priceFilter === "30000000"}
-                                        onChange={() => this.handlePriceFilterChange("30000000")}
-                                    />
-                                    Trên 20 triệu
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="asc"
-                                        checked={priceFilter === "0" && this.state.sortOrder === "asc"} // Thêm "this."
-                                        onChange={() => {
-                                            this.handlePriceFilterChange("0");
-                                            this.handleSortChange();
-                                        }}
-                                    />
-                                    Giá tăng dần
-                                    <span className="checkmark"></span>
-                                </label>
-                                <label className="container_InputRadio_TimKiem">
-                                    <input
-                                        type="radio"
-                                        name="priceFilter"
-                                        value="desc"
-                                        checked={priceFilter === "0" && this.state.sortOrder === "desc"} // Thêm "this."
-                                        onChange={() => {
-                                            this.handlePriceFilterChange("0");
-                                            this.handleSortChange();
-                                        }}
-                                    />
-                                    Giá giảm dần
-                                    <span className="checkmark"></span>
-                                </label>
-                            </div>
-                        </div>
+          <div className="Searchfillter">
+            <div className="container_TimKiem">
+              <label className="TimKiem_label">
+                <b>Tìm kiếm</b>
+              </label>
+              <input
+                className="TimKiem_input TimKiem_input-hover-green"
+                placeholder="tìm kiếm sản phẩm"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <div className="fillter_TimKiem">
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="0"
+                  checked={priceFilter === "0"}
+                  onChange={() => handlePriceFilterChange("0")}
+                />
+                Tất cả
+                <span className="checkmark"></span>
+              </label>
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="10000000"
+                  checked={priceFilter === "10000000"}
+                  onChange={() => handlePriceFilterChange("10000000")}
+                />
+                Dưới 10 Triệu
+                <span className="checkmark"></span>
+              </label>
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="20000000"
+                  checked={priceFilter === "20000000"}
+                  onChange={() => handlePriceFilterChange("20000000")}
+                />
+                Từ 10 triệu đến 20 triệu
+                <span className="checkmark"></span>
+              </label>
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="30000000"
+                  checked={priceFilter === "30000000"}
+                  onChange={() => handlePriceFilterChange("30000000")}
+                />
+                Trên 20 triệu
+                <span className="checkmark"></span>
+              </label>
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="asc"
+                  checked={priceFilter === "0" && sortOrder === "asc"}
+                  onChange={() => {
+                    handlePriceFilterChange("0");
+                    handleSortChange();
+                  }}
+                />
+                Giá tăng dần
+                <span className="checkmark"></span>
+              </label>
+              <label className="container_InputRadio_TimKiem">
+                <input
+                  type="radio"
+                  name="priceFilter"
+                  value="desc"
+                  checked={priceFilter === "0" && sortOrder === "desc"}
+                  onChange={() => {
+                    handlePriceFilterChange("0");
+                    handleSortChange();
+                  }}
+                />
+                Giá giảm dần
+                <span className="checkmark"></span>
+              </label>
+            </div>
+          </div>
 
-                        <ul className="products">
-                            {sortedData && sortedData.length > 0 &&
-                                sortedData.map((item, index) => (
-                                    <li key={index}>
-                                        <div className="product-top">
-                                            <a onClick={() => this.handleViewSanPham(item)} className="product-thumb">
-                                                <img
-                                                    src={item.imageUrl}
-                                                    alt={item.TenSP}
-                                                    onError={(e) => {
-                                                        e.target.src = { imageErr } // Hoặc hiển thị thông báo lỗi khác
-                                                    }}
-                                                />
-                                            </a>
-                                            <a onClick={() => this.handleViewSanPham(item)} className="mua">Mua</a>
-                                        </div>
-                                        <div className="product-info">
-                                            <a onClick={() => this.handleViewSanPham(item)} className="product-TheLoai">{item.NhanSanXuat}</a>
-                                            <a onClick={() => this.handleViewSanPham(item)} className="product-name">{item.TenSP}</a>
-                                            <div className="product-price">{item.DonGiaSP.toLocaleString()} VND</div>
-                                        </div>
-                                    </li>
-                                ))
-                            }
-                        </ul>
+          {loading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>{error}</div>
+          ) : sortedData.length > 0 ? (
+            <ul className="products">
+              {sortedData.map((item, index) => (
+                <li key={index}>
+                  <div className="product-top">
+                    <a
+                      onClick={() => handleViewSanPham(item)}
+                      className="product-thumb"
+                    >
+                      <img
+                        src={item.imageUrl}
+                        alt={item.TenSP}
+                        onError={(e) => {
+                          e.target.src = imageErr;
+                        }}
+                      />
+                    </a>
+                    <a onClick={() => handleViewSanPham(item)} className="mua">
+                      Mua
+                    </a>
+                  </div>
+                  <div className="product-info">
+                    <a
+                      onClick={() => handleViewSanPham(item)}
+                      className="product-TheLoai"
+                    >
+                      {item.NhanSanXuat}
+                    </a>
+                    <a
+                      onClick={() => handleViewSanPham(item)}
+                      className="product-name"
+                    >
+                      {item.TenSP}
+                    </a>
+                    <div className="product-price">
+                      {item.DonGiaSP.toLocaleString()} VND
                     </div>
-                </div>
-            </>
-        );
-    }
-}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div>Không có sản phẩm nào.</div>
+          )}
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+};
 
-export default withRouter(SanPhamDesktop);
+export default SanPhamDesktop;
