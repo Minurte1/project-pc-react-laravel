@@ -1,0 +1,85 @@
+.tieude {
+    margin-top: 70px;
+}
+
+.fillter_TimKiem {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container_TimKiem {
+    padding: 10px;
+}
+
+.TimKiem_label:hover {
+    color: #009688 !important
+}
+
+.TimKiem_input {
+    padding: 15px 8px;
+    display: block;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    width: 80%;
+}
+
+.TimKiem_input-hover-green:hover {
+    color: black !important;
+    background-color: lightgray !important
+}
+
+.container_InputRadio_TimKiem {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container_InputRadio_TimKiem input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: #eee;
+    border-radius: 50%;
+    border: 5px solid #2196F3;
+}
+
+/* On mouse-over, add a grey background color */
+.container_InputRadio_TimKiem:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container_InputRadio_TimKiem input:checked~.checkmark {
+    background-color: #f36421;
+    border: none;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container_InputRadio_TimKiem input:checked~.checkmark:after {
+    display: block;
+}

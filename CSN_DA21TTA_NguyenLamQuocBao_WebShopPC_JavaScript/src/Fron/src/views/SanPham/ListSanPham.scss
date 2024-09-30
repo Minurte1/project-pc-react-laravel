@@ -1,0 +1,120 @@
+// .container-bottom {
+//     position: absolute;
+// }
+
+.tieude {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
+
+}
+
+.tieude h1 {
+    text-align: center;
+    width: 50%;
+    font-weight: bold;
+    padding: 5px;
+    background-color: white;
+}
+
+ul.products {
+    padding: 0 20px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+ul.products li {
+    flex-basis: 20%;
+    /* Rộng 20% phần tử cha */
+    padding: 5px 5px;
+    box-sizing: border-box;
+}
+
+ul.products li img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ul.products li .product-top a.mua {
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    background-color: #446084;
+    color: #fff;
+    padding: 10px 0px;
+    position: absolute;
+    width: 100%;
+    bottom: -40px;
+    transition: 0.5s ease-in-out;
+    /* ease-in-out hiệu ứng chậm tăng tốc rồi giảm tốc */
+    opacity: 0.8;
+}
+
+ul.products li:hover .product-top a.mua {
+    bottom: 0px;
+    cursor: pointer;
+}
+
+ul.products li .product-top {
+    position: relative;
+    overflow: hidden;
+}
+
+ul.products li .product-top .product-thumb {
+    display: block;
+}
+
+ul.products li .product-top .product-thumb img {
+    width: 250px;
+    height: 170px;
+    display: block;
+    transition: 0.2s ease-in-out;
+}
+
+ul.products li:hover .product-top .product-thumb img {
+    filter: opacity(80%);
+}
+
+ul.products li .product-info {
+    padding: 10px 0px;
+    background-color: #fff;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+ul.products li .product-info a {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ul.products li .product-info a.product-TheLoai {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #9e9e9e;
+    padding: 3px 0px;
+}
+
+ul.products li .product-info a.product-name {
+    color: #334862;
+    padding: 3px 0px;
+    text-transform: uppercase;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+ul.products li .product-info a.product-price {
+    color: #111;
+    padding: 2px 0px;
+    font-weight: 600;
+}

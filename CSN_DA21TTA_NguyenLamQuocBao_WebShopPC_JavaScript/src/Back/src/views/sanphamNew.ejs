@@ -1,0 +1,73 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Node.js Basic</title>
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="/">Sản phẩm</a>
+        <a class="active" href="">Mới</a>
+        <a href="/ThongKe">Thống kê</a>
+    </div>
+    <div class="create-user-container">
+        <form action="/Them-san-pham" enctype="multipart/form-data" method="POST">
+            <div><b>Tạo sản phẩm mới:</b></div>
+            <div>
+                <label for="">Tên sản phẩm:</label>
+                <input type="text" name="TenSP" />
+            </div>
+            <div>
+                <label for="">Mã thể loại:</label>
+                <input type="text" name="MaTL" />
+            </div>
+            <div>
+                <label for="">Đơn giá:</label>
+                <input type="text" name="DonGiaSP" />
+            </div>
+            <div>
+                <label for="">Tồn kho:</label>
+                <input type="text" name="TonKhoSP" />
+            </div>
+            <div>
+                <label for="">Chip:</label>
+                <input type="text" name="Chip" />
+            </div>
+            <div>
+                <label for="">Main:</label>
+                <input type="text" name="Main" />
+            </div>
+            <div>
+                <label for="">VGA:</label>
+                <input type="text" name="VGA" />
+            </div>
+            <div>
+                <label for="">Nhà sản xuất:</label>
+                <input list="ListNhanSanXuat" name="NhanSanXuat" />
+                <datalist id="ListNhanSanXuat">
+                    <option value="Shop PC">
+                    <option value="Apple">
+                    <option value="ASUS">
+                    <option value="Lenovo">
+                </datalist>
+            </div>
+            <div>
+                <label for="">Ram:</label>
+                <input type="text" name="RAM" />
+            </div>
+            <div>
+                <label for="">Ảnh:</label>
+                <input type="file" name="profile_pic" />
+            </div>
+            <div>
+                <button type="submit" class="button">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

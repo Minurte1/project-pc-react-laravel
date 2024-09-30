@@ -1,0 +1,200 @@
+* {
+    box-sizing: border-box
+}
+
+.slider-main {
+    position: relative;
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.slide-container {
+    //position: absolute;
+    // left: 50%;
+    // top: 55%;
+    // transform: translate(-50%, -50%);
+    margin: auto;
+    /* Sao nó không căng giữa, do màn hình quá nhỏ à, uwwwwww */
+    width: 1000px;
+    height: 600px;
+    padding: 50px;
+    background-color: #f5f5f5;
+    box-shadow: 0 30px 50px #dbdbdb;
+}
+
+#slide {
+    width: max-content;
+    margin-top: 50px;
+}
+
+.slide-item {
+    width: 200px;
+    height: 300px;
+    background-position: 50% 50%;
+    /* Căng cái ảnh ra giữa */
+    display: inline-block;
+    /* Các ảnh đứng cùng 1 hàng */
+    transition: 0.5s;
+    background-size: cover;
+    /* Cái này để tránh bị vỡ ảnh */
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translate(0, -50%);
+    /* Căng giữa =) */
+    border-radius: 20px;
+    box-shadow: 0 30px 50px #505050;
+    opacity: 1;
+}
+
+.slide-item:nth-child(1),
+.slide-item:nth-child(2) {
+    /* slide-item số 1 và số 2 */
+    left: 0;
+    top: 0;
+    transform: translate(0, 0);
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    opacity: 1;
+    /* Sao thằng số 2 không ăn css nhể =) */
+}
+
+.slide-item:nth-child(3) {
+    left: 80%;
+}
+
+.slide-item:nth-child(4) {
+    left: calc(80% + 220px);
+    /* Căng phải 50% + độ rộng của cái ảnh trước + pading 20px */
+    /* Kết quả đc mấy cái ảnh xếp hàng cách nhau 20px */
+}
+
+.slide-item:nth-child(5) {
+    /* tương tự */
+    left: calc(80% + 440px);
+}
+
+.slide-item:nth-child(n+6) {
+    /* n+6 nghĩa là tất cả ảnh từ ảnh 6 trở lên như ảnh 7, 8, ... */
+    left: calc(80% + 660px);
+    opacity: 0;
+    /* Ẩn mấy ảnh quá xa tràn khỏi màn hình đi */
+}
+
+.slide-item .slide-content {
+    /* Phần chữ trên hình */
+    position: absolute;
+    top: 50%;
+    left: 100px;
+    width: 300px;
+    text-align: left;
+    padding: 0;
+    color: yellow;
+    transform: translate(-20%, -50%);
+    /* Căng giữa */
+    display: none;
+    /* ẩn hết */
+    font-weight: bold;
+    text-shadow: 5px 5px 5px red;
+    /* Offset-x, Offset-y, Độ mờ, Màu */
+}
+
+.slide-item:nth-child(2) .slide-content {
+    /* Chữ ở ảnh 2 đang đc phóng to được hiện ra */
+    display: block;
+    z-index: 11111;
+}
+
+.slide-item .slide-name {
+    /* Chỉnh cái tiêu đề */
+    font-size: 40px;
+    font-weight: bold;
+    opacity: 0;
+    /* ẩn để lát làm cái hiệu ứng chi xịn =) */
+    animation: showcontent 1s ease-in-out 1 forwards;
+    /* animation: <tên animation> <thời gian chạy> <chạy 1 lần> <giữ trạng thái cuối> */
+}
+
+.slide-item .slide-des {
+    /* Chỉnh cái mô tả */
+    margin: 20px 0;
+    opacity: 0;
+    /* ẩn để lát làm cái hiệu ứng chi xịn =) */
+    animation: showcontent 1s ease-in-out 0.3s 1 forwards;
+    /* animation: <tên animation> <thời gian chạy> <delay 0.3s> <chạy 1 lần> <giữ trạng thái cuối> */
+}
+
+.slide-des {
+    color: red;
+    text-shadow: 5px 5px 5px yellow;
+}
+
+.slide-item button {
+    padding: 10px 20px;
+    border: none;
+    opacity: 0;
+    /* ẩn để lát làm cái hiệu ứng chi xịn =)*/
+    animation: showcontent 1s ease-in-out 0.6s 1 forwards;
+    /* animation: <tên animation> <thời gian chạy> <delay 0.6s> <chạy 1 lần> <giữ trạng thái cuối> */
+}
+
+@keyframes showcontent {
+
+    /* Hiệu ứng từ from đến to*/
+    from {
+        opacity: o;
+        transform: translate(o, 100px);
+        filter: blur(33px);
+        /* Độ mờ 33px */
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+        filter: blur(0);
+    }
+}
+
+.slide-button {
+    position: absolute;
+    bottom: 30px;
+    z-index: 22222;
+    text-align: center;
+    width: 100%;
+}
+
+.slide-button button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #555;
+    transition: 0.5s;
+}
+
+.slide-button button:hover {
+    background-color: #bac383;
+}
+
+.btnSeeMore_Slider {
+    background-color: #555555;
+    color: white;
+    border: 2px solid #555555;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btnSeeMore_Slider:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
