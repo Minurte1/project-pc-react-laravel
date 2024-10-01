@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log; // Thêm dòng này để import Log
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;    
+use Illuminate\Http\Request;        
+  
+use Illuminate\Support\Facades\DB;  
 class PostController extends Controller
 {
     // Lấy tất cả sản phẩm
     public function getAllSanPham()
     {
-        $rows = DB::select("SELECT * FROM SanPham");
+        $rows = DB::select("SELECT * FROM sanpham");
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
@@ -25,6 +25,20 @@ class PostController extends Controller
             'data' => $productsWithImageUrls,
         ]);
     }
+
+
+    public function show()
+    {
+        
+
+        return response()->json([
+            'message' => 'ok',
+            
+        ]);
+    }
+
+
+
 
     // Lấy khách hàng
     public function getKhachHang()
