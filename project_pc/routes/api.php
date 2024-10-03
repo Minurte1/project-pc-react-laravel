@@ -38,7 +38,7 @@ Route::get('/them-san-pham', [PostController::class, 'getThemSanPhamPage']);
 Route::post('/them-san-pham', [PostController::class, 'themSanPham']);
 Route::get('/edit-san-pham/{id}', [PostController::class, 'getEditPage']);
 Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
-Route::delete('/delete-san-pham', [PostController::class, 'deleteSanPham']);
+Route::delete('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
