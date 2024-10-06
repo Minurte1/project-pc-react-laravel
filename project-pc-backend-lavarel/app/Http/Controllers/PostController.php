@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log; // Thêm dòng này để import Log
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;    
+use Illuminate\Http\Request;        
+use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\DB;  
 class PostController extends Controller
 {
     // Lấy tất cả sản phẩm
     public function getAllSanPham()
     {
-        $rows = DB::select("SELECT * FROM SanPham");
+        $rows = DB::select("SELECT * FROM sanpham");
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
@@ -25,6 +26,12 @@ class PostController extends Controller
             'data' => $productsWithImageUrls,
         ]);
     }
+
+
+    
+
+
+
 
     // Lấy khách hàng
     public function getKhachHang()
@@ -274,7 +281,10 @@ class PostController extends Controller
             ->orderBy('sp.MaSP', 'desc')
             ->get();
 
-        return view('index', ['SanPham' => $sanPham]);
+            return response()->json([
+                'message' => 'ok',
+                'data' => $sanPham,
+            ]);
     }
 
     public function getThongKe()
@@ -287,7 +297,10 @@ class PostController extends Controller
             ->select('sp.TenSP', 'sp.NhanSanXuat', 'kh.TenLienHe', 'ct.SoLuong', 'sp.DonGiaSP', DB::raw("DATE_FORMAT(hd.NgayDatHang, '%Y-%m-%d %H:%i:%s') AS FormattedNgayDatHang"))
             ->get();
 
-        return view('ThongKe', ['SanPham' => $thongKe]);
+            return response()->json([
+                'message' => 'ok',
+                'data' => $thongKe,
+            ]);
     }
 
     public function postHomePage(Request $request)
@@ -348,7 +361,10 @@ class PostController extends Controller
         }
 
         $sanPham = $query->get();
-        return view('Tim', ['SanPham' => $sanPham]);
+        return response()->json([
+            'message' => 'ok',
+            'data' => $sanPham,
+        ]);
     }
 
     public function getThemSanPhamPage()
@@ -357,41 +373,56 @@ class PostController extends Controller
     }
 
     public function themSanPham(Request $request)
-    {
-        // Validate và xử lý upload hình ảnh
-        $request->validate([
-            'TenSP' => 'required|string',
-            'MaTL' => 'required|integer',
-            'DonGiaSP' => 'required|numeric',
-            'TonKhoSP' => 'required|integer',
-            'Chip' => 'nullable|string',
-            'Main' => 'nullable|string',
-            'VGA' => 'nullable|string',
-            'NhanSanXuat' => 'nullable|string',
-            'RAM' => 'nullable|string',
-            'AnhSP' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    // Validate và xử lý upload hình ảnh
+    $request->validate([
+        'TenSP' => 'required|string',
+        'MaTL' => 'required|integer',
+        'DonGiaSP' => 'required|numeric',
+        'TonKhoSP' => 'required|integer',
+        'Chip' => 'nullable|string',
+        'Main' => 'nullable|string',
+        'VGA' => 'nullable|string',
+        'NhanSanXuat' => 'nullable|string',
+        'RAM' => 'nullable|string',
+        'AnhSP' => 'required|string', // Chúng ta xác thực là string
+    ]);
 
-        $filename = $request->file('AnhSP')->store('images', 'public');
-
-        try {
-            DB::table('SanPham')->insert([
-                'TenSP' => $request->TenSP,
-                'MaTL' => $request->MaTL,
-                'DonGiaSP' => $request->DonGiaSP,
-                'TonKhoSP' => $request->TonKhoSP,
-                'Chip' => $request->Chip,
-                'Main' => $request->Main,
-                'VGA' => $request->VGA,
-                'NhanSanXuat' => $request->NhanSanXuat,
-                'RAM' => $request->RAM,
-                'AnhSP' => $filename,
-            ]);
-            return redirect('/');
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+    // Xử lý dữ liệu hình ảnh
+    $image = $request->AnhSP; // Lấy dữ liệu hình ảnh từ JSON
+    if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+        $data = substr($image, strpos($image, ',') + 1);
+        $type = strtolower($type[1]); // Lấy định dạng hình ảnh
+        if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
+            throw new \Exception('Image type not supported.');
         }
+        $data = base64_decode($data);
+        $filename = uniqid() . '.' . $type; // Tạo tên tệp ngẫu nhiên
+        $path = storage_path('app/public/images/' . $filename); // Đường dẫn tệp
+        file_put_contents($path, $data); // Lưu tệp vào server
+    } else {
+        throw new \Exception('Image is not valid.');
     }
+
+    try {
+        DB::table('SanPham')->insert([
+            'TenSP' => $request->TenSP,
+            'MaTL' => $request->MaTL,
+            'DonGiaSP' => $request->DonGiaSP,
+            'TonKhoSP' => $request->TonKhoSP,
+            'Chip' => $request->Chip,
+            'Main' => $request->Main,
+            'VGA' => $request->VGA,
+            'NhanSanXuat' => $request->NhanSanXuat,
+            'RAM' => $request->RAM,
+            'AnhSP' => $filename,
+        ]);
+        return response()->json(['message' => 'Sản phẩm đã được thêm thành công.'], 201);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 
     public function getEditPage($id)
     {
@@ -400,39 +431,57 @@ class PostController extends Controller
     }
 
     public function postUpdateSanPham(Request $request)
-    {
-        $request->validate([
-            'MaSP' => 'required|integer',
-            'TenSP' => 'required|string',
-            'MaTL' => 'required|integer',
-            'DonGiaSP' => 'required|numeric',
-            'TonKhoSP' => 'required|integer',
-            'Chip' => 'nullable|string',
-            'Main' => 'nullable|string',
-            'VGA' => 'nullable|string',
-            'NhanSanXuat' => 'nullable|string',
-            'RAM' => 'nullable|string',
-            'AnhSP' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $request->validate([
+        'MaSP' => 'required|integer',
+        'TenSP' => 'required|string',
+        'MaTL' => 'required|integer',
+        'DonGiaSP' => 'required|numeric',
+        'TonKhoSP' => 'required|integer',
+        'Chip' => 'nullable|string',
+        'Main' => 'nullable|string',
+        'VGA' => 'nullable|string',
+        'NhanSanXuat' => 'nullable|string',
+        'RAM' => 'nullable|string',
+        'AnhSP' => 'nullable|string', // Thay đổi validate cho AnhSP
+    ]);
 
-        $filename = $request->file('AnhSP')->store('images', 'public');
+    $filename = null;
 
-        try {
-            DB::table('SanPham')->where('MaSP', $request->MaSP)->update([
-                'TenSP' => $request->TenSP,
-                'MaTL' => $request->MaTL,
-                'DonGiaSP' => $request->DonGiaSP,
-                'TonKhoSP' => $request->TonKhoSP,
-                'Chip' => $request->Chip,
-                'Main' => $request->Main,
-                'VGA' => $request->VGA,
-                'NhanSanXuat' => $request->NhanSanXuat,
-                'RAM' => $request->RAM,
-                'AnhSP' => $filename,
-            ]);
-            return redirect('/');
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+    // Kiểm tra nếu có hình ảnh và là chuỗi base64
+    if (!empty($request->AnhSP)) {
+        // Tách phần type và data
+        list($type, $data) = explode(';', $request->AnhSP);
+        list(, $data)      = explode(',', $data);
+
+        // Giải mã base64
+        $data = base64_decode($data);
+
+        // Tạo tên file ngẫu nhiên
+        $filename = 'images/' . uniqid() . '.png';
+
+        // Lưu file vào storage
+        Storage::disk('public')->put($filename, $data);
     }
+
+    try {
+        DB::table('SanPham')->where('MaSP', $request->MaSP)->update([
+            'TenSP' => $request->TenSP,
+            'MaTL' => $request->MaTL,
+            'DonGiaSP' => $request->DonGiaSP,
+            'TonKhoSP' => $request->TonKhoSP,
+            'Chip' => $request->Chip,
+            'Main' => $request->Main,
+            'VGA' => $request->VGA,
+            'NhanSanXuat' => $request->NhanSanXuat,
+            'RAM' => $request->RAM,
+            'AnhSP' => $filename,
+        ]);
+        return response()->json(['message' => 'Product updated successfully']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
+    
 }
