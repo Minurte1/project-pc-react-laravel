@@ -19,7 +19,7 @@ use App\Http\Controllers\PostController;
 Route::get('/hello', [PostController::class, 'show']);
 
 
-
+Route::get('/image/{filename}', [PostController::class, 'getImage']);
 Route::get('/sanpham', [PostController::class, 'getAllSanPham']);
 Route::get('/khachhang', [PostController::class, 'getKhachHang']);
 Route::get('/sanpham/{id}', [PostController::class, 'getSanPhamById']);

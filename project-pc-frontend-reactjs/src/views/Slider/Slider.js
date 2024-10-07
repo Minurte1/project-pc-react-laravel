@@ -1,110 +1,122 @@
-import React, { Component } from "react";
-import './Slider.scss';
-import { withRouter } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import "./Slider.scss";
+import { useHistory } from "react-router-dom";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
-class Slider extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            products: [],
-        };
+const Slider = () => {
+  const [products, setProducts] = useState([]);
+  const autoSlideInterval = useRef(null);
+  const nextButtonRef = useRef(null);
+  const prevButtonRef = useRef(null);
+  const history = useHistory();
+
+  useEffect(() => {
+    fetchData();
+    setupSliderNavigation();
+    startAutoSlide();
+
+    return () => {
+      stopAutoSlide();
+    };
+  }, []);
+
+  const startAutoSlide = () => {
+    try {
+      autoSlideInterval.current = setInterval(moveSliderNext, 5000);
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    componentDidMount() {
-        this.fetchData();
-        this.setupSliderNavigation();
-        this.startAutoSlide();
+  const stopAutoSlide = () => {
+    clearInterval(autoSlideInterval.current);
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/sanpham");
+      if (!response.ok) {
+        throw new Error("Yêu cầu không thành công");
+      }
+      console.log("response", response.data);
+      const jsonResponse = await response.json();
+      setProducts(jsonResponse.data || []); // Handle the case when data is not available
+    } catch (error) {
+      console.error(error.message);
     }
+  };
 
-    componentWillUnmount() {
-        this.stopAutoSlide();
+  const setupSliderNavigation = () => {
+    if (nextButtonRef.current) {
+      nextButtonRef.current.addEventListener("click", moveSliderNext);
     }
-
-    startAutoSlide = () => {
-        try {
-            this.autoSlideInterval = setInterval(this.moveSliderNext, 5000);
-        }
-        catch (error) {
-
-        }
-    };
-
-    stopAutoSlide = () => {
-        clearInterval(this.autoSlideInterval);
-    };
-
-    fetchData = async () => {
-        try {
-            const response = await fetch("http://localhost:8080/api/v1/sanpham");
-            if (!response.ok) {
-                throw new Error("Yêu cầu không thành công");
-            }
-
-            const jsonResponse = await response.json();
-            this.setState({
-                products: jsonResponse.data || [], // Handle the case when data is not available
-            });
-        } catch (error) {
-            console.error(error.message);
-        }
-    };
-
-    setupSliderNavigation = () => {
-        // Use ref to get the DOM element
-        this.nextButtonRef.addEventListener('click', this.moveSliderNext);
-        this.prevButtonRef.addEventListener('click', this.moveSliderPrev);
-    };
-
-    moveSliderNext = () => {
-        let lists = document.querySelectorAll('.slide-item');
-        document.getElementById('slide').appendChild(lists[0]);
-    };
-
-    moveSliderPrev = () => {
-        let lists = document.querySelectorAll('.slide-item');
-        document.getElementById('slide').prepend(lists[lists.length - 1]);
-    };
-
-    handleViewSanPham = (SanPham) => {
-        const { history } = this.props;
-
-        // Kiểm tra xem history có tồn tại không
-        if (history) {
-            history.push(`/SanPham/${SanPham.MaSP}`);
-        } else {
-            console.error("Lỗi: history không tồn tại hoặc không được truyền vào đúng cách.");
-        }
+    if (prevButtonRef.current) {
+      prevButtonRef.current.addEventListener("click", moveSliderPrev);
     }
+  };
 
+  const moveSliderNext = () => {
+    let lists = document.querySelectorAll(".slide-item");
+    document.getElementById("slide").appendChild(lists[0]);
+  };
 
-    render() {
-        const { products } = this.state;
-        return (
-            <div className="slider-main">
-                <div className="slide-container">
-                    <div id="slide">
-                        {products.map((item, index) => (
-                            <div key={item.MaSP} className="slide-item" style={{ backgroundImage: `url(${item.imageUrl || ''})` }}>
-                                <div className="slide-content">
-                                    <div className="slide-name">{item.TenSP || ''}</div>
-                                    <div className="slide-des">{item.DonGiaSP ? `${item.DonGiaSP.toLocaleString()} VNĐ` : ''}</div>
-                                    <button className="btnSeeMore_Slider" onClick={() => this.handleViewSanPham(item)}>See more</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+  const moveSliderPrev = () => {
+    let lists = document.querySelectorAll(".slide-item");
+    document.getElementById("slide").prepend(lists[lists.length - 1]);
+  };
 
-                    <div className="slide-button">
-                        <button ref={ref => this.prevButtonRef = ref} ><FontAwesomeIcon icon={faChevronLeft} /></button>
-                        <button ref={ref => this.nextButtonRef = ref}><FontAwesomeIcon icon={faChevronRight} /></button>
-                    </div>
+  const handleViewSanPham = (SanPham) => {
+    if (history) {
+      history.push(`/SanPham/${SanPham.MaSP}`);
+    } else {
+      console.error(
+        "Lỗi: history không tồn tại hoặc không được truyền vào đúng cách."
+      );
+    }
+  };
+
+  return (
+    <div className="slider-main">
+      <div className="slide-container">
+        <div id="slide">
+          {products.map((item, index) => (
+            <div
+              key={item.MaSP}
+              className="slide-item"
+              style={{ backgroundImage: `url(${item.imageUrl || ""})` }}
+            >
+              <div className="slide-content">
+                <div className="slide-name">{item.TenSP || ""}</div>
+                <div className="slide-des">
+                  {item.DonGiaSP ? `${item.DonGiaSP.toLocaleString()} VNĐ` : ""}
                 </div>
+                <button
+                  className="btnSeeMore_Slider"
+                  onClick={() => handleViewSanPham(item)}
+                >
+                  See more
+                </button>
+              </div>
             </div>
-        );
-    }
-}
+          ))}
+        </div>
 
-export default withRouter(Slider);
+        <div className="slide-button">
+          <button ref={prevButtonRef}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          <button ref={nextButtonRef}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Slider;
