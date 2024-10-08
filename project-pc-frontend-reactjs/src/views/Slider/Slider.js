@@ -7,7 +7,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-
+import axios from "axios";
 const Slider = () => {
   const [products, setProducts] = useState([]);
   const autoSlideInterval = useRef(null);
@@ -39,18 +39,15 @@ const Slider = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sanpham");
-      if (!response.ok) {
-        throw new Error("Yêu cầu không thành công");
+      const response = await axios.get("http://localhost:8080/api/sanpham");
+
+      if (response.status === 200) {
+        setProducts(response.data.data || []);
       }
-      console.log("response", response.data);
-      const jsonResponse = await response.json();
-      setProducts(jsonResponse.data || []); // Handle the case when data is not available
     } catch (error) {
       console.error(error.message);
     }
   };
-
   const setupSliderNavigation = () => {
     if (nextButtonRef.current) {
       nextButtonRef.current.addEventListener("click", moveSliderNext);
@@ -88,12 +85,14 @@ const Slider = () => {
             <div
               key={item.MaSP}
               className="slide-item"
-              style={{ backgroundImage: `url(${item.imageUrl || ""})` }}
+              style={{
+                backgroundImage: `url(${`http://localhost:8080/api/image/${item.AnhSP}`})`,
+              }}
             >
               <div className="slide-content">
                 <div className="slide-name">{item.TenSP || ""}</div>
                 <div className="slide-des">
-                  {item.DonGiaSP ? `${item.DonGiaSP.toLocaleString()} VNĐ` : ""}
+                  {item.DonGiaSP ? `${item.DonGiaSP.toLocaleString()} VNĐ` : ""}{" "}
                 </div>
                 <button
                   className="btnSeeMore_Slider"
@@ -110,7 +109,8 @@ const Slider = () => {
           <button ref={prevButtonRef}>
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
-          <button ref={nextButtonRef}>
+          <button ref={nextButtonRef} className="slide-button-2">
+            {" "}
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>
