@@ -186,7 +186,7 @@ const SanPhamDesktop = () => {
                       className="product-thumb"
                     >
                       <img
-                        src={item.imageUrl}
+                        src={`http://localhost:8080/api/image/${item.AnhSP}`}
                         alt={item.TenSP}
                         onError={(e) => {
                           e.target.src = imageErr;
