@@ -28,10 +28,6 @@ class PostController extends Controller
         ]);
     }
 
-
-
-
-
     public function getImage($filename)
     {
         // Đường dẫn đầy đủ tới file trong storage
@@ -465,7 +461,7 @@ class PostController extends Controller
         if (!empty($request->AnhSP)) {
             // Tách phần type và data
             list($type, $data) = explode(';', $request->AnhSP);
-            list(, $data)      = explode(',', $data);
+            list(, $data) = explode(',', $data);
 
             // Giải mã base64
             $data = base64_decode($data);
