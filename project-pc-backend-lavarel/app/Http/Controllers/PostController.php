@@ -45,7 +45,7 @@ class PostController extends Controller
     // Lấy khách hàng
     public function getKhachHang()
     {
-        $rows = DB::select("SELECT * FROM KhachHang LIMIT 1");
+        $rows = DB::select("SELECT * FROM khachhang LIMIT 1");
 
         return response()->json([
             'message' => 'ok',
@@ -63,7 +63,7 @@ class PostController extends Controller
             ], 400);
         }
 
-        $rows = DB::select("SELECT * FROM SanPham WHERE MaSP = ?", [$id]);
+        $rows = DB::select("SELECT * FROM sanpham WHERE MASP = ?", [$id]);
 
         if (empty($rows)) {
             return response()->json([
