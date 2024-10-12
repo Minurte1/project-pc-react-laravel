@@ -34,7 +34,7 @@ const MuaSanPham = () => {
   const fetchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/sanpham/${id}`
+        `http://localhost:8000/api/sanpham/${id}`
       );
       setSanPham(response.data.data || {});
       console.log("response.data.data", response.data.data);
@@ -70,7 +70,7 @@ const MuaSanPham = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/create-hoadon", {
+      const response = await fetch("http://localhost:8000/api/create-hoadon", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const MuaSanPham = () => {
                   <div className="thongtin-sanpham_2">
                     <span className="discount-bannerr">{soLuong}</span>
                     <img
-                      src={`http://localhost:8080/api/image/${sanPham.AnhSP}`}
+                      src={`http://localhost:8000/api/image/${sanPham.AnhSP}`}
                       className="sanpham-img"
                       alt="san pham"
                     ></img>

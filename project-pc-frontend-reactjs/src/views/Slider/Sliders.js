@@ -18,7 +18,7 @@ class Sliders extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sanpham", {
+      const response = await fetch("http://localhost:8000/api/sanpham", {
         method: "GET",
         mode: "cors",
       });
@@ -120,9 +120,8 @@ class Sliders extends React.Component {
             data.slice(0, 5).map((item, index) => (
               <div
                 key={item.MaSP}
-                className={`mySlides fade ${
-                  index + 1 === this.state.slideIndex ? "show" : "hide"
-                }`}
+                className={`mySlides fade ${index + 1 === this.state.slideIndex ? "show" : "hide"
+                  }`}
               >
                 <div className="numbertext">{index + 1} / 5</div>
                 <img

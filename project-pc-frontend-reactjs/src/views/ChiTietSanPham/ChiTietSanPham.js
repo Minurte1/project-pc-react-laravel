@@ -17,7 +17,7 @@ const ChiTietSanPham = () => {
     const fetchSanPham = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/sanpham/${id}`
+          `http://localhost:8000/api/sanpham/${id}`
         );
         setSanPham(response.data.data || {});
         setLoading(false);
@@ -66,7 +66,7 @@ const ChiTietSanPham = () => {
                 <div className="product-image_ChiTietSanPham">
                   <img
                     className="image_ChiTietSanPham"
-                    src={`http://localhost:8080/api/image/${sanPham.AnhSP}`}
+                    src={`http://localhost:8000/api/image/${sanPham.AnhSP}`}
                     alt={sanPham.AnhSP}
                   />
                 </div>

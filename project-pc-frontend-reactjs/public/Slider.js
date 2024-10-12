@@ -22,7 +22,7 @@ class Slider extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sanpham", {
+      const response = await fetch("http://localhost:8000/api/sanpham", {
         method: "GET",
         mode: "cors",
       });

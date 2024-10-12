@@ -20,7 +20,7 @@ const SanPhamDesktop = () => {
   const fetchData = async () => {
     try {
       const response = await CookiesAxios.get(
-        "http://localhost:8080/api/sanphamDesktop",
+        "http://localhost:8000/api/sanphamDesktop",
         {
           headers: {
             "Content-Type": "application/json",
@@ -186,7 +186,7 @@ const SanPhamDesktop = () => {
                       className="product-thumb"
                     >
                       <img
-                        src={`http://localhost:8080/api/image/${item.AnhSP}`}
+                        src={`http://localhost:8000/api/image/${item.AnhSP}`}
                         alt={item.TenSP}
                         onError={(e) => {
                           e.target.src = imageErr;

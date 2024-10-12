@@ -27,7 +27,7 @@ const Slider = () => {
 
   const startAutoSlide = () => {
     try {
-      autoSlideInterval.current = setInterval(moveSliderNext, 5000);
+      // autoSlideInterval.current = setInterval(moveSliderNext, 5000);
     } catch (error) {
       console.error(error);
     }
@@ -39,7 +39,7 @@ const Slider = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/sanpham");
+      const response = await axios.get("http://localhost:8000/api/sanpham");
 
       if (response.status === 200) {
         setProducts(response.data.data || []);
@@ -86,7 +86,7 @@ const Slider = () => {
               key={item.MaSP}
               className="slide-item"
               style={{
-                backgroundImage: `url(${`http://localhost:8080/api/image/${item.AnhSP}`})`,
+                backgroundImage: `url(${`http://localhost:8000/api/image/${item.AnhSP}`})`,
               }}
             >
               <div className="slide-content">

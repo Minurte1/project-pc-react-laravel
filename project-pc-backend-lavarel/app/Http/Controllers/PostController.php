@@ -18,7 +18,7 @@ class PostController extends Controller
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
-                'imageUrl' => 'http://localhost:8080/public/images/' . $SanPham->AnhSP,
+                'imageUrl' => 'http://localhost:8000/public/images/' . $SanPham->AnhSP,
             ];
         }, $rows);
 
@@ -72,7 +72,7 @@ class PostController extends Controller
         }
 
         $productWithImageUrl = (array) $rows[0];
-        $productWithImageUrl['imageUrl'] = 'http://localhost:8080/public/images/' . $productWithImageUrl['ANHSP'];
+        $productWithImageUrl['imageUrl'] = 'http://localhost:8000/public/images/' . $productWithImageUrl['ANHSP'];
 
         return response()->json([
             'message' => 'ok',
@@ -94,7 +94,7 @@ class PostController extends Controller
 
             $productsWithImageUrl = array_map(function ($row) {
                 return (array) $row + [
-                    'imageUrl' => 'http://localhost:8080/public/images/' . $row->ANHSP,
+                    'imageUrl' => 'http://localhost:8000/public/images/' . $row->ANHSP,
                 ];
             }, $rows);
 
@@ -161,7 +161,7 @@ class PostController extends Controller
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
-                'imageUrl' => 'http://localhost:8080/public/images/' . $SanPham->AnhSP,
+                'imageUrl' => 'http://localhost:8000/public/images/' . $SanPham->AnhSP,
             ];
         }, $rows);
 
@@ -178,7 +178,7 @@ class PostController extends Controller
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
-                'imageUrl' => 'http://localhost:8080/public/images/' . $SanPham->AnhSP,
+                'imageUrl' => 'http://localhost:8000/public/images/' . $SanPham->AnhSP,
             ];
         }, $rows);
 
@@ -195,7 +195,7 @@ class PostController extends Controller
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
-                'imageUrl' => 'http://localhost:8080/public/images/' . $SanPham->AnhSP,
+                'imageUrl' => 'http://localhost:8000/public/images/' . $SanPham->AnhSP,
             ];
         }, $rows);
 

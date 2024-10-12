@@ -20,7 +20,7 @@ class ListSanPham extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sanpham", {
+      const response = await fetch("http://localhost:8000/api/sanpham", {
         method: "GET",
         mode: "cors",
       });
@@ -81,12 +81,12 @@ class ListSanPham extends React.Component {
           priceFilter === "0"
             ? item.DonGiaSP > 0
             : priceFilter === "10000000"
-            ? item.DonGiaSP < 10000000
-            : priceFilter === "20000000"
-            ? item.DonGiaSP < 20000000 && item.DonGiaSP >= 10000000
-            : priceFilter === "30000000"
-            ? item.DonGiaSP > 20000000
-            : true
+              ? item.DonGiaSP < 10000000
+              : priceFilter === "20000000"
+                ? item.DonGiaSP < 20000000 && item.DonGiaSP >= 10000000
+                : priceFilter === "30000000"
+                  ? item.DonGiaSP > 20000000
+                  : true
         );
     // Sắp xếp dữ liệu
     const sortedData =
@@ -209,7 +209,7 @@ class ListSanPham extends React.Component {
                         className="product-thumb"
                       >
                         <img
-                          src={`http://localhost:8080/api/image/${item.AnhSP}`}
+                          src={`http://localhost:8000/api/image/${item.AnhSP}`}
                           alt={item.TenSP}
                           onError={(e) => {
                             e.target.src = { imageErr }; // Hoặc hiển thị thông báo lỗi khác

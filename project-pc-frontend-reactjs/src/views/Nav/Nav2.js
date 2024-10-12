@@ -23,7 +23,7 @@ class Nav2 extends Component {
 
   fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/khachhang", {
+      const response = await fetch("http://localhost:8000/api/khachhang", {
         method: "GET",
         mode: "cors",
       });
