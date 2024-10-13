@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 13, 2024 lúc 04:21 PM
+-- Thời gian đã tạo: Th10 13, 2024 lúc 04:48 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -41,14 +41,9 @@ CREATE TABLE `chi_tiet_hoa__on` (
 --
 
 INSERT INTO `chi_tiet_hoa__on` (`MA_CTHD`, `MASP`, `MAHD`, `SO_LUONG`, `GIAM_GIA`, `GHI_CHU_CTHD`) VALUES
-(1, 1, 1, 1, '0%', 'Mua 1 bản game The Legend of Zelda: Tears of the Kingdom.'),
-(2, 2, 1, 1, '10%', 'Mua 1 bản game Elden Ring với giảm giá 10%.'),
-(3, 3, 2, 2, '0%', 'Mua 2 bản God of War Ragnarök.'),
-(4, 4, 3, 1, '5%', 'Mua 1 bản Horizon Forbidden West với giảm giá 5%.'),
-(5, 5, 1, 1, '0%', 'Mua 1 bản Spider-Man: Miles Morales.'),
-(6, 6, 2, 1, '0%', 'Mua 1 bản Dying Light 2.'),
-(7, 7, 3, 1, '0%', 'Mua 1 bản Call of Duty: Modern Warfare II.'),
-(8, 8, 1, 1, '0%', 'Mua 1 bản Resident Evil Village.');
+(1, 1, 1, 1, '0%', 'Đơn hàng đầu tiên.'),
+(2, 3, 2, 1, '5%', 'Giảm giá cho khách hàng thân thiết.'),
+(3, 5, 3, 1, '10%', 'Giảm giá đặc biệt cho khách hàng mới.');
 
 -- --------------------------------------------------------
 
@@ -68,9 +63,8 @@ CREATE TABLE `gio_hang` (
 
 INSERT INTO `gio_hang` (`MA_KH`, `MASP`, `SO_LUONG_SP`) VALUES
 (1, 1, 1),
-(1, 2, 1),
-(2, 3, 2),
-(3, 4, 1);
+(2, 3, 1),
+(3, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -91,9 +85,9 @@ CREATE TABLE `hoadon` (
 --
 
 INSERT INTO `hoadon` (`MAHD`, `MA_KH`, `DIA_CHI_SHIP`, `SDT_LIEN_HE_KH`, `GHI_CHU_HOA_DON`) VALUES
-(1, 1, 'Hà Nội', '0123456789', 'Hóa đơn đầu tiên cho khách hàng.'),
-(2, 2, 'Đà Nẵng', '0987654321', 'Khách hàng thân thiết đặt hàng.'),
-(3, 3, 'TP.HCM', '0912345678', 'Đơn hàng cho game hành động.');
+(1, 1, 'Hà Nội', '0912345678', 'Đơn hàng đầu tiên.'),
+(2, 2, 'Đà Nẵng', '0987654321', 'Giao hàng trong vòng 2 ngày.'),
+(3, 3, 'Hồ Chí Minh', '0901234567', 'Yêu cầu giao hàng gấp.');
 
 -- --------------------------------------------------------
 
@@ -114,9 +108,9 @@ CREATE TABLE `khachhang` (
 --
 
 INSERT INTO `khachhang` (`MA_KH`, `SDT_KH`, `TEN_KHACH_HANG`, `DIA_CHI`, `GHI_CHU_KH`) VALUES
-(1, '0123456789', 'Nguyễn Văn A', 'Hà Nội', 'Khách hàng thường xuyên'),
-(2, '0987654321', 'Trần Thị B', 'Đà Nẵng', 'Khách hàng thân thiết'),
-(3, '0912345678', 'Lê Văn C', 'TP.HCM', 'Yêu thích game hành động');
+(1, '0912345678', 'Nguyễn Văn A', 'Hà Nội', 'Khách hàng VIP.'),
+(2, '0987654321', 'Trần Thị B', 'Đà Nẵng', 'Khách hàng thân thiết.'),
+(3, '0901234567', 'Lê Văn C', 'Hồ Chí Minh', 'Khách hàng mới.');
 
 -- --------------------------------------------------------
 
@@ -135,8 +129,8 @@ CREATE TABLE `phan_quyen` (
 --
 
 INSERT INTO `phan_quyen` (`MA_PHAN_QUYEN`, `TEN_PHAN_QUYEN`, `GHI_CHU_PHAN_QUYEN`) VALUES
-(1, 'Quản trị viên', 'Quyền truy cập đầy đủ.'),
-(2, 'Người dùng', 'Quyền truy cập hạn chế.');
+(1, 'Admin', 'Quyền quản trị.'),
+(2, 'User', 'Quyền người dùng.');
 
 -- --------------------------------------------------------
 
@@ -165,14 +159,26 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`MASP`, `MATL`, `TENSP`, `DON_GIA`, `TON_KHO_SP`, `CHIP`, `MAIN`, `VGA`, `NHA_SAN_XUAT`, `RAM`, `ROM`, `ANHSP`, `GHI_CHU_SP`) VALUES
-(1, 1, 'The Legend of Zelda: Tears of the Kingdom', '59.99', 100, 'N/A', 'N/A', 'N/A', 'Nintendo', '8GB', 'N/A', 'link_to_image_zelda.jpg', 'Game phiêu lưu hành động tuyệt vời.'),
-(2, 1, 'Elden Ring', '59.99', 50, 'N/A', 'N/A', 'N/A', 'FromSoftware', '16GB', 'N/A', 'link_to_image_elden_ring.jpg', 'Trò chơi hành động nhập vai thế giới mở.'),
-(3, 2, 'God of War Ragnarök', '69.99', 30, 'N/A', 'N/A', 'N/A', 'Santa Monica Studio', '16GB', 'N/A', 'link_to_image_god_of_war.jpg', 'Hành trình của Kratos và Atreus.'),
-(4, 2, 'Horizon Forbidden West', '59.99', 75, 'N/A', 'N/A', 'N/A', 'Guerrilla Games', '16GB', 'N/A', 'link_to_image_horizon.jpg', 'Khám phá thế giới mới và chiến đấu với máy móc.'),
-(5, 3, 'Spider-Man: Miles Morales', '49.99', 90, 'N/A', 'N/A', 'N/A', 'Insomniac Games', '16GB', 'N/A', 'link_to_image_spiderman.jpg', 'Trở thành Spider-Man mới.'),
-(6, 3, 'Dying Light 2', '49.99', 60, 'N/A', 'N/A', 'N/A', 'Techland', '16GB', 'N/A', 'link_to_image_dying_light.jpg', 'Trò chơi sinh tồn trong thế giới mở.'),
-(7, 3, 'Call of Duty: Modern Warfare II', '69.99', 40, 'N/A', 'N/A', 'N/A', 'Infinity Ward', '16GB', 'N/A', 'link_to_image_call_of_duty.jpg', 'Trò chơi bắn súng góc nhìn thứ nhất.'),
-(8, 3, 'Resident Evil Village', '59.99', 55, 'N/A', 'N/A', 'N/A', 'Capcom', '16GB', 'N/A', 'link_to_image_resident_evil.jpg', 'Kinh dị sinh tồn trong thế giới ma quái.');
+(1, 1, 'PC Gaming Entry Level', '10000000', 50, NULL, NULL, NULL, 'HP', NULL, NULL, 'link_anh_1.jpg', 'Máy tính PC chơi game giá rẻ.'),
+(2, 1, 'PC Workstation', '25000000', 30, NULL, NULL, NULL, 'Dell', NULL, NULL, 'link_anh_2.jpg', 'Máy tính làm việc chuyên nghiệp cho đồ họa.'),
+(3, 1, 'PC Gaming Mid Range', '60000000', 20, NULL, NULL, NULL, 'Asus', NULL, NULL, 'link_anh_3.jpg', 'Máy tính PC chơi game hiệu suất tốt.'),
+(4, 1, 'PC Gaming High-End', '120000000', 10, NULL, NULL, NULL, 'MSI', NULL, NULL, 'link_anh_4.jpg', 'Máy tính PC chơi game cao cấp.'),
+(5, 1, 'PC Gaming Premium', '200000000', 5, NULL, NULL, NULL, 'Alienware', NULL, NULL, 'link_anh_5.jpg', 'Máy tính PC chơi game hàng đầu, hiệu suất cực cao.'),
+(6, 1, 'PC Mini Gaming', '15000000', 40, NULL, NULL, NULL, 'Lenovo', NULL, NULL, 'link_anh_6.jpg', 'PC mini dành cho game thủ di động.'),
+(7, 1, 'PC All-in-One', '30000000', 25, NULL, NULL, NULL, 'Acer', NULL, NULL, 'link_anh_7.jpg', 'Máy tính All-in-One tiết kiệm không gian.'),
+(8, 1, 'PC Desktop Văn Phòng', '20000000', 35, NULL, NULL, NULL, 'Asus', NULL, NULL, 'link_anh_8.jpg', 'Máy tính văn phòng hiệu suất cao.'),
+(9, 1, 'PC Gaming Ultra', '175000000', 15, NULL, NULL, NULL, 'Razer', NULL, NULL, 'link_anh_9.jpg', 'Máy tính chơi game hiệu suất cực cao.'),
+(10, 1, 'PC Lắp Ráp Tùy Chỉnh', '50000000', 20, NULL, NULL, NULL, 'Tự Lắp', NULL, NULL, 'link_anh_10.jpg', 'Máy tính lắp ráp theo yêu cầu người dùng.'),
+(11, 1, 'PC Gaming High Performance', '95000000', 10, NULL, NULL, NULL, 'Corsair', NULL, NULL, 'link_anh_11.jpg', 'Máy tính chơi game với hiệu suất hàng đầu.'),
+(12, 1, 'PC Đồ Họa Chuyên Nghiệp', '180000000', 8, NULL, NULL, NULL, 'NVIDIA', NULL, NULL, 'link_anh_12.jpg', 'Máy tính đồ họa cho designer chuyên nghiệp.'),
+(13, 1, 'PC Gaming Budget', '12000000', 60, NULL, NULL, NULL, 'MSI', NULL, NULL, 'link_anh_13.jpg', 'Máy tính chơi game giá rẻ cho học sinh.'),
+(14, 1, 'PC Trạm Làm Việc Cao Cấp', '300000000', 5, NULL, NULL, NULL, 'Apple', NULL, NULL, 'link_anh_14.jpg', 'Máy tính trạm cho công việc thiết kế đồ họa.'),
+(15, 1, 'PC Văn Phòng Tiết Kiệm', '10000000', 70, NULL, NULL, NULL, 'HP', NULL, NULL, 'link_anh_15.jpg', 'Máy tính văn phòng với giá hợp lý.'),
+(16, 2, 'PC Gaming VR Ready', '120000000', 12, NULL, NULL, NULL, 'Alienware', NULL, NULL, 'link_anh_16.jpg', 'Máy tính chơi game VR với hiệu suất cao.'),
+(17, 2, 'PC Workstation Đồ Họa', '250000000', 6, NULL, NULL, NULL, 'Dell', NULL, NULL, 'link_anh_17.jpg', 'Máy tính workstation cho thiết kế đồ họa chuyên nghiệp.'),
+(18, 2, 'PC Gaming Entry-Level', '9000000', 50, NULL, NULL, NULL, 'Gigabyte', NULL, NULL, 'link_anh_18.jpg', 'Máy tính chơi game dành cho người mới bắt đầu.'),
+(19, 2, 'PC Chiến Thắng', '50000000', 30, NULL, NULL, NULL, 'Cooler Master', NULL, NULL, 'link_anh_19.jpg', 'Máy tính chơi game với thiết kế độc đáo và hiệu suất cao.'),
+(20, 2, 'PC Văn Phòng Năng Động', '15000000', 45, NULL, NULL, NULL, 'Asrock', NULL, NULL, 'link_anh_20.jpg', 'Máy tính văn phòng với hiệu suất tốt và giá cả hợp lý.');
 
 -- --------------------------------------------------------
 
@@ -195,7 +201,7 @@ CREATE TABLE `tai_khoan` (
 INSERT INTO `tai_khoan` (`MA_TK`, `MA_PHAN_QUYEN`, `MA_KH`, `TEN_DANG_NHAP`, `MAT_KHAU`) VALUES
 (1, 1, 1, 'nguyenvana', 'password123'),
 (2, 2, 2, 'tranthib', 'password456'),
-(3, 2, 3, 'levanc', 'password789');
+(3, 1, 3, 'levanc', 'password789');
 
 -- --------------------------------------------------------
 
@@ -215,9 +221,8 @@ CREATE TABLE `theloai` (
 --
 
 INSERT INTO `theloai` (`MATL`, `TENTL`, `MO_TA_TL`, `GHI_CHU_TL`) VALUES
-(1, 'Game Hành Động', 'Các trò chơi tập trung vào hành động, chiến đấu.', 'Thể loại này bao gồm nhiều trò chơi nổi tiếng.'),
-(2, 'Game Nhập Vai', 'Trò chơi cho phép người chơi nhập vai vào nhân vật.', 'Chủ yếu xoay quanh việc xây dựng nhân vật và khám phá.'),
-(3, 'Game Phiêu Lưu', 'Trò chơi tập trung vào khám phá và phiêu lưu.', 'Người chơi khám phá thế giới và giải quyết câu đố.');
+(1, 'Gaming', 'Máy tính chơi game.', 'Được thiết kế cho game thủ.'),
+(2, 'Workstation', 'Máy tính văn phòng.', 'Dành cho công việc chuyên nghiệp.');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -286,7 +291,7 @@ ALTER TABLE `theloai`
 -- AUTO_INCREMENT cho bảng `chi_tiet_hoa__on`
 --
 ALTER TABLE `chi_tiet_hoa__on`
-  MODIFY `MA_CTHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `MA_CTHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `hoadon`
@@ -310,7 +315,7 @@ ALTER TABLE `phan_quyen`
 -- AUTO_INCREMENT cho bảng `sanpham`
 --
 ALTER TABLE `sanpham`
-  MODIFY `MASP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `MASP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `tai_khoan`
@@ -322,7 +327,7 @@ ALTER TABLE `tai_khoan`
 -- AUTO_INCREMENT cho bảng `theloai`
 --
 ALTER TABLE `theloai`
-  MODIFY `MATL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `MATL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
