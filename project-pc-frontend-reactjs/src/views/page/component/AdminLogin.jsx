@@ -3,7 +3,7 @@ import axios from "axios";
 import "./adminLogin.scss";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode"; // Import jwtDecode trực tiếp thay vì từ jwt-decode
-import logoGG from "../../public/logo/google.png";
+import logoGG from "../../../public/logo/google.png";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -94,8 +94,8 @@ const AdminLogin = () => {
     <div className="admin-login">
       <div>
         <button className="Button-gg" onClick={() => login()}>
-          <img src={logoGG} alt="Logo" className="logo-gg" />
-          <div className="content-sign">
+          <img src={logoGG} alt="Logo" className="logo-gg " />
+          <div className="content-sign ">
             <p>Sign in with Google</p>
           </div>
         </button>
