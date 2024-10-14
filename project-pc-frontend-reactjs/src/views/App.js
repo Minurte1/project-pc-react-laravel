@@ -22,16 +22,11 @@ function App() {
       <div className="App">
         <header>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/SanPham/:id" element={<ChiTietSanPham />} />
-            <Route path="/MuaHang/:id" element={<MuaSanPham />} />
-            <Route path="/All" element={<SanPhamTatCa />} />
-            <Route path="/Desktop" element={<SanPhamDesktop />} />
-            <Route path="/login" element={<AdminLogin />} />
-            <Route path="/Apple" element={<SanPhamApple />} />
-            <Route path="/ASUS" element={<SanPhamASUS />} />
-            <Route path="/test" element={<Test />} />{" "}
-            <Route path="/profile" element={<ProfileCustomer />} />
+            <Route path="/*" element={<MainLayout />} />
+            <Route
+              path="/admin/*"
+              element={<GuardRoute element={AdminLayout} />}
+            />
           </Routes>
         </header>
 
@@ -51,5 +46,29 @@ function App() {
     </Router>
   );
 }
-
+const MainLayout = () => (
+  <>
+    <Header />
+    <Routes>
+      {" "}
+      <Route path="/" element={<Home />} />
+      <Route path="/SanPham/:id" element={<ChiTietSanPham />} />
+      <Route path="/MuaHang/:id" element={<MuaSanPham />} />
+      <Route path="/All" element={<SanPhamTatCa />} />
+      <Route path="/Desktop" element={<SanPhamDesktop />} />
+      <Route path="/login" element={<AdminLogin />} />
+      <Route path="/Apple" element={<SanPhamApple />} />
+      <Route path="/ASUS" element={<SanPhamASUS />} />
+      <Route path="/test" element={<Test />} />{" "}
+      <Route path="/profile" element={<ProfileCustomer />} />{" "}
+      <Route path="/*" element={<RouterView />} />
+    </Routes>
+    <Footer />
+  </>
+);
+const AdminLayout = () => (
+  <Routes>
+    <Route path="/*" element={<RouterAdmin />} />
+  </Routes>
+);
 export default App;
