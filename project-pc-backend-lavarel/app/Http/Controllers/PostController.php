@@ -71,12 +71,12 @@ class PostController extends Controller
             ], 404);
         }
 
-        $productWithImageUrl = (array) $rows[0];
-        $productWithImageUrl['imageUrl'] = 'http://localhost:8000/public/images/' . $productWithImageUrl['ANHSP'];
+        // $productWithImageUrl = (array) $rows[0];
+        // $productWithImageUrl['imageUrl'] = 'http://localhost:8000/public/images/' . $productWithImageUrl['ANHSP'];
 
         return response()->json([
             'message' => 'ok',
-            'data' => $productWithImageUrl,
+            'data' => $rows,
         ]);
     }
 

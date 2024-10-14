@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Slider.scss";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,7 +13,7 @@ const Slider = () => {
   const autoSlideInterval = useRef(null);
   const nextButtonRef = useRef(null);
   const prevButtonRef = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -68,12 +68,8 @@ const Slider = () => {
   };
 
   const handleViewSanPham = (SanPham) => {
-    if (history) {
-      history.push(`/SanPham/${SanPham.MaSP}`);
-    } else {
-      console.error(
-        "Lỗi: history không tồn tại hoặc không được truyền vào đúng cách."
-      );
+    if (SanPham) {
+      navigate(`/SanPham/${SanPham.MaSP}`);
     }
   };
 

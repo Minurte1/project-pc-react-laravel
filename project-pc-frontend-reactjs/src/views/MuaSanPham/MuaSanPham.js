@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import "./MuaSanPham.scss"; // Import tệp CSS
 
@@ -8,7 +8,7 @@ import Nav2 from "../Nav/Nav2";
 
 const MuaSanPham = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [sanPham, setSanPham] = useState({});
@@ -81,7 +81,7 @@ const MuaSanPham = () => {
       if (response.ok) {
         const data = await response.json();
         alert("Đặt hàng thành công!");
-        history.push("/");
+        navigate("/");
       } else {
         throw new Error("Failed to create HoaDon");
       }

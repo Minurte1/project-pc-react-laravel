@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SanPhamDesktop.scss";
 
@@ -15,7 +15,7 @@ const SanPhamDesktop = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState("0");
   const [sortOrder, setSortOrder] = useState("asc");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -42,7 +42,7 @@ const SanPhamDesktop = () => {
   }, []);
 
   const handleViewSanPham = (SanPham) => {
-    history.push(`/SanPham/${SanPham.MaSP}`);
+    navigate(`/SanPham/${SanPham.MaSP}`);
   };
 
   const handleSearchChange = (event) => {

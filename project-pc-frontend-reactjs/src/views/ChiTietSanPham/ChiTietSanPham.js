@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import "./ChiTietSanPham.scss";
 
 import Nav2 from "../Nav/Nav2";
@@ -11,7 +11,7 @@ const ChiTietSanPham = () => {
   const [soLuong, setSoLuong] = useState(1); // Số lượng mặc định là 1
   const [loading, setLoading] = useState(true);
   const { id } = useParams(); // Lấy id từ URL
-  const history = useHistory(); // Lấy history để chuyển hướng
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSanPham = async () => {
@@ -19,7 +19,8 @@ const ChiTietSanPham = () => {
         const response = await axios.get(
           `http://localhost:8000/api/sanpham/${id}`
         );
-        setSanPham(response.data.data || {});
+        console.log(response.data.data[0]);
+        setSanPham(response.data.data[0]);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -50,7 +51,7 @@ const ChiTietSanPham = () => {
     }
 
     // Chuyển hướng đến trang mua hàng
-    history.push(`/MuaHang/${sanPham.MaSP}`);
+    navigate(`/MuaHang/${sanPham.MaSP}`);
   };
 
   return (
@@ -73,7 +74,7 @@ const ChiTietSanPham = () => {
                 <div className="product-h3_ChiTietSanPham">
                   <h3 className="h3_ChiTietSanPham">{sanPham.TenSP}</h3>
                   <p className="product-prices_ChiTietSanPham">
-                    {sanPham.DonGiaSP.toLocaleString()} VND
+                    {sanPham.DonGiaSP} VND
                   </p>
                   <hr />
                   <p className="Con_Het_ChiTietSanPham">

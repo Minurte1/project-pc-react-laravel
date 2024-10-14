@@ -1,25 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './views/App';
-import reportWebVitals from './reportWebVitals';
-import './styles/global.scss'
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./views/App";
+import reportWebVitals from "./reportWebVitals";
+import "./styles/global.scss";
 
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from './store/reducers/rootReducer'
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const reduxStore = createStore(rootReducer);
+// Thay thế <your_client_id> bằng Client ID của bạn
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={reduxStore}>
-      <App />
-    </Provider>
+    <GoogleOAuthProvider
+      clientId={`281404748457-87k9op4pjn3umqjlp51e0fthlsssqctj.apps.googleusercontent.com`}
+    >
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </GoogleOAuthProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// Đoạn mã này dùng để đo lường hiệu suất của ứng dụng
 reportWebVitals();
