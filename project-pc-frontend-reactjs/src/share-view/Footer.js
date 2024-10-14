@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-import "./Footer.scss";
+import "./css/Footer.scss";
 
 const Footer = () => {
   const navigate = useNavigate();

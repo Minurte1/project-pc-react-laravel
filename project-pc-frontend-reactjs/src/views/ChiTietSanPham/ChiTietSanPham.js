@@ -3,8 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import "./ChiTietSanPham.scss";
 
-import Nav2 from "../Nav/Nav2";
-import Footer from "../Footer/Footer";
+import Nav2 from "../../share-view/Nav2";
+import Footer from "../../share-view/Footer";
 
 const ChiTietSanPham = () => {
   const [sanPham, setSanPham] = useState({});

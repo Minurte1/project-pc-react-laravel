@@ -2,10 +2,10 @@ import React, { Component } from "react";
 
 import "./HomePage.scss";
 
-import Nav2 from "../Nav/Nav2";
+import Nav2 from "../../share-view/Nav2";
 import Slider from "../Slider/Slider";
 import ListSanPham from "../SanPham/ListSanPham";
-import Footer from "../Footer/Footer";
+import Footer from "../../share-view/Footer";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

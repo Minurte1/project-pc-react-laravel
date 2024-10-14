@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import logo from "./ICON.ico";
-import desktop from "./DESKTOP.ico";
-import apple from "./APPLE.ico";
-import asus from "./ASUS.ico";
+import logo from "./img/ICON.ico";
+import desktop from "./img/DESKTOP.ico";
+import apple from "./img/APPLE.ico";
+import asus from "./img/ASUS.ico";
 
-import "./Nav2.scss";
+import "./css/Nav2.scss";
 
 const Nav2 = () => {
   const [data, setData] = useState(null);

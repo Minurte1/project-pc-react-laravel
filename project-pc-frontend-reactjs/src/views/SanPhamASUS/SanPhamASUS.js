@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import imageErr from "../../assets/images/Kothayanh.jpg";
-import Nav2 from "../Nav/Nav2";
-import Footer from "../Footer/Footer";
+import Nav2 from "../../share-view/Nav2";
+import Footer from "../../share-view/Footer";
 
 const SanPhamASUS = () => {
   const [data, setData] = useState(null);

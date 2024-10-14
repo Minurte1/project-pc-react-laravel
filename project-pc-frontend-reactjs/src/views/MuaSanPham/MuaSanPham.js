@@ -4,7 +4,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import "./MuaSanPham.scss"; // Import tệp CSS
 
-import Nav2 from "../Nav/Nav2";
+import Nav2 from "../../share-view/Nav2";
 
 const MuaSanPham = () => {
   const { id } = useParams();

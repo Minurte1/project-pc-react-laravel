@@ -1,15 +1,16 @@
 import { useRoutes, Navigate } from "react-router-dom";
-import Home from "../web-view/view-page/home";
-import Contact from "../web-view/view-page/contact";
-import Movie from "./view-page/movie";
-import Detail from "./view-page/Detail";
-import SelectFilm from "./view-page/SelectFilm.jsx";
-import SelectPosition from "./view-page/SelectPosition.jsx";
-import MovieConfirmation from "./view-page/MovieConfirmation.jsx";
-import Login from "../authentication/login.jsx";
-import Register from "../authentication/register.jsx";
-import SelectMovie from "./view-page/selectMovie.jsx";
-import UserProfile from "./view-page/profileUser.jsx";
+import Home from "../views/HomePage/Home";
+import ChiTietSanPham from "../views/ChiTietSanPham/ChiTietSanPham";
+import MuaSanPham from "../views/MuaSanPham/MuaSanPham";
+import SanPhamTatCa from "../views/SanPhamTatCa/SanPhamTatCa";
+import SanPhamDesktop from "../views/SanPhamDesktop/SanPhamDesktop";
+
+import SanPhamApple from "../views/SanPhamApple/SanPhamApple";
+import SanPhamASUS from "../views/SanPhamASUS/SanPhamASUS";
+import Test from "../views/Test/Test";
+import ProfileCustomer from "../profileCustomer/profileCustomer";
+import LoginView from "../views/page/login-view";
+
 const RouterView = () => {
   const element = useRoutes([
     {
@@ -17,44 +18,40 @@ const RouterView = () => {
       element: <Home />,
     },
     {
+      path: "/SanPham/:id",
+      element: <ChiTietSanPham />,
+    },
+    {
+      path: "/MuaHang/:id",
+      element: <MuaSanPham />,
+    },
+    {
+      path: "/All",
+      element: <SanPhamTatCa />,
+    },
+    {
+      path: "/Desktop",
+      element: <SanPhamDesktop />,
+    },
+    {
       path: "/login",
-      element: <Login />,
+      element: <LoginView />,
     },
     {
-      path: "/register",
-      element: <Register />,
+      path: "/Apple",
+      element: <SanPhamApple />,
     },
     {
-      path: "/detail",
-      element: <Detail />,
+      path: "/ASUS",
+      element: <SanPhamASUS />,
     },
     {
-      path: "/selectMovie/*",
-      element: <SelectMovie />,
-    },
-    {
-      path: "/ticker",
-      element: <MovieConfirmation />,
-    },
-    {
-      path: "/selectPosition",
-      element: <SelectPosition />,
-    },
-    {
-      path: "/home",
-      element: <Home />,
-    },
-    {
-      path: "/contact",
-      element: <Contact />,
-    },
-    {
-      path: "/movie",
-      element: <Movie />,
+      path: "/test",
+      element: <Test />,
     },
     {
       path: "/profile",
-      element: <UserProfile />,
+      element: <ProfileCustomer />,
     },
     {
       path: "*",
@@ -62,7 +59,7 @@ const RouterView = () => {
     },
   ]);
 
-  return <div> {element} </div>;
+  return <div>{element}</div>;
 };
 
 export default RouterView;

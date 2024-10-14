@@ -5,8 +5,8 @@ import "./SanPhamDesktop.scss";
 
 import imageErr from "../../assets/images/Kothayanh.jpg";
 import CookiesAxios from "../../services/CookiesAxios";
-import Nav2 from "../Nav/Nav2";
-import Footer from "../Footer/Footer";
+import Nav2 from "../../share-view/Nav2";
+import Footer from "../../share-view/Footer";
 
 const SanPhamDesktop = () => {
   const [data, setData] = useState([]);

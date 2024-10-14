@@ -1,7 +1,7 @@
 import React from "react";
 import ListSanPham from "../SanPham/ListSanPham";
-import Nav2 from "../Nav/Nav2";
-import Footer from "../Footer/Footer";
+import Nav2 from "../../share-view/Nav2";
+import Footer from "../../share-view/Footer";
 
 const SanPhamTatCa = () => {
   return (
