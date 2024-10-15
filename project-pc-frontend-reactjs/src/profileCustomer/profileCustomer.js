@@ -420,13 +420,13 @@ const ProfileCustomer = () => {
       toast.error("Có lỗi xảy ra khi cập nhật mật khẩu");
     }
   };
-  if (loading) {
-    return "Loading...  ";
-  }
+  // if (loading) {
+  //   return "Loading...  ";
+  // }
 
-  if (redirect) {
-    return <Navigate to="/login" />;
-  }
+  // if (redirect) {
+  //   return <Navigate to="/login" />;
+  // }
 
   return (
     <>
