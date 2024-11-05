@@ -30,7 +30,6 @@ const Nav2 = () => {
 
       setData(jsonResponse.data);
       setLoading(false);
-      console.log(jsonResponse);
     } catch (error) {
       console.error(error.message);
       setError(error.message);
@@ -111,7 +110,7 @@ const Nav2 = () => {
             </a>
           </div>
           <div className="cart-div_Nav2">
-            {}
+            { }
             <div className="cart-div_Nav2" onClick={handleMenuOpen}>
               {" "}
               <IconButton>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ListSanPham.scss";
-import imageErr from "../../assets/images/Kothayanh.jpg";
+import imageErr from "../../assets/images/Kothayanh.jpg"; // Hình ảnh lỗi
+import axios from "axios";
 
 const ListSanPham = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]); // Thay đổi từ null thành mảng rỗng
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,16 +16,14 @@ const ListSanPham = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/sanpham", {
-        method: "GET",
-        mode: "cors",
-      });
-      if (!response.ok) {
-        throw new Error("Yêu cầu không thành công");
+      const response = await axios.get("http://localhost:8000/api/sanpham");
+      console.log("response.data.data: ", response.data.data);
+      if (response.status !== 200) {
+        alert("Yêu cầu không thành công");
+      } else {
+        setData(response.data.data); // Lấy dữ liệu từ response
+        setLoading(false);
       }
-      const jsonResponse = await response.json();
-      setData(jsonResponse.data);
-      setLoading(false);
     } catch (error) {
       console.error(error.message);
       setError(error.message);
@@ -37,7 +36,7 @@ const ListSanPham = () => {
   }, []);
 
   const handleViewSanPham = (SanPham) => {
-    navigate(`/SanPham/${SanPham.MaSP}`);
+    navigate(`/SanPham/${SanPham.MASP}`); // Đảm bảo gọi đúng mã sản phẩm
   };
 
   const handleSearchChange = (event) => {
@@ -58,18 +57,18 @@ const ListSanPham = () => {
     data.length > 0 &&
     data
       .filter((item) =>
-        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+        item.TENSP ? item.TENSP.toLowerCase().includes(searchTerm.toLowerCase()) : false
       )
       .filter((item) =>
         priceFilter === "0"
-          ? item.DonGiaSP > 0
+          ? item.DON_GIA > 0
           : priceFilter === "10000000"
-          ? item.DonGiaSP < 10000000
-          : priceFilter === "20000000"
-          ? item.DonGiaSP < 20000000 && item.DonGiaSP >= 10000000
-          : priceFilter === "30000000"
-          ? item.DonGiaSP > 20000000
-          : true
+            ? item.DON_GIA < 10000000
+            : priceFilter === "20000000"
+              ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
+              : priceFilter === "30000000"
+                ? item.DON_GIA > 20000000
+                : true
       );
 
   const sortedData =
@@ -77,7 +76,7 @@ const ListSanPham = () => {
     filteredData.length > 0 &&
     filteredData.sort((a, b) => {
       const order = sortOrder === "asc" ? 1 : -1;
-      return order * (a.DonGiaSP - b.DonGiaSP);
+      return order * (Number(a.DON_GIA) - Number(b.DON_GIA)); // Chuyển đổi giá thành số
     });
 
   if (loading) {
@@ -192,10 +191,10 @@ const ListSanPham = () => {
                     className="product-thumb"
                   >
                     <img
-                      src={`http://localhost:8000/api/image/${item.AnhSP}`}
-                      alt={item.TenSP}
+                      src={item.ANHSP ? `http://localhost:8000/images/${item.ANHSP}` : imageErr}
+                      alt={item.TENSP || "Sản phẩm"}
                       onError={(e) => {
-                        e.target.src = imageErr;
+                        e.target.src = imageErr; // Chuyển sang ảnh lỗi nếu không tải được
                       }}
                     />
                   </a>
@@ -208,16 +207,16 @@ const ListSanPham = () => {
                     onClick={() => handleViewSanPham(item)}
                     className="product-TheLoai"
                   >
-                    {item.NhanSanXuat}
+                    {item.NHA_SAN_XUAT} {/* Cập nhật đúng tên trường */}
                   </a>
                   <a
                     onClick={() => handleViewSanPham(item)}
                     className="product-name"
                   >
-                    {item.TenSP}
+                    {item.TENSP} {/* Cập nhật đúng tên trường */}
                   </a>
                   <div className="product-price">
-                    {item.DonGiaSP.toLocaleString()} VND
+                    {Number(item.DON_GIA).toLocaleString()} VND {/* Đảm bảo giá là số */}
                   </div>
                 </div>
               </li>

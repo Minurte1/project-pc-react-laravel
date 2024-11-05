@@ -14,44 +14,39 @@ const ChiTietSanPham = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchSanPham = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/sanpham/${id}`
-        );
-        console.log(response.data.data[0]);
-        setSanPham(response.data.data[0]);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-        // Xử lý khi không tìm thấy sản phẩm, ví dụ: chuyển hướng đến trang 404
-      }
-    };
-
     fetchSanPham();
   }, [id]);
 
+  const fetchSanPham = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/sanpham/${id}`);
+      // console.log("response.data.data: ", response.data.data);
+      setSanPham(response.data.data); // Sửa ở đây, không lấy phần tử đầu tiên
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching product details:", error);
+      // Xử lý khi không tìm thấy sản phẩm, ví dụ: chuyển hướng đến trang 404
+    }
+  };
+
   const handleQuantityChange = (event) => {
     const enteredQuantity = parseInt(event.target.value, 10);
-
     if (!isNaN(enteredQuantity)) {
-      // Nếu người dùng nhập một số hợp lệ
-      const limitedQuantity = Math.min(enteredQuantity, sanPham.TonKhoSP);
+      const limitedQuantity = Math.min(enteredQuantity, sanPham.TON_KHO_SP);
       setSoLuong(limitedQuantity);
     } else {
-      alert("Vược quá só lượng tồn kho !!!");
+      alert("Vượt quá số lượng tồn kho !!!");
       console.error("Please enter a valid quantity.");
     }
   };
 
   const handlePurchase = () => {
-    if (soLuong > sanPham.TonKhoSP) {
+    if (soLuong > sanPham.TON_KHO_SP) {
       alert("Số lượng mua vượt quá số lượng tồn kho.");
       return;
     }
-
     // Chuyển hướng đến trang mua hàng
-    navigate(`/MuaHang/${sanPham.MaSP}`);
+    navigate(`/MuaHang/${sanPham.MASP}`);
   };
 
   return (
@@ -67,18 +62,18 @@ const ChiTietSanPham = () => {
                 <div className="product-image_ChiTietSanPham">
                   <img
                     className="image_ChiTietSanPham"
-                    src={`http://localhost:8000/api/image/${sanPham.AnhSP}`}
-                    alt={sanPham.AnhSP}
+                    src={sanPham.imageUrl} // Sử dụng URL hình ảnh đã tạo
+                    alt={sanPham.TENSP} // Sử dụng tên sản phẩm cho alt
                   />
                 </div>
                 <div className="product-h3_ChiTietSanPham">
-                  <h3 className="h3_ChiTietSanPham">{sanPham.TenSP}</h3>
+                  <h3 className="h3_ChiTietSanPham">{sanPham.TENSP}</h3>
                   <p className="product-prices_ChiTietSanPham">
-                    {sanPham.DonGiaSP} VND
+                    {sanPham.DON_GIA} VND
                   </p>
                   <hr />
                   <p className="Con_Het_ChiTietSanPham">
-                    {sanPham.TonKhoSP > 0 ? "Còn hàng" : "Hết hàng"}
+                    {sanPham.TON_KHO_SP > 0 ? "Còn hàng" : "Hết hàng"}
                   </p>
                   <div className="SoLuongSanPham_ChiTietSanPham">
                     <label htmlFor="quantity">Số lượng:</label>
@@ -106,45 +101,45 @@ const ChiTietSanPham = () => {
                           <td>
                             <b>Chip</b>
                           </td>
-                          <td>{sanPham.Chip}</td>
+                          <td>{sanPham.CHIP || 'Không có thông tin'}</td> {/* Hiển thị nếu không có thông tin */}
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>Main</b>
                           </td>
-                          <td>{sanPham.Main}</td>
+                          <td>{sanPham.MAIN || 'Không có thông tin'}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>VGA</b>
                           </td>
-                          <td>{sanPham.VGA}</td>
+                          <td>{sanPham.VGA || 'Không có thông tin'}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>Ram</b>
                           </td>
-                          <td>{sanPham.RAM}</td>
+                          <td>{sanPham.RAM || 'Không có thông tin'}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>Tồn kho</b>
                           </td>
-                          <td>{sanPham.TonKhoSP}</td>
+                          <td>{sanPham.TON_KHO_SP}</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
 
                   <div className="product-h3_muahang_ChiTietSanPham">
-                    {sanPham.TonKhoSP > 0 && (
+                    {sanPham.TON_KHO_SP > 0 && (
                       <Link
                         to={{
-                          pathname: `/MuaHang/${sanPham.MaSP}`,
+                          pathname: `/MuaHang/${sanPham.MASP}`,
                           state: { soLuong },
                         }}
                         className="purchase-button_ChiTietSanPham"

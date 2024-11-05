@@ -1,13 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
 import "./Slider.scss";
 import { useNavigate } from "react-router-dom";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+
 const Slider = () => {
   const [products, setProducts] = useState([]);
   const autoSlideInterval = useRef(null);
@@ -40,7 +37,7 @@ const Slider = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/sanpham");
-
+      // console.log("response.data.data: ", response.data.data);
       if (response.status === 200) {
         setProducts(response.data.data || []);
       }
@@ -48,6 +45,7 @@ const Slider = () => {
       console.error(error.message);
     }
   };
+
   const setupSliderNavigation = () => {
     if (nextButtonRef.current) {
       nextButtonRef.current.addEventListener("click", moveSliderNext);
@@ -69,7 +67,7 @@ const Slider = () => {
 
   const handleViewSanPham = (SanPham) => {
     if (SanPham) {
-      navigate(`/SanPham/${SanPham.MaSP}`);
+      navigate(`/SanPham/${SanPham.MASP}`);
     }
   };
 
@@ -77,18 +75,18 @@ const Slider = () => {
     <div className="slider-main">
       <div className="slide-container">
         <div id="slide">
-          {products.map((item, index) => (
+          {products.map((item) => (
             <div
-              key={item.MaSP}
+              key={item.MASP}
               className="slide-item"
               style={{
-                backgroundImage: `url(${`http://localhost:8000/api/image/${item.AnhSP}`})`,
+                backgroundImage: `url(${item.imageUrl ? item.imageUrl : 'http://localhost:8000/images/no_image_available.png'})`,
               }}
             >
               <div className="slide-content">
-                <div className="slide-name">{item.TenSP || ""}</div>
+                <div className="slide-name">{item.TENSP || ""}</div>
                 <div className="slide-des">
-                  {item.DonGiaSP ? `${item.DonGiaSP.toLocaleString()} VNĐ` : ""}{" "}
+                  {item.DON_GIA ? `${Number(item.DON_GIA).toLocaleString()} VNĐ` : ""}
                 </div>
                 <button
                   className="btnSeeMore_Slider"
@@ -106,7 +104,6 @@ const Slider = () => {
             <FontAwesomeIcon icon={faChevronLeft} />
           </button>
           <button ref={nextButtonRef} className="slide-button-2">
-            {" "}
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         </div>

@@ -17,8 +17,13 @@ class PostController extends Controller
         $rows = DB::select("SELECT * FROM sanpham");
 
         $productsWithImageUrls = array_map(function ($SanPham) {
+            // Nếu AnhSP không có giá trị, sử dụng ảnh mặc định từ /images
+            $imageUrl = isset($SanPham->ANHSP) && !empty($SanPham->ANHSP)
+                ? 'http://localhost:8000/images/' . $SanPham->ANHSP
+                : 'http://localhost:8000/images/no_image_available.png'; // Đường dẫn ảnh mặc định
+
             return (array) $SanPham + [
-                'imageUrl' => 'http://localhost:8000/public/images/' . $SanPham->AnhSP,
+                'imageUrl' => $imageUrl,
             ];
         }, $rows);
 
@@ -71,12 +76,16 @@ class PostController extends Controller
             ], 404);
         }
 
-        // $productWithImageUrl = (array) $rows[0];
-        // $productWithImageUrl['imageUrl'] = 'http://localhost:8000/public/images/' . $productWithImageUrl['ANHSP'];
+        // Lấy sản phẩm đầu tiên
+        $product = (array) $rows[0];
+        // Tạo URL hình ảnh
+        $product['imageUrl'] = isset($product['ANHSP']) && !empty($product['ANHSP'])
+            ? 'http://localhost:8000/images/' . $product['ANHSP']
+            : 'http://localhost:8000/images/no_image_available.png'; // Đường dẫn ảnh mặc định
 
         return response()->json([
             'message' => 'ok',
-            'data' => $rows,
+            'data' => $product,
         ]);
     }
 
@@ -157,7 +166,7 @@ class PostController extends Controller
     // Lấy sản phẩm desktop
     public function getSanPhamDesktop()
     {
-        $rows = DB::select("SELECT * FROM sanpham WHERE NHA_SAN_XUAT LIKE ?", ["Shop PC"]);
+        $rows = DB::select("SELECT * FROM sanpham WHERE NHA_SAN_XUAT LIKE ?", bindings: ["Shop PC"]);
 
         $productsWithImageUrls = array_map(function ($SanPham) {
             return (array) $SanPham + [
