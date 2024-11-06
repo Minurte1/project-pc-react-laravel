@@ -123,43 +123,46 @@ class PostController extends Controller
     // Tạo hóa đơn
     public function createHoaDon(Request $request)
     {
-        $validatedData = $request->validate([
-            'MA_KH' => 'required',
-            'DIA_CHI_SHIP' => 'required',
-            'SDT_LIEN_HE_KH' => 'required',
-            'GHI_CHU_HOA_DON' => 'nullable',
-            'ChiTietHoaDon' => 'required|array',
-        ]);
+        // Kiểm tra nếu dữ liệu 'formData' không hợp lệ
+        $data = $request->all();  // Lấy toàn bộ dữ liệu
+
+        // Kiểm tra ChiTietHoaDon
+        if (empty($data['ChiTietHoaDon']) || !isset($data['ChiTietHoaDon'][0]['MaSP'])) {
+            return response()->json(['success' => false, 'message' => 'Chi tiết hóa đơn không hợp lệ.', 'data' => $data]);
+        }
 
         try {
-            // Insert hoadon
-            $newMaHD = DB::insert("INSERT INTO hoadon (MA_KH, DIA_CHI_SHIP, SDT_LIEN_HE_KH, GHI_CHU_HOA_DON) (?, ?, ?, ?)", [
-                $validatedData['MA_KH'],
-                $validatedData['DIA_CHI_SHIP'],
-                $validatedData['SDT_LIEN_HE_KH'],
-                $validatedData['GHI_CHU_HOA_DON'],
+            // Bắt đầu transaction
+            DB::beginTransaction();
+
+            // Thêm vào bảng hoadon
+            DB::insert('INSERT INTO hoadon (MA_KH, DIA_CHI_SHIP, SDT_LIEN_HE_KH, GHI_CHU_HOA_DON) VALUES (?, ?, ?, ?)', [
+                $data['MaKH'],
+                $data['DiaChiShip'],
+                $data['SdtShip'],
+                $data['GhiChu'],
             ]);
 
-            // Insert ChiTietHoaDon
-            foreach ($validatedData['ChiTietHoaDon'] as $item) {
-                DB::insert("INSERT INTO ChiTietHoaDon (MAHD, MASP, SO_LUONG, GIAM_GIA) VALUES (?, ?, ?, ?)", [
-                    $newMaHD,
-                    $item['MASP'],
-                    $item['SO_LUONG'],
-                    $item['GIAM_GIA'],
-                ]);
+            // Lấy ID của hóa đơn vừa tạo
+            $hoaDonId = DB::getPdo()->lastInsertId();
 
-                // Cập nhật TonKhoSP
-                DB::update("UPDATE sanpham SET TON_KHO_SP = TON_KHO_SP - ? WHERE MASP = ?", [
-                    $item['SO_LUONG'],
-                    $item['MASP'],
-                ]);
-            }
+            // Thêm vào bảng chi_tiet_hoa_don
+            DB::insert('INSERT INTO chi_tiet_hoa_don (MASP, MAHD, SO_LUONG, GIAM_GIA, GHI_CHU_CTHD) VALUES (?, ?, ?, ?, ?)', [
+                $data['ChiTietHoaDon'][0]['MaSP'],
+                $hoaDonId,
+                $data['ChiTietHoaDon'][0]['SoLuong'],
+                $data['ChiTietHoaDon'][0]['GiamGia'],
+                $data['GhiChu']
+            ]);
 
-            return response()->json(['message' => 'HoaDon created successfully']);
-        } catch (\Exception $error) {
-            Log::error('Error creating HoaDon: ' . $error->getMessage());
-            return response()->json(['message' => 'Internal Server Error'], 500);
+            // Commit transaction
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Hóa đơn đã được tạo thành công.']);
+        } catch (\Exception $e) {
+            // Rollback nếu có lỗi
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Lỗi khi tạo hóa đơn.', 'error' => $e->getMessage()]);
         }
     }
 

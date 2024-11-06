@@ -16,27 +16,30 @@ const MuaSanPham = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    MaKH: "QuocBaoKH1",
-    MaNV: "QuocBaoNV1",
+    MaKH: 1,
     DiaChiShip: "",
     SdtShip: "",
     NgayDatHang: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
     GhiChu: "",
-    ChiTietHoaDon: [{ MaSP: 0, SoLuong: 1, GiamGia: 1 }],
+    ChiTietHoaDon: [{ MaSP: null, SoLuong: null, GiamGia: 1 }],
   });
 
   useEffect(() => {
-    // Fetch product details when component mounts or id/location.state changes
     if (location.state && location.state.soLuong) {
       setSoLuong(location.state.soLuong);
     }
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      ChiTietHoaDon: [{ MaSP: id, SoLuong: soLuong, GiamGia: 1 }]
+    }));
+
     fetchProduct();
-  }, [id, location.state]);
+  }, [id, location.state, soLuong]); // Thêm soLuong vào dependency  
 
   const fetchProduct = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/sanpham/${id}`);
-      console.log("response.data.data: ", response.data.data);
+      // console.log("response.data.data: ", response.data.data);
       setSanPham(response.data.data || {});
       setLoading(false);
     } catch (error) {
@@ -57,28 +60,42 @@ const MuaSanPham = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Ensure all required fields are filled
-    if (!formData.MaKH || !formData.MaNV || !formData.DiaChiShip) {
+    // Kiểm tra các trường bắt buộc
+    if (!formData.MaKH || !formData.DiaChiShip || !formData.SdtShip || !formData.ChiTietHoaDon[0].MaSP) {
       alert("Vui lòng nhập đầy đủ thông tin!");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/create-hoadon", formData, {
+      // Cập nhật formData nếu cần
+      const updatedFormData = {
+        ...formData,
+        ChiTietHoaDon: [{
+          MaSP: sanPham.MASP,  // Gán mã sản phẩm từ sanPham
+          SoLuong: soLuong,
+          GiamGia: 1
+        }]
+      };
+
+      console.log(updatedFormData);  // Kiểm tra dữ liệu gửi đi
+
+      const response = await axios.post("http://localhost:8000/api/create-hoadon", updatedFormData, {
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json', // Đảm bảo gửi dữ liệu dưới dạng JSON
+        }
       });
 
       if (response.status === 200) {
         alert("Đặt hàng thành công!");
-        navigate("/"); // Redirect after successful order
+        navigate("/"); // Điều hướng sau khi đặt hàng thành công
       } else {
-        throw new Error("Failed to create HoaDon");
+        alert("Tạo hóa đơn thất bại");
+        navigate("/");
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to create HoaDon");
+      console.log("Error:", error);
+      alert("Error");
+      navigate("/");
     }
   };
 
