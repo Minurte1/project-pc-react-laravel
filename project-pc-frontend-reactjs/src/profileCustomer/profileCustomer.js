@@ -123,10 +123,10 @@ const ProfileCustomer = () => {
     if (CountCustomer > 10) {
       toast.error(
         "Waoooo SuperUltra Click Hủy Đơn " +
-          " " +
-          " (°ロ°)!" +
-          " x" +
-          CountCustomer
+        " " +
+        " (°ロ°)!" +
+        " x" +
+        CountCustomer
       );
     }
     if (CountCustomer === 25) {
@@ -441,41 +441,36 @@ const ProfileCustomer = () => {
               <div className="functions-br-ngang1"></div>
             </div>
             <div
-              className={`functions-thongtincanhan ${
-                selectedItem === "profile" ? "active" : ""
-              }`}
+              className={`functions-thongtincanhan ${selectedItem === "profile" ? "active" : ""
+                }`}
               onClick={handleIsOpenProfile}
             >
               <p>Thông tin cá nhân</p>
             </div>
             <div
-              className={`functions-thongtincanhan ${
-                selectedItem === "password" ? "active" : ""
-              }`}
+              className={`functions-thongtincanhan ${selectedItem === "password" ? "active" : ""
+                }`}
               onClick={handleIsOpenProfilePassword}
             >
               <p>Thay đổi mật khẩu</p>
             </div>
             <div
-              className={`functions-thongtincanhan ${
-                selectedItem === "orders" ? "active" : ""
-              }`}
+              className={`functions-thongtincanhan ${selectedItem === "orders" ? "active" : ""
+                }`}
               onClick={handleIsOpenDonHang}
             >
               <p>Xem đơn hàng</p>
             </div>
             <div
-              className={`functions-thongtincanhan ${
-                selectedItem === "delivered" ? "active" : ""
-              }`}
+              className={`functions-thongtincanhan ${selectedItem === "delivered" ? "active" : ""
+                }`}
               onClick={handleIsOpenDonHangDaGiao}
             >
               <p>Đơn hàng đã giao</p>
             </div>
             <div
-              className={`functions-thongtincanhan ${
-                selectedItem === "canceled" ? "active" : ""
-              }`}
+              className={`functions-thongtincanhan ${selectedItem === "canceled" ? "active" : ""
+                }`}
               onClick={handleIsOpenDonHangHuyDon}
             >
               <p>Đơn hàng đã hủy</p>
