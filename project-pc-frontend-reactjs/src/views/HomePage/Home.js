@@ -15,11 +15,8 @@ class Home extends React.Component {
     return (
       <>
         <div className="home-container">
-          <Nav2 />
           <Slider />
           <ListSanPham />
-          <Footer />
-
           <ToastContainer />
         </div>
       </>

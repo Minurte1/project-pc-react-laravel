@@ -1,4 +1,0 @@
-docker compose -f mysql.yml -p shoppc-sql up -d
-docker tag a0176f777dc50502b88ca09c679d53507ae89d54f779a2b993a239dcad2a32b6 pepefrog2434123/shop_pc
-docker push pepefrog2434123/shop_pc
-npx create-react-app my-app

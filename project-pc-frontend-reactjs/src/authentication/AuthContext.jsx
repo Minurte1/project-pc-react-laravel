@@ -1,28 +1,31 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
-// Tạo context
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-// Provider component
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Trạng thái đăng nhập
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const loginIs = () => {
-    setIsLoggedIn(true); // Đặt trạng thái đăng nhập thành true
+  const updateAuthStatus = () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUserData(decoded);
+      setIsLoggedIn(true);
+    } else {
+      setUserData(null);
+      setIsLoggedIn(false);
+    }
   };
 
-  const logoutIs = () => {
-    setIsLoggedIn(false); // Đặt trạng thái đăng nhập thành false
-  };
-  console.log(isLoggedIn);
+  useEffect(() => {
+    updateAuthStatus();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, loginIs, logoutIs }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, userData, updateAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-// Hook để sử dụng context
-export const useAuth = () => {
-  return useContext(AuthContext);
 };

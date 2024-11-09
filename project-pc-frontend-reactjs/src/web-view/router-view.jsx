@@ -11,7 +11,8 @@ import SanPhamApple from "../views/SanPhamApple/SanPhamApple";
 import SanPhamASUS from "../views/SanPhamASUS/SanPhamASUS";
 import Test from "../views/Test/Test";
 import ProfileCustomer from "../profileCustomer/profileCustomer";
-import LoginView from "../views/page/login-view";
+import LoginView from "../private/login";
+import Register from "../private/register";
 import Admin from "../admin-view/adminComponent";
 
 function ProtectedRoute({ element, allowedRoles }) {
@@ -56,10 +57,6 @@ const RouterView = () => {
       element: <SanPhamDesktop />,
     },
     {
-      path: "/login",
-      element: <LoginView />,
-    },
-    {
       path: "/Apple",
       element: <SanPhamApple />,
     },
@@ -78,6 +75,14 @@ const RouterView = () => {
     {
       path: "*",
       element: <Navigate to="/contact" replace />,
+    },
+    {
+      path: "/login",
+      element: <LoginView />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
     {
       path: "/admin/*",

@@ -1,0 +1,86 @@
+.section-defaut-login {
+    min-height: 90vh;
+}
+
+.section-login {
+    min-height   : 100vh;
+    margin-bottom: 50px;
+    margin-top   : 50px;
+    padding-top  : 0px !important;
+}
+
+.container-login {
+    background-color: white;
+    border-radius   : 10px;
+    width           : 70%;
+    max-width       : 1200px;
+    overflow        : hidden;
+}
+
+.welcome-section-login {
+    padding        : 30px;
+    width          : 50%;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+}
+
+.welcome-section-login img {
+    width : 100%;
+    height: auto;
+}
+
+.login-section-login {
+    padding: 40px;
+    margin : auto;
+}
+
+.input-group-login {
+    display       : flex;
+    flex-direction: column;
+    margin-bottom : 20px;
+}
+
+.input-group-login label {
+    margin-bottom: 5px;
+    font-size    : 14px;
+    color        : #777;
+}
+
+.input-group-login select,
+.input-group-login input {
+    padding      : 10px;
+    font-size    : 16px;
+    border-radius: 0px;
+    border       : 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.submit-btn-login {
+    background-color: #ff8200;
+    color           : white;
+    border          : none;
+    padding         : 15px;
+    font-size       : 16px;
+    border-radius   : 5px;
+    cursor          : pointer;
+    width           : 100%;
+}
+
+.submit-btn-login:hover {
+    background-color: #e08e18;
+}
+
+.register-link-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link-login a {
+    color          : #f5a623;
+    text-decoration: none;
+}
+
+.register-link-login a:hover {
+    text-decoration: underline;
+}

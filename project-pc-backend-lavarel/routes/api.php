@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AuthController;
 
 /*
 |---------------------------------------------------------------------------
@@ -39,6 +40,12 @@ Route::post('/them-san-pham', [PostController::class, 'themSanPham']);
 Route::get('/edit-san-pham/{id}', [PostController::class, 'getEditPage']);
 Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
 Route::delete('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
+Route::post('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
+
+//AuthController
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

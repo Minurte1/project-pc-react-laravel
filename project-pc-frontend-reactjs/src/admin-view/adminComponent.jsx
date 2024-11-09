@@ -17,6 +17,7 @@ function Admin() {
     try {
       const decodedToken = jwt_decode(authToken); // Giải mã token
       const role = decodedToken.role; // Lấy role từ token
+
       if (role === 1 || role === 0) {
         // Nếu role là 1 hoặc 0, ở lại trang quản trị
         return;
