@@ -36,7 +36,7 @@ const Login = () => {
       const decodedToken = jwtDecode(token);
       console.log("Decoded Token:", decodedToken);
 
-      // Lưu thông tin token vào localStorage (tuỳ chọn)
+      // Lưu thông tin token vào localStorage
       localStorage.setItem('authToken', token);
       updateAuthStatus(); // Cập nhật AuthContext ngay sau khi lưu token
       navigate("/");

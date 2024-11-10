@@ -1,0 +1,114 @@
+.sidebar {
+    background-color: white;
+    color           : #666;
+    font-size       : 16px;
+    width           : 220px;
+    height          : 100vh;
+    position        : fixed;
+    transition      : all 0.3s ease;
+    box-shadow      : 2px 0px 5px rgba(0, 0, 0, 0.1);
+    overflow-y      : auto;
+    /* Cho phép thanh cuộn dọc */
+    overflow-x      : hidden;
+    /* Ẩn thanh cuộn ngang nếu có */
+    padding-right   : 10px;
+    /* Giãn khoảng cách bên phải để thanh cuộn không che nội dung */
+}
+
+.sidebar h2 {
+    text-align   : center;
+    padding      : 20px 0;
+    border-bottom: 1px solid #495057;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding   : 0;
+}
+
+.sidebar ul li {
+    padding   : 15px;
+    transition: background 0.3s;
+}
+
+.sidebar ul li a {
+    color          : #666;
+    font-size      : 15px;
+    text-decoration: none;
+    display        : block;
+}
+
+.sidebar ul li.active {
+    color           : white;
+    background-color: #fb9678;
+}
+
+.sidebar ul li.active a {
+    color: white;
+}
+
+.sidebar ul li i {
+    margin-right: 2px;
+    font-size   : 17px;
+}
+
+.sidebar ul li:hover {
+    background: #fb9678;
+    color     : white;
+}
+
+.main-content {
+    margin-left: 200px;
+    /* padding : 20px; */
+}
+
+/* Admin */
+.admin-header {
+    width           : 100%;
+    height          : 70px;
+    background-color: #fb9678;
+    display         : flex;
+    padding         : 0px 30px;
+    justify-content : space-between;
+    align-items     : center;
+}
+
+.admin-header .navbar-search .form-control {
+    border-radius: 30px;
+}
+
+.admin-header .img-profile {
+    height: 40px;
+    width : 40px;
+}
+
+.admin-header .dropdown-menu {
+    min-width: 200px;
+}
+
+.admin-header .topbar-divider {
+    width           : 1px;
+    height          : 40px;
+    background-color: #e3e6f0;
+    margin          : 0 1rem;
+}
+
+.admin-content {
+    width       : 100%;
+    min-height  : 88vh;
+    padding     : 30px;
+    padding-left: 45px;
+}
+
+.container-admin-content {
+    width           : 100%;
+    min-height      : 83vh;
+    padding         : 40px;
+    padding-bottom  : unset;
+    background-color: #f8f9fa;
+}
+
+.admin-footer {
+    width     : 100%;
+    text-align: center;
+}

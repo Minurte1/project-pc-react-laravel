@@ -23,7 +23,7 @@ const Nav2 = () => {
     const token = localStorage.getItem("authToken");
     if (token) {
       try {
-        console.log("userData: ", userData)
+        // console.log("userData: ", userData)
       } catch (error) {
         console.error("Token không hợp lệ:", error);
       }
@@ -41,7 +41,7 @@ const Nav2 = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.clear(); // Xóa toàn bộ dữ liệu trong localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất trong Context
     navigate("/login");
   };
@@ -103,7 +103,7 @@ const Nav2 = () => {
             >
               {userData && userData.TEN_PHAN_QUYEN && userData.TEN_PHAN_QUYEN === "Admin" ?
                 (<MenuItem
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/admin")}
                   style={{
                     display: "flex",
                     alignItems: "center",

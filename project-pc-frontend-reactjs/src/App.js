@@ -25,7 +25,7 @@ function App() {
           <header>
             <Routes>
               <Route path="/*" element={<MainLayout />} />
-              <Route path="/admin/*" element={<GuardRoute element={AdminLayout} />} />
+              <Route path="/admin/*" element={<AdminLayout />} />
             </Routes>
           </header>
 

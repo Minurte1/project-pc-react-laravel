@@ -1,25 +1,22 @@
-/* eslint-disable no-sparse-arrays */
-import { useRoutes, Navigate } from "react-router-dom";
+// src/admin-view/router-admin.jsx
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from './dashboardComponent';
 
 const AdminRouter = () => {
-  const element = useRoutes([
-    {
-      path: "", // Route chính cho Dashboard
-      // element: <Dashboard />,
-      children: [
-        {
-          path: "", // Khi vào "/admin/" sẽ render Users
-          // element: <Users />,
-        },
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Dashboard />
+        }
+      />
 
-        {
-          path: "*",
-          element: <Navigate to="/admin/users" replace />, // Chuyển hướng nếu không tìm thấy route
-        },
-      ],
-    },
-  ]);
-  return element;
+      {/* Thêm các route khác ở đây */}
+      <Route path="*" element={<Navigate to="/admin" replace />} />
+    </Routes>
+  );
 };
 
 export default AdminRouter;

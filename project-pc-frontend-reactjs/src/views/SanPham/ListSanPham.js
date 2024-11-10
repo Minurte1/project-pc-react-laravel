@@ -17,7 +17,6 @@ const ListSanPham = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/api/sanpham");
-      console.log("response.data.data: ", response.data.data);
       if (response.status !== 200) {
         alert("Yêu cầu không thành công");
       } else {
