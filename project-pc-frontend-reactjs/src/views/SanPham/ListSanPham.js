@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ListSanPham.scss";
-import imageErr from "../../assets/images/Kothayanh.jpg"; // Hình ảnh lỗi
+import imageErr from "../../assets/images/no_image_available.png"; // Hình ảnh lỗi
 import axios from "axios";
 
 const ListSanPham = () => {

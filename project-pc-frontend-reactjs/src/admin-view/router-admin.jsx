@@ -1,21 +1,30 @@
-// src/admin-view/router-admin.jsx
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Dashboard from './dashboardComponent';
+import { Routes, Route, Navigate, useRoutes } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import Settings from './pages/Settings';
 
 const AdminRouter = () => {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Dashboard />
-        }
-      />
-
-      {/* Thêm các route khác ở đây */}
-      <Route path="*" element={<Navigate to="/admin" replace />} />
-    </Routes>
+    <div className="d-flex">
+      {/* Sidebar */}
+      <Sidebar />
+      {/* Nội dung chính */}
+      <div className="flex-grow-1">
+        <Navbar />
+        <div className="container mt-3">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </div>
+    </div>
   );
 };
 

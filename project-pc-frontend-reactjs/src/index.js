@@ -22,6 +22,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
-// Đoạn mã này dùng để đo lường hiệu suất của ứng dụng
-reportWebVitals();

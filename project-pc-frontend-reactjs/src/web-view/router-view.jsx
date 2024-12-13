@@ -13,7 +13,7 @@ import Test from "../views/Test/Test";
 import ProfileCustomer from "../profileCustomer/profileCustomer";
 import LoginView from "../private/login";
 import Register from "../private/register";
-import Admin from "../admin-view/adminComponent";
+import Dashboard from "../admin-view/pages/Dashboard";
 
 function ProtectedRoute({ element, allowedRoles }) {
   const token = localStorage.getItem("authToken");
@@ -73,10 +73,6 @@ const RouterView = () => {
       element: <ProfileCustomer />,
     },
     {
-      path: "*",
-      element: <Navigate to="/contact" replace />,
-    },
-    {
       path: "/login",
       element: <LoginView />,
     },
@@ -84,10 +80,10 @@ const RouterView = () => {
       path: "/register",
       element: <Register />,
     },
-    {
-      path: "/admin/*",
-      element: <ProtectedRoute element={<Admin />} allowedRoles={[0]} />,
-    },
+    // {
+    //   path: "*",
+    //   element: <Navigate to="/" replace />,
+    // },
   ]);
 
   return <div>{element}</div>;

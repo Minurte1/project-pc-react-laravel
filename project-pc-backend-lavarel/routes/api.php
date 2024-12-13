@@ -5,17 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 
-/*
-|---------------------------------------------------------------------------
-| API Routes
-|---------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 // Route cho API /hello
 Route::get('/hello', [PostController::class, 'show']);
 
@@ -35,7 +24,7 @@ Route::delete('/delete-user/{id}', [PostController::class, 'deleteUser']);
 Route::get('/', [PostController::class, 'getHomePage']);
 Route::get('/thong-ke', [PostController::class, 'getThongKe']);
 Route::post('/tim', [PostController::class, 'postHomePage']);
-Route::get('/them-san-pham', [PostController::class, 'getThemSanPhamPage']);
+Route::get('/them-san-pham', [PostController::class, 'getThemSanPhamPage']);    
 Route::post('/them-san-pham', [PostController::class, 'themSanPham']);
 Route::get('/edit-san-pham/{id}', [PostController::class, 'getEditPage']);
 Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
