@@ -426,56 +426,56 @@ class PostController extends Controller
     //     return view('sanphamNew');
     // }
 
-    // public function themSanPham(Request $request)
-    // {
-    //     // Validate và xử lý upload hình ảnh
-    //     $request->validate([
-    //         'TenSP' => 'required|string',
-    //         'MaTL' => 'required|integer',
-    //         'DonGiaSP' => 'required|numeric',
-    //         'TonKhoSP' => 'required|integer',
-    //         'Chip' => 'nullable|string',
-    //         'Main' => 'nullable|string',
-    //         'VGA' => 'nullable|string',
-    //         'NhanSanXuat' => 'nullable|string',
-    //         'RAM' => 'nullable|string',
-    //         'AnhSP' => 'required|string', // Chúng ta xác thực là string
-    //     ]);
+    public function themSanPham(Request $request)
+    {
+        // Validate và xử lý upload hình ảnh
+        $request->validate([
+            'TenSP' => 'required|string',
+            'MaTL' => 'required|integer',
+            'DonGiaSP' => 'required|numeric',
+            'TonKhoSP' => 'required|integer',
+            'Chip' => 'nullable|string',
+            'Main' => 'nullable|string',
+            'VGA' => 'nullable|string',
+            'NhanSanXuat' => 'nullable|string',
+            'RAM' => 'nullable|string',
+            'AnhSP' => 'required|string', // Chúng ta xác thực là string
+        ]);
 
-    //     // Xử lý dữ liệu hình ảnh
-    //     $image = $request->AnhSP; // Lấy dữ liệu hình ảnh từ JSON
-    //     if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
-    //         $data = substr($image, strpos($image, ',') + 1);
-    //         $type = strtolower($type[1]); // Lấy định dạng hình ảnh
-    //         if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
-    //             throw new \Exception('Image type not supported.');
-    //         }
-    //         $data = base64_decode($data);
-    //         $filename = uniqid() . '.' . $type; // Tạo tên tệp ngẫu nhiên
-    //         $path = storage_path('app/public/images/' . $filename); // Đường dẫn tệp
-    //         file_put_contents($path, $data); // Lưu tệp vào server
-    //     } else {
-    //         throw new \Exception('Image is not valid.');
-    //     }
+        // Xử lý dữ liệu hình ảnh
+        $image = $request->AnhSP; // Lấy dữ liệu hình ảnh từ JSON
+        if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+            $data = substr($image, strpos($image, ',') + 1);
+            $type = strtolower($type[1]); // Lấy định dạng hình ảnh
+            if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
+                throw new \Exception('Image type not supported.');
+            }
+            $data = base64_decode($data);
+            $filename = uniqid() . '.' . $type; // Tạo tên tệp ngẫu nhiên
+            $path = storage_path('app/public/images/' . $filename); // Đường dẫn tệp
+            file_put_contents($path, $data); // Lưu tệp vào server
+        } else {
+            throw new \Exception('Image is not valid.');
+        }
 
-    //     try {
-    //         DB::table('SanPham')->insert([
-    //             'TenSP' => $request->TenSP,
-    //             'MaTL' => $request->MaTL,
-    //             'DonGiaSP' => $request->DonGiaSP,
-    //             'TonKhoSP' => $request->TonKhoSP,
-    //             'Chip' => $request->Chip,
-    //             'Main' => $request->Main,
-    //             'VGA' => $request->VGA,
-    //             'NhanSanXuat' => $request->NhanSanXuat,
-    //             'RAM' => $request->RAM,
-    //             'AnhSP' => $filename,
-    //         ]);
-    //         return response()->json(['message' => 'Sản phẩm đã được thêm thành công.'], 201);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => $e->getMessage()], 500);
-    //     }
-    // }
+        try {
+            DB::table('SanPham')->insert([
+                'TenSP' => $request->TenSP,
+                'MaTL' => $request->MaTL,
+                'DonGiaSP' => $request->DonGiaSP,
+                'TonKhoSP' => $request->TonKhoSP,
+                'Chip' => $request->Chip,
+                'Main' => $request->Main,
+                'VGA' => $request->VGA,
+                'NhanSanXuat' => $request->NhanSanXuat,
+                'RAM' => $request->RAM,
+                'AnhSP' => $filename,
+            ]);
+            return response()->json(['message' => 'Sản phẩm đã được thêm thành công.'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
 
     // public function getEditPage($id)

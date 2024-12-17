@@ -7,7 +7,7 @@ import {
 } from "../../services/product-service"; // Import service functions
 import ProductModal from "../modal-view/product-modal"; // Import Product Modal
 
-const Users = () => {
+const ProductComponent = () => {
   const [sanphams, setSanphams] = useState([]);
   const [selectedSanPham, setSelectedSanPham] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -182,4 +182,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default ProductComponent;

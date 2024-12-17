@@ -29,7 +29,7 @@ Route::post('/them-san-pham', [PostController::class, 'themSanPham']);
 Route::get('/edit-san-pham/{id}', [PostController::class, 'getEditPage']);
 Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
 Route::delete('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
-Route::post('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
+
 
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);

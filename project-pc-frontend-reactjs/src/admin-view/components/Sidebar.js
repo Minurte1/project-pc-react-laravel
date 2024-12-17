@@ -17,7 +17,7 @@ const Sidebar = () => {
                 <li className="nav-item mb-2">
                     <Link
                         className="nav-link text-white btn btn-outline-light btn-sm rounded-pill text-center"
-                        to="/users"
+                        to="/admin/users"
                     >
                         <i className="bi bi-people"></i> Users
                     </Link>
@@ -25,7 +25,7 @@ const Sidebar = () => {
                 <li className="nav-item">
                     <Link
                         className="nav-link text-white btn btn-outline-light btn-sm rounded-pill text-center"
-                        to="/settings"
+                        to="/admin/settings"
                     >
                         <i className="bi bi-gear"></i> Settings
                     </Link>
