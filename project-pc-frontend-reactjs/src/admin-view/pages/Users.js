@@ -84,7 +84,10 @@ const Users = () => {
       <h5 className="card-title mb-4">Quản lý sản phẩm</h5>
       <div className="mb-3">
         <div className="col-12 d-flex justify-content-between align-items-center mt-3">
-          <div style={{ width: "350px" }} className="col-3 input-group admin-input-group">
+          <div
+            style={{ width: "350px" }}
+            className="col-3 input-group admin-input-group"
+          >
             <input
               type="text"
               className="col-3 form-control admin-input"
@@ -110,7 +113,7 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {currentSanPhams.map((sanpham) => (
+          {createSanPham.map((sanpham) => (
             <tr key={sanpham.MASP}>
               <td>{sanpham.MASP}</td>
               <td>{sanpham.TENSP}</td>
@@ -149,7 +152,9 @@ const Users = () => {
           {[...Array(totalPages)].map((_, index) => (
             <li
               key={index}
-              className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+              className={`page-item ${
+                currentPage === index + 1 ? "active" : ""
+              }`}
             >
               <a
                 className="page-link"
