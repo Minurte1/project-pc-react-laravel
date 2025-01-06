@@ -1,19 +1,19 @@
-import React from 'react';
-import { Routes, Route, Navigate, useRoutes } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import Settings from './pages/Settings';
+import React from "react";
+import { Routes, Route, Navigate, useRoutes } from "react-router-dom";
+
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import Settings from "./pages/Settings";
+import NavBarAdmin from "./components/navBarAdmin";
+import HeaderAdmin from "./components/headerAdmin";
 
 const AdminRouter = () => {
   return (
     <div className="d-flex">
-      {/* Sidebar */}
-      <Sidebar />
-      {/* Nội dung chính */}
+      <HeaderAdmin />
+
       <div className="flex-grow-1">
-        <Navbar />
+        <NavBarAdmin />
         <div className="container mt-3">
           <Routes>
             <Route path="/" element={<Dashboard />} />

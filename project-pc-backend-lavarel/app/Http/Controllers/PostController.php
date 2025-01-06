@@ -33,6 +33,64 @@ class PostController extends Controller
         ]);
     }
 
+
+    
+    public function getUserById($id)
+{
+    // Truy vấn JOIN dữ liệu từ ba bảng
+    $query = "
+        SELECT 
+            kh.MA_KH, 
+            kh.SDT_KH, 
+            kh.TEN_KHACH_HANG, 
+            kh.DIA_CHI, 
+            kh.GHI_CHU_KH, 
+            tk.MA_TK, 
+            tk.TEN_DANG_NHAP, 
+            tk.MA_PHAN_QUYEN, 
+            pq.TEN_PHAN_QUYEN, 
+            pq.GHI_CHU_PHAN_QUYEN
+        FROM khachhang kh
+        LEFT JOIN tai_khoan tk ON kh.MA_KH = tk.MA_KH
+        LEFT JOIN phan_quyen pq ON tk.MA_PHAN_QUYEN = pq.MA_PHAN_QUYEN
+        WHERE kh.MA_KH = ?
+    ";
+
+    // Lấy dữ liệu từ database
+    $rows = DB::select($query, [$id]);
+
+    if (empty($rows)) {
+        // Trả về thông báo nếu không tìm thấy dữ liệu
+        return response()->json([
+            'message' => 'User not found',
+        ], 404);
+    }
+
+    // Chỉ có một dòng kết quả vì MA_KH là duy nhất
+    $user = $rows[0];
+
+    // Xử lý ghi chú nếu rỗng
+    $noteKH = isset($user->GHI_CHU_KH) && !empty($user->GHI_CHU_KH)
+        ? $user->GHI_CHU_KH
+        : 'No customer notes available';
+
+    $notePQ = isset($user->GHI_CHU_PHAN_QUYEN) && !empty($user->GHI_CHU_PHAN_QUYEN)
+        ? $user->GHI_CHU_PHAN_QUYEN
+        : 'No role notes available';
+
+    // Bổ sung các dữ liệu đã xử lý
+    $userWithAdditionalData = (array) $user + [
+        'formattedCustomerNote' => $noteKH,
+        'formattedRoleNote' => $notePQ,
+    ];
+
+    // Trả về dữ liệu JSON
+    return response()->json([
+        'message' => 'ok',
+        'data' => $userWithAdditionalData,
+    ]);
+}
+
     public function getImage($filename)
     {
         // Đường dẫn đầy đủ tới file trong storage

@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router-dom";
-import { jwtDecode as jwt_decode } from 'jwt-decode';
+import { jwtDecode as jwt_decode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 
 import Home from "../views/HomePage/Home";
@@ -10,7 +10,7 @@ import SanPhamDesktop from "../views/SanPhamDesktop/SanPhamDesktop";
 import SanPhamApple from "../views/SanPhamApple/SanPhamApple";
 import SanPhamASUS from "../views/SanPhamASUS/SanPhamASUS";
 import Test from "../views/Test/Test";
-import ProfileCustomer from "../profileCustomer/profileCustomer";
+
 import LoginView from "../private/login";
 import Register from "../private/register";
 import Dashboard from "../admin-view/pages/Dashboard";
@@ -68,10 +68,7 @@ const RouterView = () => {
       path: "/test",
       element: <Test />,
     },
-    {
-      path: "/profile",
-      element: <ProfileCustomer />,
-    },
+
     {
       path: "/login",
       element: <LoginView />,

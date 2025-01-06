@@ -12,6 +12,7 @@ Route::get('/hello', [PostController::class, 'show']);
 Route::get('/image/{filename}', [PostController::class, 'getImage']);
 Route::get('/sanpham', [PostController::class, 'getAllSanPham']);
 Route::get('/khachhang', [PostController::class, 'getKhachHang']);
+Route::get('/khachhang/{id}', [PostController::class, 'getUserById']);
 Route::get('/sanpham/{id}', [PostController::class, 'getSanPhamById']);
 Route::get('/sanpham/slider', [PostController::class, 'getSanPhamSlider']);
 Route::get('/sanphamDesktop', [PostController::class, 'getSanPhamDesktop']);
