@@ -12,17 +12,19 @@ import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
-  const api = process.env.REACT_APP_URL_SERVER;
+  const api = process.env.URL_NODE;
   const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
-    TENNGUOIDUNG: "",
-    EMAIL: "",
-    DIACHI: "",
-    SODIENTHOAI: "",
-    MATKHAU: "",
-    CURRENT_PASSWORD: "",
-    AVATAR: "",
+    TEN_KHACH_HANG: "", // Tên khách hàng
+    SDT_KH: "", // Số điện thoại
+    DIA_CHI: "", // Địa chỉ
+    GHI_CHU_KH: "", // Ghi chú khách hàng
+    TEN_DANG_NHAP: "", // Tên đăng nhập
+    MA_PHAN_QUYEN: "", // Mã phân quyền
+    TEN_PHAN_QUYEN: "", // Tên phân quyền
+    GHI_CHU_PHAN_QUYEN: "", // Ghi chú phân quyền
   });
+
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -53,26 +55,27 @@ const UserProfile = () => {
         }
 
         const decoded = jwtDecode(token);
-        const response = await axios.get(`${api}/user/${decoded.MANGUOIDUNG}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          `http://localhost:8000/api/khachhang/${decoded.MA_TK}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-        // Kiểm tra nếu người dùng không tồn tại (ví dụ: response.data.DT là mảng rỗng)
-        if (!response.data.DT || response.data.DT.length === 0) {
-          navigate("/"); // Điều hướng ra trang chủ nếu không phải người dùng hợp lệ
-          return;
+        if (response.data.message == "ok") {
+          console.log("oke");
+          setUserData(response.data.data);
+          setFormData({
+            TEN_KHACH_HANG: response.data.data.TEN_KHACH_HANG,
+            SDT_KH: response.data.data.SDT_KH,
+            DIA_CHI: response.data.data.DIA_CHI,
+            GHI_CHU_KH: response.data.data.GHI_CHU_KH,
+            TEN_DANG_NHAP: response.data.data.TEN_DANG_NHAP,
+            MA_PHAN_QUYEN: response.data.data.MA_PHAN_QUYEN,
+            TEN_PHAN_QUYEN: response.data.data.TEN_PHAN_QUYEN,
+            GHI_CHU_PHAN_QUYEN: response.data.data.GHI_CHU_PHAN_QUYEN,
+          });
         }
-
-        setUserData(response.data.DT[0]);
-        setFormData({
-          TENNGUOIDUNG: response.data.DT[0].TENNGUOIDUNG,
-          EMAIL: response.data.DT[0].EMAIL,
-          DIACHI: response.data.DT[0].DIACHI,
-          SODIENTHOAI: response.data.DT[0].SODIENTHOAI,
-          MATKHAU: response.data.DT[0].MATKHAU,
-          AVATAR: response.data.DT[0].AVATAR,
-        });
-        setAvatarPreview(`${api}/images/${response.data.DT[0].AVATAR}`);
       } catch (error) {
         console.error("Error fetching user data:", error);
         // navigate("/"); // Điều hướng ra trang chủ nếu có lỗi xảy ra
@@ -208,9 +211,9 @@ const UserProfile = () => {
           {" "}
           <TextField
             margin="normal"
-            label="Họ và tên"
-            name="TENNGUOIDUNG"
-            value={formData.TENNGUOIDUNG || ""}
+            label="Tên Khách Hàng"
+            name="TEN_KHACH_HANG"
+            value={formData.TEN_KHACH_HANG || ""}
             onChange={handleChange}
             fullWidth
             disabled={!isEditing}
@@ -218,8 +221,8 @@ const UserProfile = () => {
           <TextField
             margin="normal"
             label="Email"
-            name="email"
-            value={formData.EMAIL || ""}
+            name="TEN_DANG_NHAP"
+            value={formData.TEN_DANG_NHAP || ""}
             onChange={handleChange}
             fullWidth
             disabled={true}
@@ -227,8 +230,8 @@ const UserProfile = () => {
           <TextField
             margin="normal"
             label="Số điện thoại"
-            name="SODIENTHOAI"
-            value={formData.SODIENTHOAI || ""}
+            name="SDT_KH"
+            value={formData.SDT_KH || ""}
             onChange={handleChange}
             fullWidth
             disabled={!isEditing}
@@ -236,8 +239,8 @@ const UserProfile = () => {
           <TextField
             margin="normal"
             label="Địa chỉ"
-            name="DIACHI"
-            value={formData.DIACHI || ""}
+            name="DIA_CHI"
+            value={formData.DIA_CHI || ""}
             onChange={handleChange}
             fullWidth
             disabled={!isEditing}
