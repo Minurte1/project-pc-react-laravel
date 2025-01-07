@@ -61,7 +61,6 @@ function App() {
 }
 const RouterUser = () => (
   <>
-    {/* <HeaderUser /> */}
     <Grid container style={{ height: "100vh" }}>
       <Grid item xs={3} md={2.5}>
         <NavBarUser />

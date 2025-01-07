@@ -73,6 +73,7 @@ const NavBarAdmin = () => {
         >
           Quản lý hệ thống
         </Typography>
+
         <List component="nav">
           <ListItem
             button
@@ -95,7 +96,7 @@ const NavBarAdmin = () => {
 
             <ListItemText primary="Thống kê cơ bản" />
           </ListItem>
-          {/* //----------------------- */}
+
           <List>
             {/* Quản lý người dùng */}
             <ListItem
@@ -242,7 +243,7 @@ const NavBarAdmin = () => {
                     borderRadius: "13px",
                     backgroundColor:
                       location.pathname ===
-                      "/admin/san-pham/don-hang/dang-xu-ly"
+                        "/admin/san-pham/don-hang/dang-xu-ly"
                         ? "#02d3f9"
                         : "transparent", // Kiểm tra nếu đang ở trang này
                     "&:hover": {

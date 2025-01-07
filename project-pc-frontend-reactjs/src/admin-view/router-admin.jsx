@@ -18,9 +18,8 @@ const AdminRouter = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/nguoi-dung" element={<Users />} />
+            <Route path="/*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </div>
