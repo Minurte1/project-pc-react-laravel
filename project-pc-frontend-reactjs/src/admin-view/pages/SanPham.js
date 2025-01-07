@@ -67,8 +67,19 @@ const DonHang = () => {
         console.log(`Xóa sản phẩm với mã ${MASP}`);
     };
 
-    const handleSaveSanPham = (formData) => {
-        console.log("formData: ", formData)
+    const handleSaveSanPham = () => {
+        const fetchSanPham = async () => {
+            const response = await axios.get(
+                `http://localhost:8000/api/list-san-pham`
+            );
+            const dataWithId = response?.data?.data?.map((user, index) => ({
+                ...user,
+                id: index + 1,
+            }));
+            setListSanPham(dataWithId || []);
+            setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
+        };
+        fetchSanPham();
     };
 
     const columns = [
@@ -125,7 +136,14 @@ const DonHang = () => {
                         className="form-control"
                     />
                 </div>
-                <button type="button" class="btn btn-success">Thêm</button>
+                <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={() => setShowModal(true)}
+                >
+                    Thêm
+                </button>
+
                 <div style={{ height: 1000, width: "100%" }}>
                     <DataGrid rows={filteredData} columns={columns} pageSize={5} />
                 </div>

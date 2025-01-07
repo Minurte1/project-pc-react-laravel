@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-
+import { enqueueSnackbar } from "notistack";
 const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit }) => {
     const [formData, setFormData] = useState({
         MATL: "",
@@ -46,10 +47,47 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
         });
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        handleSubmit(formData); // Gọi hàm xử lý submit (thêm hoặc sửa)
-        handleClose(); // Đóng modal
+
+        const formDataToSend = new FormData();
+        formDataToSend.append("ANHSP", formData.ANHSP); // Gửi file ảnh
+        formDataToSend.append("MATL", formData.MATL);
+        formDataToSend.append("TENSP", formData.TENSP);
+        formDataToSend.append("DON_GIA", formData.DON_GIA);
+        formDataToSend.append("TON_KHO_SP", formData.TON_KHO_SP);
+        formDataToSend.append("CHIP", formData.CHIP);
+        formDataToSend.append("MAIN", formData.MAIN);
+        formDataToSend.append("VGA", formData.VGA);
+        formDataToSend.append("NHA_SAN_XUAT", formData.NHA_SAN_XUAT);
+        formDataToSend.append("RAM", formData.RAM);
+        formDataToSend.append("ROM", formData.ROM);
+        formDataToSend.append("GHI_CHU_SP", formData.GHI_CHU_SP);
+
+        try {
+            if (sanpham) {
+                // Cập nhật sản phẩm
+                // await axios.put(`http://localhost:8000/api/update-san-pham/${sanpham.MASP}`, formDataToSend, {
+                //     headers: {
+                //         "Content-Type": "multipart/form-data",
+                //     },
+                // });
+                enqueueSnackbar("Cảnh báo: chưa cá API này.", { variant: "warning" });
+            } else {
+                // Thêm mới sản phẩm
+                await axios.post("http://localhost:8000/api/save-san-pham", formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                alert("Thêm sản phẩm mới thành công!");
+            }
+            handleSubmit();
+            handleClose(); // Đóng modal sau khi xử lý xong
+        } catch (error) {
+            console.error("Lỗi khi xử lý sản phẩm:", error);
+            enqueueSnackbar(`Đã xảy ra lỗi. Vui lòng thử lại. Cụ thể là ${error}`, { variant: "error" });
+        }
     };
 
     return (
@@ -203,11 +241,15 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
                             <Form.Group controlId="ANHSP">
                                 <Form.Label>Ảnh sản phẩm</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="file"
                                     name="ANHSP"
-                                    value={formData.ANHSP}
-                                    onChange={handleChange}
-                                    placeholder="Nhập đường dẫn ảnh"
+                                    onChange={(e) => {
+                                        const file = e.target.files[0]; // Lấy file đầu tiên được chọn
+                                        setFormData((prevData) => ({
+                                            ...prevData,
+                                            ANHSP: file, // Lưu file vào formData
+                                        }));
+                                    }}
                                 />
                             </Form.Group>
                         </Col>

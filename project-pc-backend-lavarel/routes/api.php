@@ -49,6 +49,8 @@ Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
 Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
 Route::get('/list-the-loai', [AdminController::class, 'getTheLoai']);
 
+Route::post('/save-san-pham', [AdminController::class, 'createSanPham']);
+
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
