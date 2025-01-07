@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router-dom";
-import { jwtDecode as jwt_decode } from 'jwt-decode';
+import { jwtDecode as jwt_decode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 
 import Home from "../views/HomePage/Home";
@@ -10,10 +10,12 @@ import SanPhamDesktop from "../views/SanPhamDesktop/SanPhamDesktop";
 import SanPhamApple from "../views/SanPhamApple/SanPhamApple";
 import SanPhamASUS from "../views/SanPhamASUS/SanPhamASUS";
 import Test from "../views/Test/Test";
-import ProfileCustomer from "../profileCustomer/profileCustomer";
+
 import LoginView from "../private/login";
 import Register from "../private/register";
-import Admin from "../admin-view/adminComponent";
+import Dashboard from "../admin-view/pages/Dashboard";
+import Cart from "./view-page/cart";
+import CartThanhToan from "./view-page/thanhToanCart";
 
 function ProtectedRoute({ element, allowedRoles }) {
   const token = localStorage.getItem("authToken");
@@ -68,14 +70,7 @@ const RouterView = () => {
       path: "/test",
       element: <Test />,
     },
-    {
-      path: "/profile",
-      element: <ProfileCustomer />,
-    },
-    {
-      path: "*",
-      element: <Navigate to="/contact" replace />,
-    },
+
     {
       path: "/login",
       element: <LoginView />,
@@ -85,8 +80,16 @@ const RouterView = () => {
       element: <Register />,
     },
     {
-      path: "/admin/*",
-      element: <ProtectedRoute element={<Admin />} allowedRoles={[0]} />,
+      path: "/cart",
+      element: <Cart />,
+    },
+    {
+      path: "/cart-thanh-toan",
+      element: <CartThanhToan />,
+    },
+    {
+      path: "*",
+      element: <Navigate to="/" replace />,
     },
   ]);
 

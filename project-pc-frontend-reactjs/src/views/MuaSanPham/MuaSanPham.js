@@ -28,17 +28,19 @@ const MuaSanPham = () => {
     if (location.state && location.state.soLuong) {
       setSoLuong(location.state.soLuong);
     }
-    setFormData(prevFormData => ({
+    setFormData((prevFormData) => ({
       ...prevFormData,
-      ChiTietHoaDon: [{ MaSP: id, SoLuong: soLuong, GiamGia: 1 }]
+      ChiTietHoaDon: [{ MaSP: id, SoLuong: soLuong, GiamGia: 1 }],
     }));
 
     fetchProduct();
-  }, [id, location.state, soLuong]); // Thêm soLuong vào dependency  
+  }, [id, location.state, soLuong]); // Thêm soLuong vào dependency
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/sanpham/${id}`);
+      const response = await axios.get(
+        `http://localhost:8000/api/sanpham/${id}`
+      );
       // console.log("response.data.data: ", response.data.data);
       setSanPham(response.data.data || {});
       setLoading(false);
@@ -61,7 +63,12 @@ const MuaSanPham = () => {
     event.preventDefault();
 
     // Kiểm tra các trường bắt buộc
-    if (!formData.MaKH || !formData.DiaChiShip || !formData.SdtShip || !formData.ChiTietHoaDon[0].MaSP) {
+    if (
+      !formData.MaKH ||
+      !formData.DiaChiShip ||
+      !formData.SdtShip ||
+      !formData.ChiTietHoaDon[0].MaSP
+    ) {
       alert("Vui lòng nhập đầy đủ thông tin!");
       return;
     }
@@ -70,20 +77,26 @@ const MuaSanPham = () => {
       // Cập nhật formData nếu cần
       const updatedFormData = {
         ...formData,
-        ChiTietHoaDon: [{
-          MaSP: sanPham.MASP,  // Gán mã sản phẩm từ sanPham
-          SoLuong: soLuong,
-          GiamGia: 1
-        }]
+        ChiTietHoaDon: [
+          {
+            MaSP: sanPham.MASP, // Gán mã sản phẩm từ sanPham
+            SoLuong: soLuong,
+            GiamGia: 1,
+          },
+        ],
       };
 
-      console.log(updatedFormData);  // Kiểm tra dữ liệu gửi đi
+      console.log(updatedFormData); // Kiểm tra dữ liệu gửi đi
 
-      const response = await axios.post("http://localhost:8000/api/create-hoadon", updatedFormData, {
-        headers: {
-          'Content-Type': 'application/json', // Đảm bảo gửi dữ liệu dưới dạng JSON
+      const response = await axios.post(
+        "http://localhost:8000/api/create-hoadon",
+        updatedFormData,
+        {
+          headers: {
+            "Content-Type": "application/json", // Đảm bảo gửi dữ liệu dưới dạng JSON
+          },
         }
-      });
+      );
 
       if (response.status === 200) {
         alert("Đặt hàng thành công!");
@@ -174,7 +187,7 @@ const MuaSanPham = () => {
                 <div className="thongtin-sanpham_2">
                   <span className="discount-bannerr">{soLuong}</span>
                   <img
-                    src={`${sanPham.imageUrl}`} // Link ảnh 
+                    src={`${sanPham.imageUrl}`} // Link ảnh
                     className="sanpham-img"
                     alt="san pham"
                   />
@@ -208,7 +221,9 @@ const MuaSanPham = () => {
                   )}
                 </div>
                 <div className="muahang-phivanchuyen">
-                  <span className="muahang-phivanchuyen-label">Phí vận chuyển và lắp ráp: </span>
+                  <span className="muahang-phivanchuyen-label">
+                    Phí vận chuyển và lắp ráp:{" "}
+                  </span>
                   <span className="muahang-phivanchuyen-value">
                     {(parseInt(sanPham.DON_GIA) * 0.01).toLocaleString()} VND
                   </span>

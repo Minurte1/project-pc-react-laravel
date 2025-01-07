@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-import logoPCGamer from '../assets/PC_Gamer_square_logo.png'
-import './login.scss';
+import logoPCGamer from "../assets/PC_Gamer_square_logo.png";
+import "./login.scss";
 
 import { createAccount } from "../services/accountService";
 
@@ -14,7 +14,7 @@ const Register = () => {
     TEN_DANG_NHAP: "",
     MAT_KHAU: "",
     NHAP_LAI_MAT_KHAU: "",
-    MA_PHAN_QUYEN: 1,
+    MA_PHAN_QUYEN: 2,
   });
 
   const [error, setError] = useState(null);
@@ -57,7 +57,11 @@ const Register = () => {
           <div className="row">
             <div className="col-lg-6 col-md-12 welcome-section-login d-none d-md-block">
               <div className="image-login">
-                <img src={logoPCGamer} alt="PC Gamer logo" className="img-fluid" />
+                <img
+                  src={logoPCGamer}
+                  alt="PC Gamer logo"
+                  className="img-fluid"
+                />
               </div>
             </div>
 
@@ -65,7 +69,6 @@ const Register = () => {
               <h2 style={{ fontWeight: "bold" }}>Đăng ký</h2>
               <form onSubmit={handleRegister}>
                 <div className="input-group-login mb-3">
-
                   <input
                     type="text"
                     name="TEN_KHACH_HANG"
@@ -151,7 +154,6 @@ const Register = () => {
                   {error}
                 </div>
               )}
-
 
               <p className="text-center mt-4 register-link-login">
                 Bạn đã có tài khoản?

@@ -1,0 +1,20 @@
+trong bang khách hang gồm MA_KH,SDT_KH,TEN_KHACH_HANG,DIA_CHI,GHI_CHU_KH
+
+trong bang phan_quyen gồm MA_PHAN_QUYEN,TEN_PHAN_QUYEN,GHI_CHU_PHAN_QUYEN
+
+trong bang tai_khoan gồm MA_TK,MA_PHAN_QUYEN,MA_KH,TEN_DANG_NHAP,MAT_KHAU
+
+trong bang hoadon gồm MAHD,MA_KH,DIA_CHI_SHIP,SDT_LIEN_HE_KH,GHI_CHU_HOA_DON
+
+trong bang chi_tiet_hoa__on gồm MA_CTHD,MASP,MAHD,SO_LUONG,GIAM_GIA,GHI_CHU_CTHD
+
+trong bang sanpham gồm MASP,MATL,TENSP,DON_GIA,TON_KHO_SP,CHIP,MAIN,VGA,NHA_SAN_XUAT,RAM,ROM,ANHSP,GHI_CHU_SP
+
+trong bang theloai gồm MATL,TENTL,MO_TA_TL,theloai
+GHI_CHU_TL
+
+trong bang gio_hang gồm MA_KH,MASP,SO_LUONG_SP
+
+tang hoặc giảm số lượng sản phẩm trong giỏ hang ( dynamic )
+tạo giỏ hang 
+loại bỏ 

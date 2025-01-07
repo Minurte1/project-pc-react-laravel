@@ -1,11 +1,16 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";  // Chỉ import một lần
-import { faUser, faSignOutAlt, faScrewdriverWrench } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Chỉ import một lần
+import {
+  faUser,
+  faSignOutAlt,
+  faScrewdriverWrench,
+} from "@fortawesome/free-solid-svg-icons";
 import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 
 import { AuthContext } from "../authentication/AuthContext"; // Đường dẫn tới AuthContext
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import logo from "./img/ICON.ico";
 import desktop from "./img/DESKTOP.ico";
@@ -14,7 +19,8 @@ import asus from "./img/ASUS.ico";
 import "./css/Nav2.scss";
 
 const Nav2 = () => {
-  const { isLoggedIn, setIsLoggedIn, userData, updateAuthStatus } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, userData, updateAuthStatus } =
+    useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
@@ -76,14 +82,36 @@ const Nav2 = () => {
 
           <div className="cart-div_Nav2">
             {isLoggedIn ? (
-              <div className="cart-div_Nav2" onClick={handleMenuOpen}>
-                <IconButton>
-                  <Avatar alt={userData?.TEN_KHACH_HANG || "User"} src={userData?.avatar} />
-                </IconButton>
-                <span>{userData?.TEN_KHACH_HANG || "Khách"}</span>
-              </div>
+              <>
+                <Link
+                  to="/cart"
+                  className=""
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    textDecoration: "none",
+                    width: "130px",
+                    color: "inherit",
+                  }}
+                >
+                  <ShoppingCartIcon style={{ marginRight: "8px" }} />
+                  Giỏ hàng
+                </Link>
+                <div className="cart-div_Nav2" onClick={handleMenuOpen}>
+                  <IconButton>
+                    <Avatar
+                      alt={userData?.TEN_KHACH_HANG || "User"}
+                      src={userData?.avatar}
+                    />
+                  </IconButton>
+                  <span>{userData?.TEN_KHACH_HANG || "Khách"}</span>
+                </div>
+              </>
             ) : (
-              <button className="btn btn-login" onClick={() => navigate("/login")}>
+              <button
+                className="btn btn-login"
+                onClick={() => navigate("/login")}
+              >
                 Đăng nhập
               </button>
             )}
@@ -101,8 +129,10 @@ const Nav2 = () => {
                 },
               }}
             >
-              {userData && userData.TEN_PHAN_QUYEN && userData.TEN_PHAN_QUYEN === "Admin" ?
-                (<MenuItem
+              {userData &&
+              userData.TEN_PHAN_QUYEN &&
+              userData.TEN_PHAN_QUYEN === "Admin" ? (
+                <MenuItem
                   onClick={() => navigate("/admin")}
                   style={{
                     display: "flex",
@@ -111,16 +141,24 @@ const Nav2 = () => {
                     borderRadius: "5px",
                     transition: "background-color 0.3s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#f0f0f0")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "transparent")
+                  }
                 >
-                  <FontAwesomeIcon icon={faScrewdriverWrench} style={{ marginRight: "10px", color: "#555" }} />
+                  <FontAwesomeIcon
+                    icon={faScrewdriverWrench}
+                    style={{ marginRight: "10px", color: "#555" }}
+                  />
                   <Typography variant="body1" textAlign="center">
                     Trang Admin
                   </Typography>
-                </MenuItem>) :
+                </MenuItem>
+              ) : (
                 ""
-              }
+              )}
 
               <MenuItem
                 onClick={() => navigate("/profile")}
@@ -131,10 +169,17 @@ const Nav2 = () => {
                   borderRadius: "5px",
                   transition: "background-color 0.3s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#f0f0f0")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "transparent")
+                }
               >
-                <FontAwesomeIcon icon={faUser} style={{ marginRight: "10px", color: "#555" }} />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  style={{ marginRight: "10px", color: "#555" }}
+                />
                 <Typography variant="body1" textAlign="center">
                   Hồ sơ
                 </Typography>
@@ -149,10 +194,17 @@ const Nav2 = () => {
                   borderRadius: "5px",
                   transition: "background-color 0.3s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#f0f0f0")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "transparent")
+                }
               >
-                <FontAwesomeIcon icon={faSignOutAlt} style={{ marginRight: "10px", color: "#555" }} />
+                <FontAwesomeIcon
+                  icon={faSignOutAlt}
+                  style={{ marginRight: "10px", color: "#555" }}
+                />
                 <Typography variant="body1" textAlign="center">
                   Đăng xuất
                 </Typography>
