@@ -15,6 +15,7 @@ import LoginView from "../private/login";
 import Register from "../private/register";
 import Dashboard from "../admin-view/pages/Dashboard";
 import Cart from "./view-page/cart";
+import CartThanhToan from "./view-page/thanhToanCart";
 
 function ProtectedRoute({ element, allowedRoles }) {
   const token = localStorage.getItem("authToken");
@@ -81,6 +82,10 @@ const RouterView = () => {
     {
       path: "/cart",
       element: <Cart />,
+    },
+    {
+      path: "/cart-thanh-toan",
+      element: <CartThanhToan />,
     },
     {
       path: "*",
