@@ -14,3 +14,7 @@ trong bang theloai gồm MATL,TENTL,MO_TA_TL,theloai
 GHI_CHU_TL
 
 trong bang gio_hang gồm MA_KH,MASP,SO_LUONG_SP
+
+tang hoặc giảm số lượng sản phẩm trong giỏ hang ( dynamic )
+tạo giỏ hang 
+loại bỏ 

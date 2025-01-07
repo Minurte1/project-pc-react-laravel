@@ -84,11 +84,7 @@ const Cart = () => {
   };
 
   const handleClicknavigate = () => {
-    navigate("/xacnhanthanhtoan", {
-      state: {
-        cartItemsdata,
-      },
-    });
+    navigate("/cart-thanh-toan");
   };
 
   console.log("cart ", cartItemsdata);
