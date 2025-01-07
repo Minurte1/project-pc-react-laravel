@@ -93,5 +93,27 @@ class AdminController extends Controller
         ]);
     }
 
+    public function getTheLoai()
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $listTheLoai = DB::select("
+        SELECT * FROM theloai
+        ", );
+
+        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
+        if (empty($listTheLoai)) {
+            return response()->json([
+                'message' => 'No items found in the cart for this user.',
+                'data' => [],
+            ]);
+        }
+
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $listTheLoai
+        ]);
+    }
+
 
 }

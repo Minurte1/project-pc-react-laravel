@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import DonHang from "./pages/DonHang";
 import SanPham from "./pages/SanPham";
+import TheLoai from "./pages/TheLoai";
 import Settings from "./pages/Settings";
 import NavBarAdmin from "./components/navBarAdmin";
 import HeaderAdmin from "./components/headerAdmin";
@@ -16,6 +17,7 @@ const AdminRouter = () => {
     { path: "/nguoi-dung", element: <Users /> },
     { path: "/don-hang", element: <DonHang /> },
     { path: "/san-pham", element: <SanPham /> },
+    { path: "/the-loai", element: <TheLoai /> },
     { path: "/*", element: <Navigate to="/" replace /> },
   ];
 

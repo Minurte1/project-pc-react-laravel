@@ -4,15 +4,22 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+
+import SanPhamModal from "./Modal/SanPhamModal"
+import { selectAll } from "@testing-library/user-event/dist/cjs/event/index.js";
 const DonHang = () => {
     const api = process.env.URL_NODE;
     const [listSanPham, setListSanPham] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
+    const [listTheLoai, setListTheLoai] = useState([]);
     const [searchText, setSearchText] = useState(""); // Lưu giá trị tìm kiếm
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedSanPham, setSelectedSanPham] = useState(false);
 
     useEffect(() => {
         // Giả lập API call để lấy danh sách người dùng
-        const fetchDonhang = async () => {
+        const fetchSanPham = async () => {
             const response = await axios.get(
                 `http://localhost:8000/api/list-san-pham`
             );
@@ -23,7 +30,19 @@ const DonHang = () => {
             setListSanPham(dataWithId || []);
             setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
         };
-        fetchDonhang();
+        fetchSanPham();
+
+        const fetchTheLoai = async () => {
+            const response = await axios.get(
+                `http://localhost:8000/api/list-the-loai`
+            );
+            const dataWithId = response?.data?.data?.map((user, index) => ({
+                ...user,
+                id: index + 1,
+            }));
+            setListTheLoai(dataWithId || []);
+        };
+        fetchTheLoai();
     }, []);
 
     const handleSearch = (event) => {
@@ -48,6 +67,10 @@ const DonHang = () => {
         console.log(`Xóa sản phẩm với mã ${MASP}`);
     };
 
+    const handleSaveSanPham = (formData) => {
+        console.log("formData: ", formData)
+    };
+
     const columns = [
         { field: "id", headerName: "ID", width: 100 },
         // { field: "MASP", headerName: "Mã SP", width: 150 },
@@ -64,10 +87,10 @@ const DonHang = () => {
         { field: "TENTL", headerName: "Loại", width: 150 },
         { field: "DON_GIA", headerName: "Đơn giá", width: 150 },
         { field: "TON_KHO_SP", headerName: "Tồn kho", width: 100 },
+        { field: "NHA_SAN_XUAT", headerName: "Nhà sản xuất", width: 150 },
         { field: "CHIP", headerName: "Chip", width: 150 },
         { field: "MAIN", headerName: "Main", width: 150 },
         { field: "VGA", headerName: "VGA", width: 150 },
-        { field: "NHA_SAN_XUAT", headerName: "Nhà sản xuất", width: 150 },
         { field: "RAM", headerName: "RAM", width: 150 },
         { field: "ROM", headerName: "ROM", width: 150 },
         // { field: "GHI_CHU_SP", headerName: "Ghi chú SP", width: 200 },
@@ -89,22 +112,32 @@ const DonHang = () => {
     ];
 
     return (
-        <div className="mt-2">
-            <h5 className="card-title mb-4">Quản lý sản phẩm</h5>
-            {/* Ô tìm kiếm */}
-            <div className="mb-3">
-                <input
-                    type="text"
-                    value={searchText}
-                    onChange={handleSearch}
-                    placeholder="Tìm kiếm sản phẩm..."
-                    className="form-control"
-                />
+        <>
+            <div className="mt-2">
+                <h5 className="card-title mb-4">Quản lý sản phẩm</h5>
+                {/* Ô tìm kiếm */}
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={handleSearch}
+                        placeholder="Tìm kiếm sản phẩm..."
+                        className="form-control"
+                    />
+                </div>
+                <button type="button" class="btn btn-success">Thêm</button>
+                <div style={{ height: 1000, width: "100%" }}>
+                    <DataGrid rows={filteredData} columns={columns} pageSize={5} />
+                </div>
             </div>
-            <div style={{ height: 1000, width: "100%" }}>
-                <DataGrid rows={filteredData} columns={columns} pageSize={5} />
-            </div>
-        </div>
+            <SanPhamModal
+                show={showModal}
+                handleClose={() => setShowModal(false)}
+                sanpham={selectedSanPham}
+                listTheLoai={listTheLoai}
+                handleSubmit={handleSaveSanPham}
+            />
+        </>
     );
 };
 

@@ -196,13 +196,13 @@ const NavBarAdmin = () => {
                   <ListItem
                     button
                     component={Link}
-                    to="/admin/san-pham/danh-muc"
+                    to="/admin/the-loai"
                     sx={{
                       pl: 4,
                       color: "#1f1f1f",
                       borderRadius: "13px",
                       backgroundColor:
-                        location.pathname === "/admin/san-pham/danh-muc"
+                        location.pathname === "/admin/the-loai"
                           ? "#02d3f9"
                           : "transparent", // Kiểm tra nếu đang ở trang này
                       "&:hover": { backgroundColor: "#02d3f9" },
@@ -215,7 +215,7 @@ const NavBarAdmin = () => {
             </Collapse>
 
             {/* Quản lý đơn hàng */}
-            <ListItem
+            {/* <ListItem
               button
               onClick={() => toggleSection("donHang")}
               sx={{
@@ -229,9 +229,9 @@ const NavBarAdmin = () => {
               </ListItemIcon>
               <ListItemText primary="Quản lý đơn hàng" />
               {openSection === "donHang" ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            </ListItem> */}
 
-            <Collapse
+            {/* <Collapse
               in={openSection === "donHang"}
               timeout="auto"
               unmountOnExit
@@ -344,7 +344,8 @@ const NavBarAdmin = () => {
                   <ListItemText primary="Quản lý khuyến mãi" />
                 </ListItem>{" "}
               </List>
-            </Collapse>
+            </Collapse> */}
+
           </List>
         </List>
       </Box>{" "}

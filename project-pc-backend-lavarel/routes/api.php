@@ -47,6 +47,7 @@ Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart'
 Route::get('/list-user', [AdminController::class, 'getListUser']);
 Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
 Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
+Route::get('/list-the-loai', [AdminController::class, 'getTheLoai']);
 
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);
