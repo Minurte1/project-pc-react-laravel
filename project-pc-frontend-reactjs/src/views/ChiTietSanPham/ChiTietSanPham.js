@@ -5,14 +5,17 @@ import "./ChiTietSanPham.scss";
 
 import Nav2 from "../../share-view/Nav2";
 import Footer from "../../share-view/Footer";
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
 const ChiTietSanPham = () => {
   const [sanPham, setSanPham] = useState({});
   const [soLuong, setSoLuong] = useState(1); // Số lượng mặc định là 1
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
   const { id } = useParams(); // Lấy id từ URL
   const navigate = useNavigate();
-
+  const api = process.env.URL_NODE;
   useEffect(() => {
     fetchSanPham();
   }, [id]);
@@ -51,6 +54,36 @@ const ChiTietSanPham = () => {
     navigate(`/MuaHang/${sanPham.MASP}`);
   };
 
+  // THÊM VÀO GIỎ HÀNG
+  const handleAddToCart = async (isToCart) => {
+    if (!isAuthenticated) {
+      enqueueSnackbar("Vui lòng đăng nhập để tiếp tục!");
+      navigate("/login"); // Đảm bảo '/login' là đường dẫn đúng tới trang đăng nhập của bạn
+      return; // Dừng hàm nếu chưa đăng nhập
+    }
+
+    try {
+      const payload = {
+        MASP: id,
+        MA_KH: userInfo.MA_TK, // ID người dùng
+        CHANGE: 1,
+      };
+
+      const response = await axios.post(
+        `http://localhost:8000/api/cart/update`,
+        payload
+      );
+
+      enqueueSnackbar(response.data.message, { variant: "success" });
+    } catch (error) {
+      console.error("Lỗi hệ thống:", error);
+      enqueueSnackbar(error.response.data.EM, { variant: "error" });
+    } finally {
+      if (isToCart) {
+        navigate("/cart");
+      }
+    }
+  };
   return (
     <div>
       {loading ? (
@@ -141,16 +174,35 @@ const ChiTietSanPham = () => {
                   <div className="product-h3_muahang_ChiTietSanPham">
                     {sanPham.TON_KHO_SP > 0 && (
                       <>
-                        {" "}
-                        <Link
-                          to={{
-                            pathname: `/MuaHang/${sanPham.MASP}`,
-                            state: { soLuong },
-                          }}
-                          className="purchase-button_ChiTietSanPham"
-                        >
-                          Mua Hàng
-                        </Link>
+                        <Grid container spacing={2} mb={3} direction="row">
+                          <Grid item xs={12} sm={6}>
+                            <Button
+                              variant="contained"
+                              fullWidth
+                              sx={{
+                                backgroundColor: "#26272b",
+                                "&:hover": {
+                                  color: "#26272b",
+                                  backgroundColor: "#fff",
+                                },
+                              }}
+                              onClick={() => handleAddToCart(false)}
+                            >
+                              Thêm vào giỏ hàng
+                            </Button>
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <Link
+                              to={{
+                                pathname: `/MuaHang/${sanPham.MASP}`,
+                                state: { soLuong },
+                              }}
+                              className="purchase-button_ChiTietSanPham"
+                            >
+                              Mua Hàng
+                            </Link>
+                          </Grid>
+                        </Grid>
                       </>
                     )}
                   </div>

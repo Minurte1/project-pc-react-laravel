@@ -33,9 +33,11 @@ Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
 Route::delete('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
 
 //CartController
+Route::get('/cart/{maKh}', [CartController::class, 'getCartItemsByUserId']);
 Route::post('/cart/update', [CartController::class, 'updateCartItemQuantity']);
 Route::post('/cart/create', [CartController::class, 'createCart']);
-Route::delete('/cart/{maKh}/remove', [CartController::class, 'removeCart']);
+// Route xóa sản phẩm trong giỏ hàng của người dùng
+Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart']);
 
 
 //AuthController

@@ -10,6 +10,7 @@ import {
   Divider,
   Container,
 } from "@mui/material";
+import imageErr from "../../assets/images/no_image_available.png"; // Hình ảnh lỗi
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,6 +23,7 @@ const Cart = () => {
   const [cartItemsdata, setCartItems] = useState([]);
   const [totalAmountdata, setTotalAmount] = useState(0);
   const api = process.env.REACT_APP_URL_SERVER;
+  const [tongTienGioHang, setTongTienGioHang] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
@@ -38,25 +40,24 @@ const Cart = () => {
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(
-        `${api}/gio-hang/use/cart-user/${userInfo.USER_ID}`
+        `http://localhost:8000/api/cart/${userInfo.MA_TK}`
       );
 
-      setCartItems(response.data.DT);
-      setTotalAmount(response.data.TOTAL_AMOUNT);
+      setCartItems(response.data.data);
+      setTongTienGioHang(response.data.totalAmount);
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
   };
+
   const handleRemoveProducts = async (PRODUCT_ID) => {
     try {
-      const response = await axios.post(`${api}/gio-hang/remove-products/`, {
-        USER_ID: userInfo.USER_ID,
-        PRODUCT_ID: PRODUCT_ID,
-      });
-      if (response.data.EC === 1) {
-        enqueueSnackbar(response.data.EM, { variant: "success" });
-        fetchCartItems();
-      }
+      const response = await axios.delete(
+        `http://localhost:8000/api/cart/${userInfo.MA_TK}/remove/${PRODUCT_ID}`
+      );
+
+      enqueueSnackbar(response.data.message, { variant: "info" });
+      fetchCartItems();
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
@@ -64,25 +65,22 @@ const Cart = () => {
   const updateQuantity = async (productId, action) => {
     try {
       if (action === "add") {
-        await axios.post(`${api}/gio-hang/add-single`, {
-          USER_ID: userInfo.USER_ID,
-          PRODUCT_ID: productId,
+        await axios.post(`http://localhost:8000/api/cart/update`, {
+          MA_KH: userInfo.MA_TK,
+          MASP: productId,
+          CHANGE: 1, // Giảm bớt 1
         });
       } else {
-        await axios.post(`${api}/gio-hang/remove-single`, {
-          USER_ID: userInfo.USER_ID,
-          PRODUCT_ID: productId,
+        await axios.post(`http://localhost:8000/api/cart/update`, {
+          MA_KH: userInfo.MA_TK,
+          MASP: productId,
+          CHANGE: -1, // Giảm bớt 1
         });
       }
       fetchCartItems();
     } catch (error) {
       enqueueSnackbar("Lỗi khi cập nhật số lượng", { variant: "error" });
     }
-  };
-  const calculateItemTotal = (price, quantity) => {
-    const numPrice = Number(price) || 0;
-    const numQuantity = Number(quantity) || 0;
-    return (numPrice * numQuantity).toLocaleString();
   };
 
   const handleClicknavigate = () => {
@@ -93,54 +91,59 @@ const Cart = () => {
     });
   };
 
-  const totalAmount = cartItemsdata.reduce(
-    (total, item) => total + (item.QUANTITY || 0) * item.PRODUCT_PRICE,
-    0
-  );
-
+  console.log("cart ", cartItemsdata);
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container
+      maxWidth="md"
+      sx={{ py: 4, marginTop: "100px", minHeight: "700px" }}
+    >
       <Typography variant="h4" gutterBottom>
         Giỏ hàng
       </Typography>
 
-      {cartItemsdata.map((item) => (
-        <Card key={item.CART_ID} sx={{ display: "flex", mb: 2, p: 2 }}>
+      {cartItemsdata.map((item, index) => (
+        <Card key={index} sx={{ display: "flex", mb: 2, p: 2 }}>
           <CardMedia
             component="img"
             sx={{ width: 150, objectFit: "contain" }}
-            image={`${api}/images/${item.IMAGE_URL}`}
-            alt={item.NAME}
+            image={
+              item.ANHSP
+                ? `http://localhost:8000/images/${item.ANHSP}`
+                : imageErr
+            }
+            alt={item.TENSP} // Dùng trường 'TENSP' cho tên sản phẩm
           />
 
           <Box
             sx={{ display: "flex", flexDirection: "column", flex: 1, ml: 2 }}
           >
             <CardContent>
-              <Typography variant="h6">{item.NAME}</Typography>
+              <Typography variant="h6">{item.TENSP}</Typography>{" "}
+              {/* Dùng 'TENSP' */}
               <Typography variant="body2" color="text.secondary">
-                Mã SP: {item.PRODUCT_ID}
+                Mã SP: {item.MASP} {/* Dùng 'MASP' */}
               </Typography>
               <Typography variant="body1">
-                Giá: {parseInt(item.PRODUCT_PRICE).toLocaleString()}đ
+                Giá: {parseInt(item.DON_GIA).toLocaleString()}đ{" "}
+                {/* Dùng 'DON_GIA' */}
               </Typography>
-
               <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
                 <IconButton
-                  onClick={() => updateQuantity(item.PRODUCT_ID, "remove")}
-                  disabled={item.QUANTITY <= 1}
+                  onClick={() => updateQuantity(item.MASP, "remove")} // Dùng 'MASP'
+                  disabled={item.SO_LUONG_SP <= 1} // Dùng 'SO_LUONG_SP'
                 >
                   <RemoveIcon />
                 </IconButton>
-                <Typography sx={{ mx: 2 }}>{item.QUANTITY}</Typography>
+                <Typography sx={{ mx: 2 }}>{item.SO_LUONG_SP}</Typography>{" "}
+                {/* Dùng 'SO_LUONG_SP' */}
                 <IconButton
-                  onClick={() => updateQuantity(item.PRODUCT_ID, "add")}
-                  disabled={item.QUANTITY >= item.SOLUONG_KHO}
+                  onClick={() => updateQuantity(item.MASP, "add")} // Dùng 'MASP'
+                  disabled={item.SO_LUONG_SP >= item.TON_KHO_SP} // Dùng 'TON_KHO_SP'
                 >
                   <AddIcon />
                 </IconButton>
                 <IconButton
-                  onClick={() => handleRemoveProducts(item.PRODUCT_ID)}
+                  onClick={() => handleRemoveProducts(item.MASP)} // Dùng 'MASP'
                   color="error"
                   sx={{ ml: 2 }}
                 >
@@ -152,7 +155,8 @@ const Cart = () => {
 
           <Box sx={{ display: "flex", alignItems: "center", pr: 2 }}>
             <Typography variant="h6">
-              {calculateItemTotal(item.PRODUCT_PRICE, item.QUANTITY)}đ
+              {parseInt(item.THANH_TIEN).toLocaleString()}đ{" "}
+              {/* Dùng 'THANH_TIEN' */}
             </Typography>
           </Box>
         </Card>
@@ -162,7 +166,7 @@ const Cart = () => {
 
       <Box sx={{ textAlign: "right" }}>
         <Typography variant="h5" gutterBottom>
-          Tổng tiền: {totalAmount?.toLocaleString()}đ
+          Tổng tiền: {tongTienGioHang?.toLocaleString()}đ
         </Typography>
         <Button
           variant="contained"

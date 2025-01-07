@@ -6,6 +6,57 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function getCartItemsByUserId($maKh)
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $cartItems = DB::select("
+            SELECT 
+                gh.MA_KH,
+                kh.TEN_KHACH_HANG,
+                kh.SDT_KH,
+                sp.MASP,
+                sp.TENSP,
+                sp.DON_GIA,
+                sp.TON_KHO_SP,
+                sp.ANHSP,
+                sp.GHI_CHU_SP,
+                tl.TENTL AS LOAI_SAN_PHAM,
+                gh.SO_LUONG_SP,
+                (gh.SO_LUONG_SP * sp.DON_GIA) AS THANH_TIEN
+            FROM gio_hang gh
+            JOIN khachhang kh ON kh.MA_KH = gh.MA_KH
+            JOIN sanpham sp ON sp.MASP = gh.MASP
+            JOIN theloai tl ON tl.MATL = sp.MATL
+            WHERE gh.MA_KH = ?
+        ", [$maKh]);
+    
+        // Truy vấn tổng số tiền trong giỏ hàng của người dùng
+        $totalAmount = DB::selectOne("
+            SELECT SUM(gh.SO_LUONG_SP * sp.DON_GIA) AS totalAmount
+            FROM gio_hang gh
+            JOIN sanpham sp ON sp.MASP = gh.MASP
+            WHERE gh.MA_KH = ?
+        ", [$maKh]);
+    
+        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
+        if (empty($cartItems)) {
+            return response()->json([
+                'message' => 'No items found in the cart for this user.',
+                'data' => [],
+                'totalAmount' => 0
+            ]);
+        }
+    
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $cartItems,
+            'totalAmount' => $totalAmount->totalAmount
+        ]);
+    }
+    
+
+
     // Tăng hoặc giảm số lượng sản phẩm trong giỏ hàng
     public function updateCartItemQuantity(Request $request)
     {
@@ -26,10 +77,21 @@ class CartController extends Controller
             ->first();
     
         if (!$cartItem) {
-            return response()->json(['message' => 'Product not found in cart'], 404);
+            // Nếu sản phẩm chưa có, tạo mới với số lượng là 1 nếu CHANGE = 1
+            if ($change > 0) {
+                DB::table('gio_hang')->insert([
+                    'MA_KH' => $maKh,
+                    'MASP' => $maSp,
+                    'SO_LUONG_SP' => 1,
+                ]);
+    
+                return response()->json(['message' => 'Product added to cart with quantity 1']);
+            } else {
+                return response()->json(['message' => 'Product not found in cart'], 404);
+            }
         }
     
-        // Tính toán số lượng mới
+        // Nếu sản phẩm đã tồn tại, tính toán số lượng mới
         $newQuantity = $cartItem->SO_LUONG_SP + $change;
     
         if ($newQuantity <= 0) {
@@ -50,6 +112,7 @@ class CartController extends Controller
     
         return response()->json(['message' => 'Product quantity updated', 'newQuantity' => $newQuantity]);
     }
+    
     
 
     // Tạo giỏ hàng mới
@@ -91,15 +154,24 @@ class CartController extends Controller
     
 
     // Loại bỏ giỏ hàng
-    public function removeCart($maKh)
+  // Loại bỏ sản phẩm khỏi giỏ hàng của người dùng
+    public function removeCart($maKh, $maSp)
     {
-        // Xóa tất cả sản phẩm trong giỏ hàng của khách hàng
-        DB::table('gio_hang')
-            ->where('MA_KH', $maKh)
-            ->delete();
+    // Xóa sản phẩm trong giỏ hàng của khách hàng theo MA_KH và MASP
+    $deleted = DB::table('gio_hang')
+        ->where('MA_KH', $maKh)
+        ->where('MASP', $maSp)
+        ->delete();
 
+    if ($deleted) {
         return response()->json([
-            'message' => 'Cart removed successfully',
+            'message' => 'Product removed from cart successfully',
         ]);
+    } else {
+        return response()->json([
+            'message' => 'Product not found in cart',
+        ], 404);
     }
+    }
+
 }
