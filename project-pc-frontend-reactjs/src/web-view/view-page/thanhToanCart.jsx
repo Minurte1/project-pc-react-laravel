@@ -35,7 +35,7 @@ const CartThanhToan = () => {
     SdtShip: "",
     NgayDatHang: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
     GhiChu: "",
-    ChiTietHoaDon: [{ MaSP: null, SoLuong: null, GiamGia: 1 }],
+    ChiTietHoaDon: cartItemsdata,
   });
 
   const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
@@ -55,6 +55,11 @@ const CartThanhToan = () => {
         `http://localhost:8000/api/cart/${userInfo.MA_TK}`
       );
 
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ChiTietHoaDon: response.data.data,
+      }));
+
       setCartItems(response.data.data);
       setTongTienGioHang(response.data.totalAmount);
     } catch (error) {
@@ -68,11 +73,23 @@ const CartThanhToan = () => {
       [name]: value, // Update the specific form field
     }));
   };
-  const handleThanhToanCart = () => {};
+  const handleThanhToanCart = async () => {
+    try {
+      await axios.post(`http://localhost:8000/api/cart/checkout`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      navigate("/cart");
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
   return (
     <>
       <Nav2 />
-      <form id="yourFormId">
+      <div id="yourFormId">
         <div className="muahang-container">
           <div className="container-setup">
             <div className="muahang-giay-info">
@@ -217,7 +234,7 @@ const CartThanhToan = () => {
             </div>{" "}
           </div>
         </div>
-      </form>
+      </div>
     </>
   );
 };

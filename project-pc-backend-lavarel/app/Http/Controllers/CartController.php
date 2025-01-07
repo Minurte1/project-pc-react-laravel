@@ -174,4 +174,57 @@ class CartController extends Controller
     }
     }
 
+    public function thanhToanCart(Request $request)
+    {
+        // Lấy dữ liệu đầu vào
+        $maKh = $request->input('MA_KH');
+        $diaChiShip = $request->input('DIA_CHI_SHIP');
+        $sdtLienHe = $request->input('SDT_LIEN_HE_KH');
+        $ghiChuHoaDon = $request->input('GHI_CHU_HOA_DON');
+  
+        // Lấy dữ liệu giỏ hàng của người dùng
+        $cartItems = DB::table('gio_hang')
+            ->join('sanpham', 'gio_hang.MASP', '=', 'sanpham.MASP')
+            ->where('gio_hang.MA_KH', $maKh)
+            ->select('gio_hang.MASP', 'gio_hang.SO_LUONG_SP', 'sanpham.DON_GIA')
+            ->get();
+    
+        // Kiểm tra nếu giỏ hàng rỗng
+        if ($cartItems->isEmpty()) {
+            return response()->json([
+                'message' => 'No items in the cart to checkout.',
+                'info' =>$maKh,
+            ], 400);
+        }
+    
+        // Tạo hóa đơn mới
+        $maHd = DB::table('hoadon')->insertGetId([
+            'MA_KH' => $maKh,
+            'DIA_CHI_SHIP' => $diaChiShip,
+            'SDT_LIEN_HE_KH' => $sdtLienHe,
+            'GHI_CHU_HOA_DON' => $ghiChuHoaDon,
+         
+        ]);
+    
+        // Thêm chi tiết hóa đơn
+        foreach ($cartItems as $item) {
+            DB::table('chi_tiet_hoa__on')->insert([
+                'MAHD' => $maHd,
+                'MASP' => $item->MASP,
+                'SO_LUONG' => $item->SO_LUONG_SP,
+                'GIAM_GIA' => 0, // Mặc định không giảm giá
+                'GHI_CHU_CTHD' => null,
+             
+            ]);
+        }
+    
+        // Xóa tất cả sản phẩm trong giỏ hàng của người dùng
+        DB::table('gio_hang')->where('MA_KH', $maKh)->delete();
+    
+        return response()->json([
+            'message' => 'Checkout completed successfully.',
+            'MAHD' => $maHd,
+        ]);
+    }
+    
 }
