@@ -1,2 +1,6 @@
+- install php : composer install
+- run server php : php artisan serve
+
+
 - profile user 
 - giỏ hàng

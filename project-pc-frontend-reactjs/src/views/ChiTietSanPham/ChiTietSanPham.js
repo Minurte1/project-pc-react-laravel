@@ -5,7 +5,7 @@ import "./ChiTietSanPham.scss";
 
 import Nav2 from "../../share-view/Nav2";
 import Footer from "../../share-view/Footer";
-
+import { Button } from "@mui/material";
 const ChiTietSanPham = () => {
   const [sanPham, setSanPham] = useState({});
   const [soLuong, setSoLuong] = useState(1); // Số lượng mặc định là 1
@@ -19,7 +19,9 @@ const ChiTietSanPham = () => {
 
   const fetchSanPham = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/sanpham/${id}`);
+      const response = await axios.get(
+        `http://localhost:8000/api/sanpham/${id}`
+      );
       // console.log("response.data.data: ", response.data.data);
       setSanPham(response.data.data); // Sửa ở đây, không lấy phần tử đầu tiên
       setLoading(false);
@@ -101,28 +103,29 @@ const ChiTietSanPham = () => {
                           <td>
                             <b>Chip</b>
                           </td>
-                          <td>{sanPham.CHIP || 'Không có thông tin'}</td> {/* Hiển thị nếu không có thông tin */}
+                          <td>{sanPham.CHIP || "Không có thông tin"}</td>{" "}
+                          {/* Hiển thị nếu không có thông tin */}
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>Main</b>
                           </td>
-                          <td>{sanPham.MAIN || 'Không có thông tin'}</td>
+                          <td>{sanPham.MAIN || "Không có thông tin"}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>VGA</b>
                           </td>
-                          <td>{sanPham.VGA || 'Không có thông tin'}</td>
+                          <td>{sanPham.VGA || "Không có thông tin"}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
                           <td>
                             <b>Ram</b>
                           </td>
-                          <td>{sanPham.RAM || 'Không có thông tin'}</td>
+                          <td>{sanPham.RAM || "Không có thông tin"}</td>
                         </tr>
 
                         <tr className="table_tr_ChiTietSanPham">
@@ -137,22 +140,25 @@ const ChiTietSanPham = () => {
 
                   <div className="product-h3_muahang_ChiTietSanPham">
                     {sanPham.TON_KHO_SP > 0 && (
-                      <Link
-                        to={{
-                          pathname: `/MuaHang/${sanPham.MASP}`,
-                          state: { soLuong },
-                        }}
-                        className="purchase-button_ChiTietSanPham"
-                      >
-                        Mua Hàng
-                      </Link>
+                      <>
+                        {" "}
+                        <Link
+                          to={{
+                            pathname: `/MuaHang/${sanPham.MASP}`,
+                            state: { soLuong },
+                          }}
+                          className="purchase-button_ChiTietSanPham"
+                        >
+                          Mua Hàng
+                        </Link>
+                      </>
                     )}
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </>
       )}
     </div>

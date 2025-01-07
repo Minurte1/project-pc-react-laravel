@@ -53,7 +53,7 @@ export default function LoginView() {
         .then((response) => {
           // console.log('check', response.data);
           console.log(response.data.DT.access_token);
-
+          console.log("oke login");
           // Trong hàm then của axios.post
           if (response.data.EC === 1) {
             toast.success("Đăng nhập thành công");

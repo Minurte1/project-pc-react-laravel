@@ -1,16 +1,11 @@
-// src/store/store.js
+// src/redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice"; // Đường dẫn đến userSlice của bạn
+import authReducer from "./authSlice";
 
 const store = configureStore({
   reducer: {
-    users: userReducer,
+    auth: authReducer, ///
   },
 });
-
-const storedUser = localStorage.getItem("loggedInUser");
-if (storedUser) {
-  const user = JSON.parse(storedUser);
-}
 
 export default store;

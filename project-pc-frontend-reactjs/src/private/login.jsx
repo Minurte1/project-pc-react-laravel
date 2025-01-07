@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from 'jwt-decode'; // Sử dụng đúng cú pháp import
+import { jwtDecode } from "jwt-decode"; // Sử dụng đúng cú pháp import
 import { AuthContext } from "../authentication/AuthContext"; // Đường dẫn tới AuthContext
 
-import logoPCGamer from '../assets/PC_Gamer_square_logo.png'
-import './login.scss';
+import logoPCGamer from "../assets/PC_Gamer_square_logo.png";
+import "./login.scss";
 
 import { login } from "../services/accountService"; // Assuming the login function is in api-service.js
 
@@ -32,12 +32,12 @@ const Login = () => {
       const token = await login(email, password);
 
       // Giải mã token và log ra console
-      console.log("token: ", token)
+      console.log("token: ", token);
       const decodedToken = jwtDecode(token);
       console.log("Decoded Token:", decodedToken);
 
       // Lưu thông tin token vào localStorage
-      localStorage.setItem('authToken', token);
+      localStorage.setItem("authToken", token);
       updateAuthStatus(); // Cập nhật AuthContext ngay sau khi lưu token
       navigate("/");
     } catch (err) {
