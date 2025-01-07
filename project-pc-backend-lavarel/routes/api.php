@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 
 // Route cho API /hello
 Route::get('/hello', [PostController::class, 'show']);
@@ -30,6 +31,11 @@ Route::post('/them-san-pham', [PostController::class, 'themSanPham']);
 Route::get('/edit-san-pham/{id}', [PostController::class, 'getEditPage']);
 Route::post('/update-san-pham', [PostController::class, 'postUpdateSanPham']);
 Route::delete('/delete-san-pham/{id}', [PostController::class, 'deleteSanPham']);
+
+//CartController
+Route::post('/cart/update', [CartController::class, 'updateCartItemQuantity']);
+Route::post('/cart/create', [CartController::class, 'createCart']);
+Route::delete('/cart/{maKh}/remove', [CartController::class, 'removeCart']);
 
 
 //AuthController

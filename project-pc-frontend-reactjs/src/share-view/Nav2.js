@@ -10,6 +10,7 @@ import {
 import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 
 import { AuthContext } from "../authentication/AuthContext"; // Đường dẫn tới AuthContext
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import logo from "./img/ICON.ico";
 import desktop from "./img/DESKTOP.ico";
@@ -82,8 +83,19 @@ const Nav2 = () => {
           <div className="cart-div_Nav2">
             {isLoggedIn ? (
               <>
-                <Link to="/cart" className="purchase-button_ChiTietSanPham">
-                  Mua Hàng
+                <Link
+                  to="/cart"
+                  className=""
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    textDecoration: "none",
+                    width: "130px",
+                    color: "inherit",
+                  }}
+                >
+                  <ShoppingCartIcon style={{ marginRight: "8px" }} />
+                  Giỏ hàng
                 </Link>
                 <div className="cart-div_Nav2" onClick={handleMenuOpen}>
                   <IconButton>
