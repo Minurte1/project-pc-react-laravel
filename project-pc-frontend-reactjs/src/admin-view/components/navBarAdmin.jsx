@@ -123,6 +123,30 @@ const NavBarAdmin = () => {
               <ListItemText primary="Quản lý người dùng" />
             </ListItem>
 
+            {/* Quản lý đơn hàng */}
+            <ListItem
+              button
+              component={Link}
+              to="/admin/don-hang"
+              sx={{
+                borderRadius: "12px",
+                color: "#1f1f1f",
+                cursor: "pointer",
+                userSelect: "none",
+                backgroundColor:
+                  location.pathname === "/admin/don-hang"
+                    ? "#02d3f9"
+                    : "transparent", // Kiểm tra nếu đang ở trang này
+                "&:hover": { backgroundColor: "#02d3f9" },
+              }}
+            >
+              <ListItemIcon>
+                <ShoppingCartIcon sx={{ color: "#1f1f1f" }} />
+              </ListItemIcon>
+
+              <ListItemText primary="Quản lý đơn hàng" />
+            </ListItem>
+
             {/* Quản lý sản phẩm */}
             <ListItem
               button
@@ -143,6 +167,7 @@ const NavBarAdmin = () => {
               />
               {openSection === "sanPham" ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+
             <Collapse
               in={openSection === "sanPham"}
               timeout="auto"
@@ -166,6 +191,7 @@ const NavBarAdmin = () => {
                 >
                   <ListItemText primary="Thêm sản phẩm" />
                 </ListItem>{" "}
+
                 <List>
                   <ListItem
                     button
@@ -204,6 +230,7 @@ const NavBarAdmin = () => {
               <ListItemText primary="Quản lý đơn hàng" />
               {openSection === "donHang" ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+
             <Collapse
               in={openSection === "donHang"}
               timeout="auto"

@@ -10,7 +10,6 @@ use App\Http\Controllers\AdminController;
 // Route cho API /hello
 Route::get('/hello', [PostController::class, 'show']);
 
-
 Route::get('/image/{filename}', [PostController::class, 'getImage']);
 Route::get('/sanpham', [PostController::class, 'getAllSanPham']);
 Route::get('/khachhang', [PostController::class, 'getKhachHang']);
@@ -39,10 +38,15 @@ Route::get('/cart/{maKh}', [CartController::class, 'getCartItemsByUserId']);
 Route::post('/cart/update', [CartController::class, 'updateCartItemQuantity']);
 Route::post('/cart/create', [CartController::class, 'createCart']);
 
-
 // Route xóa sản phẩm trong giỏ hàng của người dùng
 Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart']);
 
+// Route xóa sản phẩm trong giỏ hàng của người dùng
+
+//Roter cho Admin
+Route::get('/list-user', [AdminController::class, 'getListUser']);
+Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
+Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
 
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);

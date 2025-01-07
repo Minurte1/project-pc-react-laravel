@@ -73,6 +73,7 @@ const RouterUser = () => (
     </Grid>
   </>
 );
+
 const MainLayout = () => (
   <>
     <Nav2 />
@@ -88,5 +89,4 @@ const AdminLayout = () => (
     <Route path="/*" element={<AdminRouter />} />
   </Routes>
 );
-
 export default App;

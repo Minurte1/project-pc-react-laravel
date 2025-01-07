@@ -1,26 +1,36 @@
 import React from "react";
-import { Routes, Route, Navigate, useRoutes } from "react-router-dom";
+import { useRoutes, Navigate } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
+import DonHang from "./pages/DonHang";
+import SanPham from "./pages/SanPham";
 import Settings from "./pages/Settings";
 import NavBarAdmin from "./components/navBarAdmin";
 import HeaderAdmin from "./components/headerAdmin";
 
 const AdminRouter = () => {
+  const routes = [
+    { path: "/", element: <Dashboard /> },
+    { path: "/dashboard", element: <Dashboard /> },
+    { path: "/nguoi-dung", element: <Users /> },
+    { path: "/don-hang", element: <DonHang /> },
+    { path: "/san-pham", element: <SanPham /> },
+    { path: "/*", element: <Navigate to="/" replace /> },
+  ];
+
+  const element = useRoutes(routes);
+
   return (
-    <div className="d-flex">
+    <div>
       <HeaderAdmin />
 
-      <div className="flex-grow-1">
-        <NavBarAdmin />
-        <div className="container mt-3">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/nguoi-dung" element={<Users />} />
-            <Route path="/*" element={<Navigate to="/" replace />} />
-          </Routes>
+      <div className="row">
+        <div className="col-3">
+          <NavBarAdmin />
+        </div>
+        <div className="col-9">
+          <div>{element}</div>
         </div>
       </div>
     </div>

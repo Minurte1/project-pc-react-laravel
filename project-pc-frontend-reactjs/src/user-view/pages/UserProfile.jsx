@@ -63,7 +63,6 @@ const UserProfile = () => {
         );
 
         if (response.data.message == "ok") {
-          console.log("oke");
           setUserData(response.data.data);
           setFormData({
             TEN_KHACH_HANG: response.data.data.TEN_KHACH_HANG,
