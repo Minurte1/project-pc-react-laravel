@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomerController;
 
 // Route cho API /hello
 Route::get('/hello', [PostController::class, 'show']);
@@ -54,6 +55,11 @@ Route::post('/save-san-pham', [AdminController::class, 'createSanPham']);
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+//CustomerController
+Route::put('/customers/{maKh}', [CustomerController::class, 'updateCustomerInfo']);
+
+
 
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

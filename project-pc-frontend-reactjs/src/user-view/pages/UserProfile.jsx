@@ -11,8 +11,10 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const UserProfile = () => {
   const api = process.env.URL_NODE;
+  const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
   const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
     TEN_KHACH_HANG: "", // Tên khách hàng
@@ -108,7 +110,7 @@ const UserProfile = () => {
         formData.append("AVATAR", avatarFile);
 
         const response = await axios.put(
-          `${api}/user/${dataUser.MANGUOIDUNG}`,
+          `http://localhost:8000/api/customers/${userInfo.MA_TK}`,
           formData
         );
         if (response.data.EC === 1) {
@@ -119,19 +121,15 @@ const UserProfile = () => {
       }
 
       const response = await axios.put(
-        `${api}/user/${dataUser.MANGUOIDUNG}`,
+        `http://localhost:8000/api/customers/${userInfo.MA_TK}`,
         formData
       );
-      if (response.data.EC === 1) {
-        setUserData(response.data.DT);
-        enqueueSnackbar(response.data.EM, { variant: "success" });
-      } else if (response.data.EC === 0) {
-        enqueueSnackbar(response.data.EM, { variant: "error" });
-      }
+
+      enqueueSnackbar(response.data.message, { variant: "info" });
 
       setIsEditing(false);
     } catch (error) {
-      enqueueSnackbar(error.response.data.EM, { variant: "error" });
+      enqueueSnackbar(error.response.data.message, { variant: "error" });
       console.error("Error updating user data:", error);
     }
   };
@@ -159,11 +157,16 @@ const UserProfile = () => {
           alt={userData?.TENNGUOIDUNG}
           sx={{ width: 40, height: 40, mr: 2 }}
         />
-        <Typography variant="h5">{userData?.TENNGUOIDUNG || "User"}</Typography>
+        <Typography variant="h5">
+          {userData?.TEN_KHACH_HANG || "User"}
+        </Typography>{" "}
       </Box>{" "}
+      <Typography variant="h6">
+        Phân quyền {userData?.TEN_PHAN_QUYEN || "User"}
+      </Typography>
       {isEditing && (
         <Box sx={{ mb: 3 }}>
-          <Typography variant="body1" gutterBottom>
+          {/* <Typography variant="body1" gutterBottom>
             Change Avatar:
           </Typography>
           <input
@@ -171,7 +174,7 @@ const UserProfile = () => {
             type="file"
             accept="image/*"
             onChange={handleAvatarChange}
-          />
+          /> */}
         </Box>
       )}
       {isEditingPassword ? (
