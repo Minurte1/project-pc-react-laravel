@@ -177,10 +177,10 @@ class CartController extends Controller
     public function thanhToanCart(Request $request)
     {
         // Lấy dữ liệu đầu vào
-        $maKh = $request->input('MA_KH');
-        $diaChiShip = $request->input('DIA_CHI_SHIP');
-        $sdtLienHe = $request->input('SDT_LIEN_HE_KH');
-        $ghiChuHoaDon = $request->input('GHI_CHU_HOA_DON');
+        $maKh = $request->input('MaKH');
+        $diaChiShip = $request->input('DiaChiShip');
+        $sdtLienHe = $request->input('SdtShip');
+        $ghiChuHoaDon = "Đang chờ thanh toán";
   
         // Lấy dữ liệu giỏ hàng của người dùng
         $cartItems = DB::table('gio_hang')

@@ -30,7 +30,7 @@ const CartThanhToan = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    MaKH: 1,
+    MaKH: 4,
     DiaChiShip: "",
     SdtShip: "",
     NgayDatHang: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
@@ -57,6 +57,7 @@ const CartThanhToan = () => {
 
       setFormData((prevFormData) => ({
         ...prevFormData,
+        MaKH: userInfo.MA_TK,
         ChiTietHoaDon: response.data.data,
       }));
 

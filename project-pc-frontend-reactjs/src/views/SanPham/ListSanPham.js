@@ -56,18 +56,20 @@ const ListSanPham = () => {
     data.length > 0 &&
     data
       .filter((item) =>
-        item.TENSP ? item.TENSP.toLowerCase().includes(searchTerm.toLowerCase()) : false
+        item.TENSP
+          ? item.TENSP.toLowerCase().includes(searchTerm.toLowerCase())
+          : false
       )
       .filter((item) =>
         priceFilter === "0"
           ? item.DON_GIA > 0
           : priceFilter === "10000000"
-            ? item.DON_GIA < 10000000
-            : priceFilter === "20000000"
-              ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
-              : priceFilter === "30000000"
-                ? item.DON_GIA > 20000000
-                : true
+          ? item.DON_GIA < 10000000
+          : priceFilter === "20000000"
+          ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
+          : priceFilter === "30000000"
+          ? item.DON_GIA > 20000000
+          : true
       );
 
   const sortedData =
@@ -190,7 +192,11 @@ const ListSanPham = () => {
                     className="product-thumb"
                   >
                     <img
-                      src={item.ANHSP ? `http://localhost:8000/images/${item.ANHSP}` : imageErr}
+                      src={
+                        item.ANHSP
+                          ? `http://localhost:8000/images/${item.ANHSP}`
+                          : imageErr
+                      }
                       alt={item.TENSP || "Sản phẩm"}
                       onError={(e) => {
                         e.target.src = imageErr; // Chuyển sang ảnh lỗi nếu không tải được
@@ -215,7 +221,8 @@ const ListSanPham = () => {
                     {item.TENSP} {/* Cập nhật đúng tên trường */}
                   </a>
                   <div className="product-price">
-                    {Number(item.DON_GIA).toLocaleString()} VND {/* Đảm bảo giá là số */}
+                    {Number(item.DON_GIA).toLocaleString()} VND{" "}
+                    {/* Đảm bảo giá là số */}
                   </div>
                 </div>
               </li>

@@ -97,66 +97,71 @@ const Cart = () => {
         Giỏ hàng
       </Typography>
 
-      {cartItemsdata.map((item, index) => (
-        <Card key={index} sx={{ display: "flex", mb: 2, p: 2 }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 150, objectFit: "contain" }}
-            image={
-              item.ANHSP
-                ? `http://localhost:8000/images/${item.ANHSP}`
-                : imageErr
-            }
-            alt={item.TENSP} // Dùng trường 'TENSP' cho tên sản phẩm
-          />
-
-          <Box
-            sx={{ display: "flex", flexDirection: "column", flex: 1, ml: 2 }}
-          >
-            <CardContent>
-              <Typography variant="h6">{item.TENSP}</Typography>{" "}
-              {/* Dùng 'TENSP' */}
-              <Typography variant="body2" color="text.secondary">
-                Mã SP: {item.MASP} {/* Dùng 'MASP' */}
+      {cartItemsdata.length > 0 ? (
+        cartItemsdata.map((item, index) => (
+          <Card key={index} sx={{ display: "flex", mb: 2, p: 2 }}>
+            <CardMedia
+              component="img"
+              sx={{ width: 150, objectFit: "contain" }}
+              image={
+                item.ANHSP
+                  ? `http://localhost:8000/images/${item.ANHSP}`
+                  : imageErr
+              }
+              alt={item.TENSP}
+            />
+            <Box
+              sx={{ display: "flex", flexDirection: "column", flex: 1, ml: 2 }}
+            >
+              <CardContent>
+                <Typography variant="h6">{item.TENSP}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Mã SP: {item.MASP}
+                </Typography>
+                <Typography variant="body1">
+                  Giá: {parseInt(item.DON_GIA).toLocaleString()}đ
+                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+                  <IconButton
+                    onClick={() => updateQuantity(item.MASP, "remove")}
+                    disabled={item.SO_LUONG_SP <= 1}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                  <Typography sx={{ mx: 2 }}>{item.SO_LUONG_SP}</Typography>
+                  <IconButton
+                    onClick={() => updateQuantity(item.MASP, "add")}
+                    disabled={item.SO_LUONG_SP >= item.TON_KHO_SP}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleRemoveProducts(item.MASP)}
+                    color="error"
+                    sx={{ ml: 2 }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </CardContent>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", pr: 2 }}>
+              <Typography variant="h6">
+                {parseInt(item.THANH_TIEN).toLocaleString()}đ
               </Typography>
-              <Typography variant="body1">
-                Giá: {parseInt(item.DON_GIA).toLocaleString()}đ{" "}
-                {/* Dùng 'DON_GIA' */}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-                <IconButton
-                  onClick={() => updateQuantity(item.MASP, "remove")} // Dùng 'MASP'
-                  disabled={item.SO_LUONG_SP <= 1} // Dùng 'SO_LUONG_SP'
-                >
-                  <RemoveIcon />
-                </IconButton>
-                <Typography sx={{ mx: 2 }}>{item.SO_LUONG_SP}</Typography>{" "}
-                {/* Dùng 'SO_LUONG_SP' */}
-                <IconButton
-                  onClick={() => updateQuantity(item.MASP, "add")} // Dùng 'MASP'
-                  disabled={item.SO_LUONG_SP >= item.TON_KHO_SP} // Dùng 'TON_KHO_SP'
-                >
-                  <AddIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => handleRemoveProducts(item.MASP)} // Dùng 'MASP'
-                  color="error"
-                  sx={{ ml: 2 }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </CardContent>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", pr: 2 }}>
-            <Typography variant="h6">
-              {parseInt(item.THANH_TIEN).toLocaleString()}đ{" "}
-              {/* Dùng 'THANH_TIEN' */}
-            </Typography>
-          </Box>
-        </Card>
-      ))}
+            </Box>
+          </Card>
+        ))
+      ) : (
+        <Typography
+          variant="h6"
+          color="text.secondary"
+          textAlign="center"
+          sx={{ mt: 4 }}
+        >
+          Giỏ hàng của bạn hiện tại đang rỗng
+        </Typography>
+      )}
 
       <Divider sx={{ my: 3 }} />
 
