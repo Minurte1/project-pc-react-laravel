@@ -64,6 +64,8 @@ Route::put('/accounts/{maTk}/change-password', [CustomerController::class, 'chan
 
 //OrderController
 Route::get('/orders/pending/{maTk}', [OrderController::class, 'getPendingOrders']);
+Route::get('/orders/success/{maTk}', [OrderController::class, 'getSuccessOrders']);
+Route::get('/orders/cancel/{maTk}', [OrderController::class, 'getCancelOrders']);
 
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
