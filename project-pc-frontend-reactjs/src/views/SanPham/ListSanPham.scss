@@ -118,3 +118,31 @@ ul.products li .product-info a.product-price {
     padding: 2px 0px;
     font-weight: 600;
 }
+
+
+// ========================
+.add-to-cart {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.cart-btn {
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-btn i {
+    font-size: 16px;
+}
+
+.cart-btn:hover {
+    background-color: #ff5a4d;
+}

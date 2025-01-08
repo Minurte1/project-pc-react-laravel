@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./SanPhamDesktop.scss";
 import imageErr from "../../assets/images/no_image_available.png"; // Hình ảnh lỗi
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
+import { useSelector } from "react-redux";
 
 const SanPhamDesktop = () => {
   const [data, setData] = useState([]); // Thay đổi từ null thành mảng rỗng
@@ -11,7 +13,7 @@ const SanPhamDesktop = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-
+  const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -34,7 +36,33 @@ const SanPhamDesktop = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  // THÊM VÀO GIỎ HÀNG
+  const handleAddToCart = async (item) => {
+    if (!isAuthenticated) {
+      enqueueSnackbar("Vui lòng đăng nhập để tiếp tục!");
+      navigate("/login"); // Đảm bảo '/login' là đường dẫn đúng tới trang đăng nhập của bạn
+      return; // Dừng hàm nếu chưa đăng nhập
+    }
 
+    try {
+      const payload = {
+        MASP: item.MASP,
+        MA_KH: userInfo.MA_TK, // ID người dùng
+        CHANGE: 1,
+      };
+
+      const response = await axios.post(
+        `http://localhost:8000/api/cart/update`,
+        payload
+      );
+
+      enqueueSnackbar(response.data.message, { variant: "success" });
+    } catch (error) {
+      console.error("Lỗi hệ thống:", error);
+      enqueueSnackbar(error.response.message, { variant: "error" });
+    } finally {
+    }
+  };
   const handleViewSanPham = (SanPham) => {
     navigate(`/SanPham/${SanPham.MASP}`); // Đảm bảo gọi đúng mã sản phẩm
   };
@@ -57,18 +85,20 @@ const SanPhamDesktop = () => {
     data.length > 0 &&
     data
       .filter((item) =>
-        item.TENSP ? item.TENSP.toLowerCase().includes(searchTerm.toLowerCase()) : false
+        item.TENSP
+          ? item.TENSP.toLowerCase().includes(searchTerm.toLowerCase())
+          : false
       )
       .filter((item) =>
         priceFilter === "0"
           ? item.DON_GIA > 0
           : priceFilter === "10000000"
-            ? item.DON_GIA < 10000000
-            : priceFilter === "20000000"
-              ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
-              : priceFilter === "30000000"
-                ? item.DON_GIA > 20000000
-                : true
+          ? item.DON_GIA < 10000000
+          : priceFilter === "20000000"
+          ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
+          : priceFilter === "30000000"
+          ? item.DON_GIA > 20000000
+          : true
       );
 
   const sortedData =
@@ -191,7 +221,11 @@ const SanPhamDesktop = () => {
                     className="product-thumb"
                   >
                     <img
-                      src={item.ANHSP ? `http://localhost:8000/images/${item.ANHSP}` : imageErr}
+                      src={
+                        item.ANHSP
+                          ? `http://localhost:8000/images/${item.ANHSP}`
+                          : imageErr
+                      }
                       alt={item.TENSP || "Sản phẩm"}
                       onError={(e) => {
                         e.target.src = imageErr; // Chuyển sang ảnh lỗi nếu không tải được
@@ -216,8 +250,20 @@ const SanPhamDesktop = () => {
                     {item.TENSP} {/* Cập nhật đúng tên trường */}
                   </a>
                   <div className="product-price">
-                    {Number(item.DON_GIA).toLocaleString()} VND {/* Đảm bảo giá là số */}
+                    {Number(item.DON_GIA).toLocaleString()} VND{" "}
+                    {/* Đảm bảo giá là số */}
                   </div>
+                </div>{" "}
+                {/* Thêm icon giỏ hàng */}
+                <div className="add-to-cart">
+                  <button
+                    onClick={() => handleAddToCart(item)}
+                    className="cart-btn"
+                  >
+                    <i className="fas fa-shopping-cart"></i>{" "}
+                    {/* Icon giỏ hàng */}
+                    Thêm vào giỏ
+                  </button>
                 </div>
               </li>
             ))}
