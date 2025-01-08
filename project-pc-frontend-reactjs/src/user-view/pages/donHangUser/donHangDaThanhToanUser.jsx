@@ -32,7 +32,7 @@ const DonHang_DaThanhToan_User = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `${api}/don-hang/da-thanh-toan/${userInfo.MANGUOIDUNG}`
+        `http://localhost:8000/api/orders/success/${userInfo.MA_TK}`
       ); // Đảm bảo URL đúng với API của bạn
       setOrders(response.data.DT);
     } catch (error) {
