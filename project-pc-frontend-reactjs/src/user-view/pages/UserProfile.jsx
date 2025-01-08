@@ -25,6 +25,9 @@ const UserProfile = () => {
     MA_PHAN_QUYEN: "", // Mã phân quyền
     TEN_PHAN_QUYEN: "", // Tên phân quyền
     GHI_CHU_PHAN_QUYEN: "", // Ghi chú phân quyền
+    confirm_password: "",
+    new_password: "",
+    old_password: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -105,29 +108,25 @@ const UserProfile = () => {
 
   const handleSave = async () => {
     try {
-      if (avatarFile) {
-        const formData = new FormData();
-        formData.append("AVATAR", avatarFile);
-
+      //Thay đổi mật khẩu
+      if (isEditingPassword) {
+        const response = await axios.put(
+          `http://localhost:8000/api/accounts/${userInfo.MA_TK}/change-password`,
+          formData
+        );
+        enqueueSnackbar(response.data.message, { variant: "info" });
+        setIsEditingPassword(false);
+        setIsEditing(false);
+      } else {
+        //Thay đổi thông tin người dùng
         const response = await axios.put(
           `http://localhost:8000/api/customers/${userInfo.MA_TK}`,
           formData
         );
-        if (response.data.EC === 1) {
-          enqueueSnackbar(response.data.EM, { variant: "success" });
-        } else {
-          enqueueSnackbar(response.data.EM, { variant: "error" });
-        }
+
+        setIsEditing(false);
+        enqueueSnackbar(response.data.message, { variant: "info" });
       }
-
-      const response = await axios.put(
-        `http://localhost:8000/api/customers/${userInfo.MA_TK}`,
-        formData
-      );
-
-      enqueueSnackbar(response.data.message, { variant: "info" });
-
-      setIsEditing(false);
     } catch (error) {
       enqueueSnackbar(error.response.data.message, { variant: "error" });
       console.error("Error updating user data:", error);
@@ -184,8 +183,8 @@ const UserProfile = () => {
             margin="normal"
             type="password"
             label="Nhập Mật khẩu Cũ"
-            name="CURRENT_PASSWORD"
-            value={formData.CURRENT_PASSWORD || ""}
+            name="old_password"
+            value={formData.old_password || ""}
             onChange={handleChange}
             fullWidth
           />{" "}
@@ -193,8 +192,8 @@ const UserProfile = () => {
             margin="normal"
             type="password"
             label="Nhập Mật khẩu Mới"
-            name="MATKHAU"
-            value={formData.MATKHAU || ""}
+            name="new_password"
+            value={formData.new_password || ""}
             onChange={handleChange}
             fullWidth
           />{" "}
@@ -202,9 +201,9 @@ const UserProfile = () => {
             margin="normal"
             type="password"
             label="Xác nhận mật khẩu mới"
-            name="MATKHAUMOI"
-            value={confirmPassword || ""}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            name="confirm_password"
+            value={formData.confirm_password || ""}
+            onChange={handleChange}
             fullWidth
           />{" "}
         </>

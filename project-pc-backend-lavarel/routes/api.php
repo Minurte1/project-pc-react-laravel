@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 
 // Route cho API /hello
 Route::get('/hello', [PostController::class, 'show']);
@@ -58,8 +59,11 @@ Route::post('/login', [AuthController::class, 'login']);
 
 //CustomerController
 Route::put('/customers/{maKh}', [CustomerController::class, 'updateCustomerInfo']);
+Route::put('/accounts/{maTk}/change-password', [CustomerController::class, 'changePassword']);
 
 
+//OrderController
+Route::get('/orders/pending/{maTk}', [OrderController::class, 'getPendingOrders']);
 
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

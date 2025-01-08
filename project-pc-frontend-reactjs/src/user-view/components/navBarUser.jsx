@@ -139,7 +139,7 @@ const NavBarUser = () => {
                     },
                   }}
                 >
-                  <ListItemText primary="Đơn hàng đang xử lý" />
+                  <ListItemText primary="Đang chờ thanh toán" />
                 </ListItem>
                 <ListItem
                   button
@@ -181,7 +181,7 @@ const NavBarUser = () => {
                     },
                   }}
                 >
-                  <ListItemText primary="Đơn hàng đã giao" />
+                  <ListItemText primary=" Đơn thanh toán thành công" />
                 </ListItem>{" "}
                 <ListItem
                   button
