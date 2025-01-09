@@ -103,7 +103,7 @@ const TheLoai = () => {
                     type="text"
                     value={searchText}
                     onChange={handleSearch}
-                    placeholder="Tìm kiếm sản phẩm..."
+                    placeholder="Tìm kiếm ..."
                     className="form-control"
                 />
             </div>

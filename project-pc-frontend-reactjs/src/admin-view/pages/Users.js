@@ -4,27 +4,40 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
+import KhachHangModal from "./Modal/KhachHangModal"
 const Users = () => {
   const api = process.env.URL_NODE;
   const [listUsers, setListUsers] = useState([]);
+  const [listPhanQuyen, setListPhanQuyen] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState(""); // Lưu giá trị tìm kiếm
+  const [showModal, setShowModal] = useState(false);
+  const [selectedKhachHang, setSelectedKhachHang] = useState("");
   useEffect(() => {
-    // Giả lập API call để lấy danh sách người dùng
-    const fetchUsers = async () => {
-      const response = await axios.get(
-        `http://localhost:8000/api/list-user`
-      );
-      const dataWithId = response?.data?.data?.map((user, index) => ({
-        ...user,
-        id: index + 1,
-      }));
-      setListUsers(dataWithId || []);
-      setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
-    };
-
     fetchUsers();
+    fetchListPhanQuyen();
   }, []);
+  const fetchUsers = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/api/list-user`
+    );
+    const dataWithId = response?.data?.data?.map((user, index) => ({
+      ...user,
+      id: index + 1,
+    }));
+    setListUsers(dataWithId || []);
+    setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
+  };
+  const fetchListPhanQuyen = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/api/list-phan-quyen`
+    );
+    const dataWithId = response?.data?.data?.map((user, index) => ({
+      ...user,
+      id: index + 1,
+    }));
+    setListPhanQuyen(dataWithId || []);
+  };
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchText(value);
@@ -41,8 +54,26 @@ const Users = () => {
 
     setFilteredData(filtered); // Cập nhật dữ liệu sau khi lọc
   };
-  const handleDelete = (MA_KH) => {
-    enqueueSnackbar(`Chưa làm xong, xóa mã KH ${MA_KH}`, { variant: "error" });
+
+  const handleSave = () => {
+    fetchUsers();
+  };
+
+  const handleShowModal = (khachhang) => {
+    setSelectedKhachHang(khachhang);
+    setShowModal(true)
+  };
+
+  const handleDelete = async (MA_KH) => {
+    const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa ?");
+    if (!isConfirmed) {
+      return; // Hủy nếu người dùng không xác nhận
+    }
+
+    const response = await axios.post(`http://localhost:8000/api/xoa-khach-hang/${MA_KH}`);
+
+    enqueueSnackbar(`${response.data.message}`, { variant: "info" });
+    fetchUsers();
   };
 
   const columns = [
@@ -56,12 +87,21 @@ const Users = () => {
       headerName: "Hành động",
       width: 150,
       renderCell: (params) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(params.row.MA_KH)}
-        >
-          Xóa
-        </button>
+        <>
+          <button
+            type="button"
+            className="btn btn-warning btn-sm"
+            onClick={() => handleShowModal(params.row)}
+          >
+            Sửa
+          </button>
+          <button
+            className="btn btn-danger btn-sm mx-1"
+            onClick={() => handleDelete(params.row.MA_KH)}
+          >
+            Xóa
+          </button>
+        </>
       ),
     },
   ];
@@ -75,13 +115,30 @@ const Users = () => {
           type="text"
           value={searchText}
           onChange={handleSearch}
-          placeholder="Tìm kiếm sản phẩm..."
+          placeholder="Tìm kiếm ..."
           className="form-control"
         />
       </div>
+      <button
+        type="button"
+        className="btn btn-success"
+        onClick={() => setShowModal(true)}
+      >
+        Thêm
+      </button>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid rows={filteredData} columns={columns} pageSize={5} />
       </div>
+      <KhachHangModal
+        show={showModal}
+        handleClose={() => {
+          setShowModal(false);
+          setSelectedKhachHang("");
+        }}
+        khachhang={selectedKhachHang}
+        listPhanQuyen={listPhanQuyen}
+        handleSubmit={handleSave}
+      />
     </div>
   );
 };

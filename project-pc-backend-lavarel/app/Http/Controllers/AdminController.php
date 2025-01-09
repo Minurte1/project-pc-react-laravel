@@ -6,6 +6,28 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    public function getListPhanQuyen()
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $listPhanQuyen = DB::select("
+        SELECT * FROM phan_quyen
+        ", );
+
+        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
+        if (empty($listPhanQuyen)) {
+            return response()->json([
+                'message' => 'Không tìm thấy phân quyền.',
+                'data' => [],
+            ]);
+        }
+
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $listPhanQuyen
+        ]);
+    }
+
     public function getListUser()
     {
         // Truy vấn dữ liệu giỏ hàng của 1 người dùng
@@ -30,6 +52,179 @@ class AdminController extends Controller
             'message' => 'ok',
             'data' => $listUser
         ]);
+    }
+
+    public function createUser(Request $request)
+    {
+        // Validate dữ liệu đầu vào
+        $request->validate([
+            'TEN_KHACH_HANG' => 'required|string|max:255',
+            'SDT_KH' => 'required|string|max:15',
+            'DIA_CHI' => 'nullable|string|max:500',
+            'GHI_CHU_KH' => 'nullable|string|max:500',
+            'TEN_DANG_NHAP' => 'required|string|max:255|unique:tai_khoan,TEN_DANG_NHAP',
+            'MAT_KHAU' => 'required|string|min:6',
+            'MA_PHAN_QUYEN' => 'required|integer',
+        ]);
+
+        try {
+            // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
+            DB::beginTransaction();
+
+            // Thêm mới khách hàng vào bảng khachhang
+            $maKhachHang = DB::table('khachhang')->insertGetId([
+                'TEN_KHACH_HANG' => $request->TEN_KHACH_HANG,
+                'SDT_KH' => $request->SDT_KH,
+                'DIA_CHI' => $request->DIA_CHI,
+                'GHI_CHU_KH' => $request->GHI_CHU_KH,
+            ]);
+
+            // Thêm tài khoản sử dụng mã khách hàng vừa tạo
+            $taiKhoan = DB::table('tai_khoan')->insert([
+                'TEN_DANG_NHAP' => $request->TEN_DANG_NHAP,
+                'MAT_KHAU' => bcrypt($request->MAT_KHAU), // Mã hóa mật khẩu
+                'MA_PHAN_QUYEN' => $request->MA_PHAN_QUYEN,
+                'MA_KH' => $maKhachHang,
+            ]);
+
+            // Commit transaction nếu không có lỗi
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Thêm khách hàng và tài khoản thành công!',
+                'data' => [
+                    'khachhang' => [
+                        'MA_KH' => $maKhachHang,
+                        'TEN_KHACH_HANG' => $request->TEN_KHACH_HANG,
+                        'SDT_KH' => $request->SDT_KH,
+                        'DIA_CHI' => $request->DIA_CHI,
+                        'GHI_CHU_KH' => $request->GHI_CHU_KH,
+                    ],
+                    'taikhoan' => [
+                        'TEN_DANG_NHAP' => $request->TEN_DANG_NHAP,
+                        'MA_PHAN_QUYEN' => $request->MA_PHAN_QUYEN,
+                    ],
+                ],
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi thêm khách hàng và tài khoản.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateUser(Request $request, $maKhachHang)
+    {
+        // Validate dữ liệu đầu vào
+        $request->validate([
+            'TEN_KHACH_HANG' => 'required|string|max:255',
+            'SDT_KH' => 'required|string|max:15',
+            'DIA_CHI' => 'nullable|string|max:500',
+            'GHI_CHU_KH' => 'nullable|string|max:500',
+            'TEN_DANG_NHAP' => 'required|string|max:255|unique:tai_khoan,TEN_DANG_NHAP,' . $maKhachHang . ',MA_KH',
+            'MAT_KHAU' => 'nullable|string|min:6',
+            'MA_PHAN_QUYEN' => 'required|integer',
+        ]);
+
+        try {
+            // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
+            DB::beginTransaction();
+
+            // Cập nhật thông tin khách hàng trong bảng khachhang
+            DB::table('khachhang')->where('MA_KH', $maKhachHang)->update([
+                'TEN_KHACH_HANG' => $request->TEN_KHACH_HANG,
+                'SDT_KH' => $request->SDT_KH,
+                'DIA_CHI' => $request->DIA_CHI,
+                'GHI_CHU_KH' => $request->GHI_CHU_KH,
+            ]);
+
+            // Chuẩn bị dữ liệu để cập nhật tài khoản
+            $taiKhoanData = [
+                'TEN_DANG_NHAP' => $request->TEN_DANG_NHAP,
+                'MA_PHAN_QUYEN' => $request->MA_PHAN_QUYEN,
+            ];
+
+            // Nếu mật khẩu được cung cấp, mã hóa và thêm vào dữ liệu cập nhật
+            if (!empty($request->MAT_KHAU)) {
+                $taiKhoanData['MAT_KHAU'] = bcrypt($request->MAT_KHAU);
+            }
+
+            // Cập nhật thông tin tài khoản trong bảng tai_khoan
+            DB::table('tai_khoan')->where('MA_KH', $maKhachHang)->update($taiKhoanData);
+
+            // Commit transaction nếu không có lỗi
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Cập nhật khách hàng và tài khoản thành công!',
+                'data' => [
+                    'khachhang' => [
+                        'MA_KH' => $maKhachHang,
+                        'TEN_KHACH_HANG' => $request->TEN_KHACH_HANG,
+                        'SDT_KH' => $request->SDT_KH,
+                        'DIA_CHI' => $request->DIA_CHI,
+                        'GHI_CHU_KH' => $request->GHI_CHU_KH,
+                    ],
+                    'taikhoan' => [
+                        'TEN_DANG_NHAP' => $request->TEN_DANG_NHAP,
+                        'MA_PHAN_QUYEN' => $request->MA_PHAN_QUYEN,
+                    ],
+                ],
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi cập nhật khách hàng và tài khoản.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function deleteUser($maKhachHang)
+    {
+        try {
+            // Kiểm tra xem khách hàng có hóa đơn hay không
+            $hoaDon = DB::table('hoadon')->where('MA_KH', $maKhachHang)->exists();
+
+            if ($hoaDon) {
+                return response()->json([
+                    'message' => 'Không thể xóa khách hàng này vì đã có hóa đơn liên quan.',
+                ]);
+            }
+
+            // Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
+            DB::beginTransaction();
+
+            // Xóa giỏ hàng liên quan đến khách hàng nếu có
+            DB::table('gio_hang')->where('MA_KH', $maKhachHang)->delete();
+
+            // Xóa tài khoản liên quan đến khách hàng
+            DB::table('tai_khoan')->where('MA_KH', $maKhachHang)->delete();
+
+            // Xóa khách hàng
+            DB::table('khachhang')->where('MA_KH', $maKhachHang)->delete();
+
+            // Commit transaction nếu không có lỗi
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Xóa khách hàng và các dữ liệu liên quan thành công!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi xóa khách hàng.',
+                'error' => $e->getMessage(),
+            ], 500); // Trả về lỗi 500 (Internal Server Error)
+        }
     }
 
     public function getDonHang()
@@ -63,33 +258,6 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'ok',
             'data' => $listDonHang
-        ]);
-    }
-
-    public function getSanPham()
-    {
-        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
-        $listSanPham = DB::select("
-        SELECT 
-        sanpham.*,
-        theloai.*
-        FROM sanpham
-        JOIN theloai ON theloai.MATL = sanpham.MATL
-
-        ", );
-
-        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
-        if (empty($listSanPham)) {
-            return response()->json([
-                'message' => 'No items found in the cart for this user.',
-                'data' => [],
-            ]);
-        }
-
-        // Trả về dữ liệu giỏ hàng và tổng số tiền
-        return response()->json([
-            'message' => 'ok',
-            'data' => $listSanPham
         ]);
     }
 
@@ -222,6 +390,33 @@ class AdminController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function getSanPham()
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $listSanPham = DB::select("
+        SELECT 
+        sanpham.*,
+        theloai.*
+        FROM sanpham
+        JOIN theloai ON theloai.MATL = sanpham.MATL
+
+        ", );
+
+        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
+        if (empty($listSanPham)) {
+            return response()->json([
+                'message' => 'No items found in the cart for this user.',
+                'data' => [],
+            ]);
+        }
+
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $listSanPham
+        ]);
     }
 
     public function createSanPham(Request $request)

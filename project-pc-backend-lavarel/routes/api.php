@@ -46,6 +46,7 @@ Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart'
 // Route xóa sản phẩm trong giỏ hàng của người dùng
 
 //Roter cho Admin
+Route::get('/list-phan-quyen', [AdminController::class, 'getListPhanQuyen']);
 Route::get('/list-user', [AdminController::class, 'getListUser']);
 Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
 Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
@@ -58,6 +59,10 @@ Route::post('/xoa-san-pham/{id}', [AdminController::class, 'deleteSanPham']);
 Route::post('/save-the-loai', [AdminController::class, 'createTheLoai']);
 Route::post('/update-the-loai/{id}', [AdminController::class, 'updateTheLoai']);
 Route::post('/xoa-the-loai/{id}', [AdminController::class, 'deleteTheLoai']);
+
+Route::post('/save-khach-hang', [AdminController::class, 'createUser']);
+Route::post('/update-khach-hang/{id}', [AdminController::class, 'updateUser']);
+Route::post('/xoa-khach-hang/{id}', [AdminController::class, 'deleteUser']);
 
 
 
