@@ -15,35 +15,34 @@ const DonHang = () => {
     const [searchText, setSearchText] = useState(""); // Lưu giá trị tìm kiếm
 
     const [showModal, setShowModal] = useState(false);
-    const [selectedSanPham, setSelectedSanPham] = useState(false);
+    const [selectedSanPham, setSelectedSanPham] = useState("");
 
     useEffect(() => {
-        // Giả lập API call để lấy danh sách người dùng
-        const fetchSanPham = async () => {
-            const response = await axios.get(
-                `http://localhost:8000/api/list-san-pham`
-            );
-            const dataWithId = response?.data?.data?.map((user, index) => ({
-                ...user,
-                id: index + 1,
-            }));
-            setListSanPham(dataWithId || []);
-            setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
-        };
         fetchSanPham();
-
-        const fetchTheLoai = async () => {
-            const response = await axios.get(
-                `http://localhost:8000/api/list-the-loai`
-            );
-            const dataWithId = response?.data?.data?.map((user, index) => ({
-                ...user,
-                id: index + 1,
-            }));
-            setListTheLoai(dataWithId || []);
-        };
         fetchTheLoai();
     }, []);
+
+    const fetchSanPham = async () => {
+        const response = await axios.get(
+            `http://localhost:8000/api/list-san-pham`
+        );
+        const dataWithId = response?.data?.data?.map((user, index) => ({
+            ...user,
+            id: index + 1,
+        }));
+        setListSanPham(dataWithId || []);
+        setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
+    };
+    const fetchTheLoai = async () => {
+        const response = await axios.get(
+            `http://localhost:8000/api/list-the-loai`
+        );
+        const dataWithId = response?.data?.data?.map((user, index) => ({
+            ...user,
+            id: index + 1,
+        }));
+        setListTheLoai(dataWithId || []);
+    };
 
     const handleSearch = (event) => {
         const value = event.target.value.toLowerCase();
@@ -62,9 +61,25 @@ const DonHang = () => {
         setFilteredData(filtered); // Cập nhật dữ liệu sau khi lọc
     };
 
-    const handleDelete = (MASP) => {
-        // Logic xóa sản phẩm
-        console.log(`Xóa sản phẩm với mã ${MASP}`);
+    const handleShowModal = (sanpham) => {
+        setSelectedSanPham(sanpham);
+        setShowModal(true)
+    };
+
+    const handleDeleteSanPham = async (MASP) => {
+        const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?");
+        if (!isConfirmed) {
+            return; // Hủy nếu người dùng không xác nhận
+        }
+
+        const response = await axios.post(`http://localhost:8000/api/xoa-san-pham//${MASP}`, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        enqueueSnackbar(`${response.message}`, { variant: "info" });
+        fetchSanPham();
     };
 
     const handleSaveSanPham = () => {
@@ -112,12 +127,22 @@ const DonHang = () => {
             headerName: "Hành động",
             width: 150,
             renderCell: (params) => (
-                <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDelete(params.row.MASP)}
-                >
-                    Xóa
-                </button>
+                <>
+                    <button
+                        type="button"
+                        className="btn btn-warning"
+                        onClick={() => handleShowModal(params.row)}
+                    >
+                        Sửa
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-danger mx-1"
+                        onClick={() => handleDeleteSanPham(params.row.MASP)}
+                    >
+                        Xóa
+                    </button>
+                </>
             ),
         },
     ];
@@ -150,7 +175,10 @@ const DonHang = () => {
             </div>
             <SanPhamModal
                 show={showModal}
-                handleClose={() => setShowModal(false)}
+                handleClose={() => {
+                    setShowModal(false);
+                    setSelectedSanPham("");
+                }}
                 sanpham={selectedSanPham}
                 listTheLoai={listTheLoai}
                 handleSubmit={handleSaveSanPham}

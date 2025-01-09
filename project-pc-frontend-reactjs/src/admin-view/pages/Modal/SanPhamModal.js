@@ -37,7 +37,7 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
                 GHI_CHU_SP: "",
             });
         }
-    }, [sanpham]);
+    }, [sanpham, show]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -67,12 +67,12 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
         try {
             if (sanpham) {
                 // Cập nhật sản phẩm
-                // await axios.put(`http://localhost:8000/api/update-san-pham/${sanpham.MASP}`, formDataToSend, {
-                //     headers: {
-                //         "Content-Type": "multipart/form-data",
-                //     },
-                // });
-                enqueueSnackbar("Cảnh báo: chưa cá API này.", { variant: "warning" });
+                await axios.post(`http://localhost:8000/api/update-san-pham/${sanpham.MASP}`, formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                enqueueSnackbar("Sửa sản phẩm thành công!.", { variant: "success" });
             } else {
                 // Thêm mới sản phẩm
                 await axios.post("http://localhost:8000/api/save-san-pham", formDataToSend, {
@@ -80,7 +80,7 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
                         "Content-Type": "multipart/form-data",
                     },
                 });
-                alert("Thêm sản phẩm mới thành công!");
+                enqueueSnackbar("Thêm sản phẩm mới thành công!", { variant: "success" });
             }
             handleSubmit();
             handleClose(); // Đóng modal sau khi xử lý xong
@@ -252,6 +252,11 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
                                     }}
                                 />
                             </Form.Group>
+                            <img
+                                src={`http://localhost:8000/images/${sanpham.ANHSP}`}
+                                alt="Ảnh sản phẩm"
+                                style={{ width: 50, height: 50, objectFit: "cover" }}
+                            />
                         </Col>
                     </Row>
                     <Row className="mb-3">

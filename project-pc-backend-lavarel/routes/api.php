@@ -52,6 +52,19 @@ Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
 Route::get('/list-the-loai', [AdminController::class, 'getTheLoai']);
 
 Route::post('/save-san-pham', [AdminController::class, 'createSanPham']);
+Route::post('/update-san-pham/{id}', [AdminController::class, 'updateSanPham']);
+Route::post('/xoa-san-pham/{id}', [AdminController::class, 'deleteSanPham']);
+
+Route::post('/save-the-loai', [AdminController::class, 'createTheLoai']);
+Route::post('/update-the-loai/{id}', [AdminController::class, 'updateTheLoai']);
+Route::post('/xoa-the-loai/{id}', [AdminController::class, 'deleteTheLoai']);
+
+
+
+
+
+
+
 
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);
