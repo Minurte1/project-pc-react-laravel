@@ -569,4 +569,167 @@ class AdminController extends Controller
         }
     }
 
+    public function createDonHang(Request $request)
+    {
+        // Validate dữ liệu đầu vào
+        $request->validate([
+            'MA_KH' => 'required|integer',
+            'DIA_CHI_SHIP' => 'required|string|max:255',
+            'SDT_LIEN_HE_KH' => 'required|string|max:15',
+            'GHI_CHU_HOA_DON' => 'nullable|string|max:500',
+            'MASP' => 'required|integer',
+            'SO_LUONG' => 'required|integer|min:1',
+            'GIAM_GIA' => 'nullable|numeric|min:0|max:100',
+            'GHI_CHU_CTHD' => 'nullable|string|max:500',
+        ]);
+
+        try {
+            // Bắt đầu transaction
+            DB::beginTransaction();
+
+            // Thêm hóa đơn mới
+            $maHoaDon = DB::table('hoadon')->insertGetId([
+                'MA_KH' => $request->MA_KH,
+                'DIA_CHI_SHIP' => $request->DIA_CHI_SHIP,
+                'SDT_LIEN_HE_KH' => $request->SDT_LIEN_HE_KH,
+                'GHI_CHU_HOA_DON' => $request->GHI_CHU_HOA_DON,
+            ]);
+
+            // Thêm chi tiết hóa đơn
+            DB::table('chi_tiet_hoa_don')->insert([
+                'MASP' => $request->MASP,
+                'MAHD' => $maHoaDon,
+                'SO_LUONG' => $request->SO_LUONG,
+                'GIAM_GIA' => $request->GIAM_GIA ?? 0,
+                'GHI_CHU_CTHD' => $request->GHI_CHU_CTHD ?? null,
+            ]);
+
+            // Commit transaction
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Thêm đơn hàng thành công!',
+                'data' => [
+                    'MAHD' => $maHoaDon,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi thêm đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateDonHang(Request $request, $id)
+    {
+        // Validate dữ liệu đầu vào
+        $request->validate([
+            'MA_KH' => 'required|integer',
+            'DIA_CHI_SHIP' => 'required|string|max:255',
+            'SDT_LIEN_HE_KH' => 'required|string|max:15',
+            'GHI_CHU_HOA_DON' => 'nullable|string|max:500',
+            'MASP' => 'required|integer',
+            'SO_LUONG' => 'required|integer|min:1',
+            'GIAM_GIA' => 'nullable|numeric|min:0|max:100',
+            'GHI_CHU_CTHD' => 'nullable|string|max:500',
+        ]);
+
+        try {
+            // Bắt đầu transaction
+            DB::beginTransaction();
+
+            // Kiểm tra hóa đơn tồn tại
+            $hoaDon = DB::table('hoadon')->where('MAHD', $id)->first();
+            if (!$hoaDon) {
+                return response()->json([
+                    'message' => 'Hóa đơn không tồn tại.',
+                ], 404);
+            }
+
+            // Cập nhật thông tin hóa đơn
+            DB::table('hoadon')->where('MAHD', $id)->update([
+                'MA_KH' => $request->MA_KH,
+                'DIA_CHI_SHIP' => $request->DIA_CHI_SHIP,
+                'SDT_LIEN_HE_KH' => $request->SDT_LIEN_HE_KH,
+                'GHI_CHU_HOA_DON' => $request->GHI_CHU_HOA_DON,
+            ]);
+
+            // Cập nhật thông tin chi tiết hóa đơn
+            DB::table('chi_tiet_hoa_don')->where('MAHD', $id)->update([
+                'MASP' => $request->MASP,
+                'SO_LUONG' => $request->SO_LUONG,
+                'GIAM_GIA' => $request->GIAM_GIA ?? 0,
+                'GHI_CHU_CTHD' => $request->GHI_CHU_CTHD ?? null,
+            ]);
+
+            // Commit transaction
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Cập nhật đơn hàng thành công!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi cập nhật đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function deleteDonHang($id)
+    {
+        try {
+            // Bắt đầu transaction
+            DB::beginTransaction();
+
+            // Kiểm tra hóa đơn tồn tại
+            $hoaDon = DB::table('hoadon')->where('MAHD', $id)->first();
+            if (!$hoaDon) {
+                return response()->json([
+                    'message' => 'Hóa đơn không tồn tại.',
+                ], 404);
+            }
+
+            // Xóa chi tiết hóa đơn liên quan
+            DB::table('chi_tiet_hoa_don')->where('MAHD', $id)->delete();
+
+            // Xóa hóa đơn
+            DB::table('hoadon')->where('MAHD', $id)->delete();
+
+            // Commit transaction
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Xóa đơn hàng thành công!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback transaction nếu có lỗi
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi xóa đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -64,6 +64,11 @@ Route::post('/save-khach-hang', [AdminController::class, 'createUser']);
 Route::post('/update-khach-hang/{id}', [AdminController::class, 'updateUser']);
 Route::post('/xoa-khach-hang/{id}', [AdminController::class, 'deleteUser']);
 
+Route::post('/save-don-hang', [AdminController::class, 'createDonHang']);
+Route::post('/update-don-hang/{id}', [AdminController::class, 'updateDonHang']);
+Route::post('/xoa-don-hang/{id}', [AdminController::class, 'deleteDonHang']);
+
+
 
 
 
