@@ -17,7 +17,8 @@ import desktop from "./img/DESKTOP.ico";
 import apple from "./img/APPLE.ico";
 import asus from "./img/ASUS.ico";
 import "./css/Nav2.scss";
-
+import { logout } from "../redux/authSlice";
+import { useDispatch } from "react-redux";
 const Nav2 = () => {
   const { isLoggedIn, setIsLoggedIn, userData, updateAuthStatus } =
     useContext(AuthContext);
@@ -46,9 +47,11 @@ const Nav2 = () => {
     setAnchorEl(null);
   };
 
+  const dispatch = useDispatch();
   const handleLogout = () => {
     localStorage.clear(); // Xóa toàn bộ dữ liệu trong localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất trong Context
+    dispatch(logout()); // Gọi action logout từ Redux
     navigate("/login");
   };
 

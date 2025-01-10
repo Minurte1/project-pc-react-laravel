@@ -87,8 +87,10 @@ const MainLayout = () => (
 );
 
 const AdminLayout = () => (
-  <Routes>
-    <Route path="/*" element={<AdminRouter />} />
-  </Routes>
+  <>
+    <Routes>
+      <Route path="/*" element={<AdminRouter />} />
+    </Routes>
+  </>
 );
 export default App;

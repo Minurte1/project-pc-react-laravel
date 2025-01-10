@@ -9,6 +9,7 @@ import TheLoai from "./pages/TheLoai";
 import Settings from "./pages/Settings";
 import NavBarAdmin from "./components/navBarAdmin";
 import HeaderAdmin from "./components/headerAdmin";
+import Nav2 from "../share-view/Nav2";
 
 const AdminRouter = () => {
   const routes = [
@@ -25,9 +26,9 @@ const AdminRouter = () => {
 
   return (
     <div>
-      <HeaderAdmin />
+      <Nav2 />
 
-      <div className="row">
+      <div className="row" style={{ marginTop: "100px" }}>
         <div className="col-3">
           <NavBarAdmin />
         </div>
