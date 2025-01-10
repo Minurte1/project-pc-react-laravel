@@ -101,8 +101,12 @@ const DonHang_DangXuLy_User = () => {
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(order.DON_GIA * order.SO_LUONG)}{" "}
-              {/* Assuming you calculate the total price */}
+              }).format(
+                order.products.reduce(
+                  (acc, product) => acc + product.DON_GIA * product.SO_LUONG,
+                  0
+                )
+              )}
             </Typography>
             {order.GHI_CHU_HOA_DON === "Đang chờ thanh toán" && (
               <>

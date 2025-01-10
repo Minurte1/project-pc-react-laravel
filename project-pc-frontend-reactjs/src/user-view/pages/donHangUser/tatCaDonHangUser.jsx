@@ -30,9 +30,9 @@ const TatCaDonHangUser = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        `${api}/don-hang/${userInfo.MANGUOIDUNG}`
+        `http://localhost:8000/api/orders/all/${userInfo.MA_TK}`
       ); // Đảm bảo URL đúng với API của bạn
-      setOrders(response.data.DT);
+      setOrders(response.data.data);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -75,47 +75,47 @@ const TatCaDonHangUser = () => {
 
       {/* Hiển thị danh sách đơn hàng */}
       {orders.map((order) => (
-        <Card key={order.MADONHANG} sx={{ marginBottom: 2 }}>
+        <Card key={order.MAHD} sx={{ marginBottom: 2 }}>
           <CardContent>
-            <Typography variant="h6">Đơn hàng #{order.MADONHANG}</Typography>
+            <Typography variant="h6">Đơn hàng #{order.MAHD}</Typography>
             <Typography variant="body2">
-              Người dùng: {order.TENNGUOIDUNG}
+              Người dùng: {order.TEN_KHACH_HANG || "Không xác định"}
             </Typography>
             <Typography
               variant="body2"
               sx={{
                 color:
-                  order.TRANGTHAI === "Giao dịch thành công"
+                  order.TRANGTHAI === "Đơn thanh toán thành công"
                     ? "#4ca944"
-                    : order.TRANGTHAI === "Đã hủy"
+                    : order.TRANGTHAI === "Đơn hàng đã hủy"
                     ? "#c6463f"
                     : "#cca70b",
               }}
             >
-              Trạng thái: {order.TRANGTHAI}
+              Trạng thái: {order.GHI_CHU_HOA_DON || "Chưa cập nhật"}
             </Typography>
             <Typography variant="body2">
               Tổng tiền:{" "}
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(order.TONGTIEN)}
+              }).format(
+                order.products.reduce(
+                  (acc, product) => acc + product.DON_GIA * product.SO_LUONG,
+                  0
+                )
+              )}
             </Typography>
-            {order.TRANGTHAI === "Đang chờ thanh toán" ? (
-              <>
-                {" "}
-                <Button
-                  onClick={() => handleUpdateStatusCanceled(order.MADONHANG)}
-                  variant="outlined"
-                  color="error"
-                  sx={{ marginTop: 1, ml: 1 }}
-                >
-                  Hủy đơn hàng
-                </Button>{" "}
-              </>
-            ) : (
-              false
-            )}
+            {order.GHI_CHU_HOA_DON === "Đang chờ thanh toán" ? (
+              <Button
+                onClick={() => handleUpdateStatusCanceled(order.MAHD)}
+                variant="outlined"
+                color="error"
+                sx={{ marginTop: 1, ml: 1 }}
+              >
+                Hủy đơn hàng
+              </Button>
+            ) : null}
             <Button
               onClick={() => handleOpenModal(order)}
               variant="outlined"
@@ -133,21 +133,21 @@ const TatCaDonHangUser = () => {
           {selectedOrder && (
             <div>
               <Typography variant="h5" gutterBottom>
-                Chi Tiết Đơn Hàng #{selectedOrder.MADONHANG}
+                Chi Tiết Đơn Hàng #{selectedOrder.MAHD}
               </Typography>
 
               <Typography variant="h6">Thông tin người dùng:</Typography>
               <Typography variant="body1">
-                Tên: {selectedOrder.TENNGUOIDUNG}
+                Tên: {selectedOrder.TEN_KHACH_HANG || "Không xác định"}
               </Typography>
               <Typography variant="body1">
-                Email: {selectedOrder.EMAIL}
+                Email: {selectedOrder.TEN_DANG_NHAP || "Không xác định"}
               </Typography>
               <Typography variant="body1">
-                SĐT: {selectedOrder.SODIENTHOAI}
+                SĐT: {selectedOrder.SDT_KH || "Không xác định"}
               </Typography>
               <Typography variant="body1">
-                Địa chỉ: {selectedOrder.DIACHI}
+                Địa chỉ: {selectedOrder.DIA_CHI || "Không xác định"}
               </Typography>
 
               <Typography variant="h6" sx={{ marginTop: 2 }}>
@@ -156,7 +156,7 @@ const TatCaDonHangUser = () => {
               <Grid container spacing={2}>
                 {/* Duyệt qua các sản phẩm trong đơn hàng */}
                 {selectedOrder.products?.map((item) => (
-                  <Grid item xs={12} md={6} key={item.MASANPHAM}>
+                  <Grid item xs={12} md={6} key={item.MASP}>
                     <Card sx={{ padding: 2 }}>
                       <Box
                         sx={{
@@ -164,36 +164,31 @@ const TatCaDonHangUser = () => {
                           justifyContent: "space-between",
                         }}
                       >
-                        {" "}
                         <Box>
-                          {" "}
                           <Typography variant="body1">
-                            Mã sản phẩm: {item.MASANPHAM}
+                            Mã sản phẩm: {item.MASP}
                           </Typography>
                           <Typography variant="body1">
-                            Tên sản phẩm: {item.TENSANPHAM}
+                            Tên sản phẩm: {item.TENSP}
                           </Typography>
                           <Typography variant="body1">
-                            Số lượng: {item.SOLUONGSP}
+                            Số lượng: {item.SO_LUONG}
                           </Typography>
                           <Typography variant="body1">
                             Giá:{" "}
                             {new Intl.NumberFormat("vi-VN", {
                               style: "currency",
                               currency: "VND",
-                            }).format(item.SANPHAM_GIA)}
+                            }).format(item.DON_GIA)}
                           </Typography>
                           <Typography variant="body2" color="textSecondary">
-                            Mô tả: {item.SANPHAM_MOTA}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            Trạng thái: {item.TRANGTHAISANPHAM}
+                            Mô tả: {item.GHI_CHU_SP || "Không có mô tả"}
                           </Typography>
                         </Box>
                         <img
                           style={{ width: "100px", height: "100px" }}
-                          src={`${api}/images/${item.HINHANHSANPHAM}`}
-                          alt=""
+                          src={`${api}/images/${item.ANHSP}`}
+                          alt={item.TENSP}
                         />
                       </Box>
                     </Card>

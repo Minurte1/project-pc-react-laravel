@@ -45,7 +45,7 @@ Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart'
 
 // Route xóa sản phẩm trong giỏ hàng của người dùng
 
-//Roter cho Admin
+//Router cho Admin
 Route::get('/list-phan-quyen', [AdminController::class, 'getListPhanQuyen']);
 Route::get('/list-user', [AdminController::class, 'getListUser']);
 Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
@@ -89,6 +89,7 @@ Route::put('/accounts/{maTk}/change-password', [CustomerController::class, 'chan
 Route::get('/orders/pending/{maTk}', [OrderController::class, 'getPendingOrders']);
 Route::get('/orders/success/{maTk}', [OrderController::class, 'getSuccessOrders']);
 Route::get('/orders/cancel/{maTk}', [OrderController::class, 'getCancelOrders']);
+Route::get('/orders/all/{maTk}', [OrderController::class, 'getAllOrders']);
 
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

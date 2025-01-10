@@ -103,9 +103,9 @@ const DonHang_DaHuy_User = () => {
               variant="body2"
               sx={{
                 color:
-                  order.TRANGTHAI === "Giao dịch thành công"
+                  order.TRANGTHAI === "Đơn thanh toán thành công"
                     ? "#4ca944"
-                    : order.TRANGTHAI === "Đã hủy"
+                    : order.TRANGTHAI === "Đơn hàng đã hủy"
                     ? "#c6463f"
                     : "#cca70b",
               }}
