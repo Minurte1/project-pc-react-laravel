@@ -119,13 +119,13 @@ const Users = () => {
           className="form-control"
         />
       </div>
-      <button
+      {/* <button
         type="button"
         className="btn btn-success"
         onClick={() => setShowModal(true)}
       >
         Thêm
-      </button>
+      </button> */}
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid rows={filteredData} columns={columns} pageSize={5} />
       </div>
