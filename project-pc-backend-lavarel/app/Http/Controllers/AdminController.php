@@ -720,6 +720,48 @@ class AdminController extends Controller
         }
     }
 
+    public function getListDanhThu()
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $listDoanhThu = DB::select("
+        SELECT 
+            sanpham.MASP, 
+            sanpham.TENSP, 
+            sanpham.DON_GIA, 
+            sanpham.ANHSP,
+            theloai.MATL,
+            theloai.TENTL,
+            COALESCE(SUM(sanpham.DON_GIA * chi_tiet_hoa_don.SO_LUONG * (1 - chi_tiet_hoa_don.GIAM_GIA / 100)), 0) AS TONG_DOANH_THU
+        FROM 
+            sanpham
+        JOIN 
+            theloai 
+        ON 
+            theloai.MATL = sanpham.MATL
+        LEFT JOIN 
+            chi_tiet_hoa_don 
+        ON 
+            chi_tiet_hoa_don.MASP = sanpham.MASP
+        GROUP BY 
+            sanpham.MASP, sanpham.TENSP, sanpham.DON_GIA, sanpham.ANHSP, theloai.MATL, theloai.TENTL
+        ORDER BY 
+            TONG_DOANH_THU DESC;
+        ", );
+
+        if (empty($listDoanhThu)) {
+            return response()->json([
+                'message' => 'Không tìm thấy',
+                'data' => [],
+            ]);
+        }
+
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $listDoanhThu
+        ]);
+    }
+
 
 
 

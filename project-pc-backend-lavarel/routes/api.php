@@ -68,6 +68,8 @@ Route::post('/save-don-hang', [AdminController::class, 'createDonHang']);
 Route::post('/update-don-hang/{id}', [AdminController::class, 'updateDonHang']);
 Route::post('/xoa-don-hang/{id}', [AdminController::class, 'deleteDonHang']);
 
+Route::get('/list-danh-thu', [AdminController::class, 'getListDanhThu']);
+
 
 
 
@@ -90,8 +92,8 @@ Route::get('/orders/pending/{maTk}', [OrderController::class, 'getPendingOrders'
 Route::get('/orders/success/{maTk}', [OrderController::class, 'getSuccessOrders']);
 Route::get('/orders/cancel/{maTk}', [OrderController::class, 'getCancelOrders']);
 Route::get('/orders/all/{maTk}', [OrderController::class, 'getAllOrders']);
-    //update status order
-    Route::put('/orders/{maTk}/{maHd}/update-note', [OrderController::class, 'updateOrderNote']);
+//update status order
+Route::put('/orders/{maTk}/{maHd}/update-note', [OrderController::class, 'updateOrderNote']);
 
 
 

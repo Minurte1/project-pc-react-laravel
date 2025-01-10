@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { DataGrid } from '@mui/x-data-grid';
 import {
     Bar,
@@ -14,6 +15,43 @@ import {
 import "chart.js/auto"; // Đăng ký tự động
 
 const Dashboard = () => {
+    const [listDoanhThu, setListDoanhThu] = useState([]);
+    const [barDataDoanhThu, setBarDataDoanhThu] = useState(null);
+
+    useEffect(() => {
+        // Giả lập API call để lấy danh sách người dùng
+        fetchDoanhThu();
+    }, []);
+    const fetchDoanhThu = async () => {
+        const response = await axios.get(
+            `http://localhost:8000/api/list-danh-thu`
+        );
+        const dataWithId = response?.data?.data?.map((user, index) => ({
+            ...user,
+            id: index + 1,
+        }));
+        setListDoanhThu(dataWithId || []);
+        // Chuyển đổi dữ liệu để vẽ biểu đồ
+        const transformedData = transformDataForBarChart(dataWithId);
+        setBarDataDoanhThu(transformedData);
+    };
+    // Chuyển đổi dữ liệu để phù hợp với Bar Chart
+    const transformDataForBarChart = (dataWithId) => {
+        const labels = dataWithId.map((item) => item.TENSP); // Lấy tên sản phẩm làm nhãn
+        const datasets = [
+            {
+                label: "Tổng Doanh Thu", // Tiêu đề biểu đồ
+                data: dataWithId.map((item) => item.TONG_DOANH_THU), // Lấy tổng doanh thu
+                backgroundColor: dataWithId.map(
+                    () =>
+                        `#${Math.floor(Math.random() * 16777215).toString(16)}` // Màu ngẫu nhiên cho mỗi cột
+                ),
+            },
+        ];
+
+        return { labels, datasets };
+    };
+
     // Biểu đồ cột (Bar Chart)
     const barData = {
         labels: ["Toán", "Lý", "Hóa", "Sinh"], // Các môn học
@@ -243,58 +281,16 @@ const Dashboard = () => {
     return (
         <div className="row mt-3">
             <div className="col-md-6">
-                <h2>Bar Chart</h2>
-                <Bar data={barData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Line Chart</h2>
-                <Line data={lineData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Line Chart 2</h2>
-                <Line data={lineData2} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Line Chart 3</h2>
-                <Line data={lineData3} />
-            </div>
-
-            <div className="col-md-6">
                 <h2>Pie Chart</h2>
                 <Pie data={pieData} />
             </div>
-
             <div className="col-md-6">
                 <h2>Doughnut Chart</h2>
                 <Doughnut data={doughnutData} />
             </div>
-
-            <div className="col-md-6">
-                <h2>Radar Chart</h2>
-                <Radar data={radarData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Bubble Chart</h2>
-                <Bubble data={bubbleData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Scatter Chart</h2>
-                <Scatter data={scatterData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Mixed Chart</h2>
-                <Chart type="bar" data={mixedData} />
-            </div>
-
-            <div className="col-md-6">
-                <h2>Polar Area Chart</h2>
-                <PolarArea data={polarData} />
+            <div className="col-md-12 mt-3">
+                <h2>Doanh thu sản phẩm</h2>
+                {barDataDoanhThu && <Bar data={barDataDoanhThu} />}
             </div>
         </div>
     );
