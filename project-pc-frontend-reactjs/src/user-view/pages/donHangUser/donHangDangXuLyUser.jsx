@@ -193,6 +193,7 @@ const DonHang_DangXuLy_User = () => {
                           </Typography>
                         </Box>
                         <img
+                          style={{ width: "100px", height: "100px" }}
                           src={
                             item.ANHSP
                               ? `http://localhost:8000/images/${item.ANHSP}`
