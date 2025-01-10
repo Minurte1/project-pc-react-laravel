@@ -162,7 +162,7 @@ const DonHang_DaHuy_User = () => {
                         </Box>
                         <img
                           style={{ width: "100px", height: "100px" }}
-                          src={`${api}/images/${item.ANHSP}`}
+                          src={`http://localhost:8000/images/${item.ANHSP}`}
                           alt={item.TENSP}
                         />
                       </Box>
