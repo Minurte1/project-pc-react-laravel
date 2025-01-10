@@ -20,7 +20,7 @@ const MuaSanPham = () => {
     DiaChiShip: "",
     SdtShip: "",
     NgayDatHang: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-    GhiChu: "",
+    GhiChu: "Đơn đang chờ xử lý",
     ChiTietHoaDon: [{ MaSP: null, SoLuong: null, GiamGia: 1 }],
   });
 
@@ -167,7 +167,7 @@ const MuaSanPham = () => {
                   />
                 </label>
                 <br />
-                <label className="muahang-label">
+                {/* <label className="muahang-label">
                   <input
                     type="text"
                     className="muahang-input"
@@ -176,7 +176,7 @@ const MuaSanPham = () => {
                     value={formData.GhiChu}
                     onChange={handleInputChange}
                   />
-                </label>
+                </label> */}
                 <p className="thanhtoan">Hình thức thanh toán khi nhận hàng</p>
               </div>
             </div>
