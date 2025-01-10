@@ -79,13 +79,19 @@ class AuthController extends Controller
                 'phan_quyen.TEN_PHAN_QUYEN',
                 'khachhang.TEN_KHACH_HANG',
                 'khachhang.SDT_KH',
-                'khachhang.DIA_CHI'
+                'khachhang.DIA_CHI',
+                'khachhang.GHI_CHU_KH' // Thêm cột GHI_CHU_KH
             )
             ->first();
 
         // Kiểm tra nếu không có thông tin người dùng
         if (!$userDetails) {
             return response()->json(['error' => 'Không tìm thấy thông tin người dùng'], 404);
+        }
+
+        // Kiểm tra trạng thái của khách hàng
+        if ($userDetails->GHI_CHU_KH == 'Ngưng hoạt động') {
+            return response()->json(['message' => 'Tài khoản của bạn đã bị ngưng hoạt động'], 404);
         }
 
         $tokenPayload = [
@@ -152,12 +158,17 @@ class AuthController extends Controller
                     'tai_khoan.TEN_DANG_NHAP',
                     'phan_quyen.TEN_PHAN_QUYEN',
                     'khachhang.TEN_KHACH_HANG',
+                    'khachhang.GHI_CHU_KH',
                     'khachhang.SDT_KH',
                     'khachhang.DIA_CHI'
                 )
                 ->first();
         }
 
+        // Kiểm tra trạng thái của khách hàng
+        if ($user->GHI_CHU_KH == 'Ngưng hoạt động') {
+            return response()->json(['message' => 'Tài khoản của bạn đã bị ngưng hoạt động'], 404);
+        }
         // Tạo JWT token
         $tokenPayload = [
             'MA_TK' => $user->MA_TK,

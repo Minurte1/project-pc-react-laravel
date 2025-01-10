@@ -108,29 +108,29 @@ const ChiTietDonHang = () => {
         { field: "VGA", headerName: "VGA", width: 150 },
         { field: "RAM", headerName: "RAM", width: 150 },
         { field: "ROM", headerName: "ROM", width: 150 },
-        {
-            field: "actions",
-            headerName: "Hành động",
-            width: 150,
-            renderCell: (params) => (
-                <>
-                    <button
-                        type="button"
-                        className="btn btn-warning"
-                        onClick={() => handleShowModal(params.row)}
-                    >
-                        Sửa
-                    </button>
-                    <button
-                        type="button"
-                        className="btn btn-danger mx-1"
-                        onClick={() => handleDelete(params.row.MASP)}
-                    >
-                        Xóa
-                    </button>
-                </>
-            ),
-        },
+        // {
+        //     field: "actions",
+        //     headerName: "Hành động",
+        //     width: 150,
+        //     renderCell: (params) => (
+        //         <>
+        //             <button
+        //                 type="button"
+        //                 className="btn btn-warning"
+        //                 onClick={() => handleShowModal(params.row)}
+        //             >
+        //                 Sửa
+        //             </button>
+        //             <button
+        //                 type="button"
+        //                 className="btn btn-danger mx-1"
+        //                 onClick={() => handleDelete(params.row.MASP)}
+        //             >
+        //                 Xóa
+        //             </button>
+        //         </>
+        //     ),
+        // },
     ];
 
     return (

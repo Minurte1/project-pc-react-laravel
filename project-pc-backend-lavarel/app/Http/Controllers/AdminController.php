@@ -126,7 +126,6 @@ class AdminController extends Controller
             'DIA_CHI' => 'nullable|string|max:500',
             'GHI_CHU_KH' => 'nullable|string|max:500',
             'TEN_DANG_NHAP' => 'required|string|max:255|unique:tai_khoan,TEN_DANG_NHAP,' . $maKhachHang . ',MA_KH',
-            'MAT_KHAU' => 'nullable|string|min:6',
             'MA_PHAN_QUYEN' => 'required|integer',
         ]);
 
@@ -147,11 +146,6 @@ class AdminController extends Controller
                 'TEN_DANG_NHAP' => $request->TEN_DANG_NHAP,
                 'MA_PHAN_QUYEN' => $request->MA_PHAN_QUYEN,
             ];
-
-            // Nếu mật khẩu được cung cấp, mã hóa và thêm vào dữ liệu cập nhật
-            if (!empty($request->MAT_KHAU)) {
-                $taiKhoanData['MAT_KHAU'] = bcrypt($request->MAT_KHAU);
-            }
 
             // Cập nhật thông tin tài khoản trong bảng tai_khoan
             DB::table('tai_khoan')->where('MA_KH', $maKhachHang)->update($taiKhoanData);
@@ -230,18 +224,18 @@ class AdminController extends Controller
     public function getDonHang()
     {
         $listDonHang = DB::select("
-        SELECT 
-        khachhang.*,
-        sanpham.*,
-        theloai.*,
-        hoadon.*,
-        chi_tiet_hoa_don.*
-        FROM khachhang
-        JOIN tai_khoan ON tai_khoan.MA_KH = khachhang.MA_KH
-        JOIN hoadon ON hoadon.MA_KH = khachhang.MA_KH
-        JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.MAHD = hoadon.MAHD
-        JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
-        JOIN theloai ON theloai.MATL = sanpham.MATL
+SELECT 
+khachhang.*,
+sanpham.*,
+theloai.*,
+hoadon.*,
+chi_tiet_hoa_don.*
+FROM khachhang
+JOIN tai_khoan ON tai_khoan.MA_KH = khachhang.MA_KH
+JOIN hoadon ON hoadon.MA_KH = khachhang.MA_KH
+JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.MAHD = hoadon.MAHD
+JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
+JOIN theloai ON theloai.MATL = sanpham.MATL
         ", );
 
         if (empty($listDonHang)) {

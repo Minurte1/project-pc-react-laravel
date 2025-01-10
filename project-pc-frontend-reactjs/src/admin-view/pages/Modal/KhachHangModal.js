@@ -141,7 +141,7 @@ const KhachHangModal = ({ show, handleClose, khachhang, listPhanQuyen, handleSub
                                     // type="text"
                                     name="MAT_KHAU"
                                     value={formData.MAT_KHAU}
-                                    // onChange={handleChange}
+
                                     placeholder="Nhập mật khẩu"
                                     required={!khachhang}
                                     disabled

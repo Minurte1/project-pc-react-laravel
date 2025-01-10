@@ -108,7 +108,7 @@ const DonHang = () => {
         { field: "id", headerName: "Mã", width: 100 },
         { field: "TEN_KHACH_HANG", headerName: "Tên", width: 150 },
         { field: "SDT_LIEN_HE_KH", headerName: "Số điện thoại", width: 150 },
-        { field: "GHI_CHU_KH", headerName: "Loại khách", width: 150 },
+        // { field: "GHI_CHU_KH", headerName: "Loại khách", width: 150 },
         { field: "DIA_CHI_SHIP", headerName: "Địa chỉ nhân hàng", width: 150 },
         { field: "GHI_CHU_HOA_DON", headerName: "Trạng thái", width: 150 },
         {
@@ -159,13 +159,13 @@ const DonHang = () => {
                     className="form-control"
                 />
             </div>
-            <button
+            {/* <button
                 type="button"
                 className="btn btn-success"
                 onClick={() => setShowModal(true)}
             >
                 Thêm
-            </button>
+            </button> */}
             <div style={{ height: 'auto', width: "100%" }}>
                 <DataGrid rows={filteredData} columns={columns} pageSize={5} />
             </div>
