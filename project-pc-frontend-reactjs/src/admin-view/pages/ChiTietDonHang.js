@@ -49,12 +49,17 @@ const ChiTietDonHang = () => {
         // Lọc dữ liệu dựa trên giá trị tìm kiếm
         const filtered = listDonhangChiTiet.filter((donhang) => {
             return (
-                (donhang.TEN_KHACH_HANG?.toLowerCase()?.includes(value) || '') ||
-                (donhang.SDT_KH?.toLowerCase()?.includes(value) || '') ||
-                (donhang.SDT_LIEN_HE_KH?.toLowerCase()?.includes(value) || '') ||
-                (donhang.GHI_CHU_HOA_DON?.toLowerCase()?.includes(value) || '') ||
-                (donhang.DIA_CHI?.toLowerCase()?.includes(value) || '') ||
-                (donhang.DIA_CHI_SHIP?.toLowerCase()?.includes(value) || '')
+                (donhang.TENSP?.toLowerCase()?.includes(value) || '') ||
+                (donhang.TENTL?.toLowerCase()?.includes(value) || '') ||
+                (donhang.VGA?.toLowerCase()?.includes(value) || '') ||
+                (donhang.CHIP?.toLowerCase()?.includes(value) || '') ||
+                (donhang.ROM?.toLowerCase()?.includes(value) || '') ||
+                (donhang.RAM?.toLowerCase()?.includes(value) || '') ||
+                (donhang.NHA_SAN_XUAT?.toLowerCase()?.includes(value) || '') ||
+                (donhang.MO_TA_TL?.toLowerCase()?.includes(value) || '') ||
+                (donhang.MAIN?.toLowerCase()?.includes(value) || '') ||
+                (donhang.GHI_CHU_TL?.toLowerCase()?.includes(value) || '') ||
+                (donhang.GHI_CHU_SP?.toLowerCase()?.includes(value) || '')
             );
         });
 
