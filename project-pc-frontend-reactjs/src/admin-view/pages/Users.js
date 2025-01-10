@@ -4,7 +4,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import KhachHangModal from "./Modal/KhachHangModal"
+import KhachHangModal from "./Modal/KhachHangModal";
 const Users = () => {
   const api = process.env.URL_NODE;
   const [listUsers, setListUsers] = useState([]);
@@ -18,9 +18,7 @@ const Users = () => {
     fetchListPhanQuyen();
   }, []);
   const fetchUsers = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/api/list-user`
-    );
+    const response = await axios.get(`http://localhost:8000/api/list-user`);
     const dataWithId = response?.data?.data?.map((user, index) => ({
       ...user,
       id: index + 1,
@@ -45,10 +43,14 @@ const Users = () => {
     // Lọc dữ liệu dựa trên giá trị tìm kiếm
     const filtered = listUsers.filter((user) => {
       return (
-        (user.TEN_KHACH_HANG?.toLowerCase()?.includes(value) || '') ||
-        (user.TEN_DANG_NHAP?.toLowerCase()?.includes(value) || '') ||
-        (user.SDT_KH?.toLowerCase()?.includes(value) || '') ||
-        (user.DIA_CHI?.toString()?.includes(value) || '')
+        user.TEN_KHACH_HANG?.toLowerCase()?.includes(value) ||
+        "" ||
+        user.TEN_DANG_NHAP?.toLowerCase()?.includes(value) ||
+        "" ||
+        user.SDT_KH?.toLowerCase()?.includes(value) ||
+        "" ||
+        user.DIA_CHI?.toString()?.includes(value) ||
+        ""
       );
     });
 
@@ -61,7 +63,7 @@ const Users = () => {
 
   const handleShowModal = (khachhang) => {
     setSelectedKhachHang(khachhang);
-    setShowModal(true)
+    setShowModal(true);
   };
 
   const handleDelete = async (MA_KH) => {
@@ -70,7 +72,9 @@ const Users = () => {
       return; // Hủy nếu người dùng không xác nhận
     }
 
-    const response = await axios.post(`http://localhost:8000/api/xoa-khach-hang/${MA_KH}`);
+    const response = await axios.post(
+      `http://localhost:8000/api/xoa-khach-hang/${MA_KH}`
+    );
 
     enqueueSnackbar(`${response.data.message}`, { variant: "info" });
     fetchUsers();
