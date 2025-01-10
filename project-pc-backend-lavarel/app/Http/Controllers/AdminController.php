@@ -851,6 +851,35 @@ class AdminController extends Controller
         ]);
     }
 
+    public function getBieuDoDoanhThuTheLoai()
+    {
+        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
+        $BieuDoDoanhThuTheLoai = DB::select("
+        SELECT 
+        theloai.MATL, theloai.TENTL,
+        COALESCE(SUM(sanpham.DON_GIA * chi_tiet_hoa_don.SO_LUONG * (1 - chi_tiet_hoa_don.GIAM_GIA / 100)), 0) AS TONG_DOANH_THU
+        FROM theloai 
+        JOIN sanpham ON sanpham.MATL = theloai.MATL
+        LEFT JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.MASP = sanpham.MASP
+        GROUP BY 
+        theloai.MATL, theloai.TENTL
+        ORDER BY 
+        TONG_DOANH_THU DESC;
+        ", );
+
+        if (empty($BieuDoDoanhThuTheLoai)) {
+            return response()->json([
+                'message' => 'Không tìm thấy',
+                'data' => [],
+            ]);
+        }
+
+        // Trả về dữ liệu giỏ hàng và tổng số tiền
+        return response()->json([
+            'message' => 'ok',
+            'data' => $BieuDoDoanhThuTheLoai
+        ]);
+    }
 
 
 

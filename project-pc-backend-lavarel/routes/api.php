@@ -73,6 +73,7 @@ Route::post('/get-chi-tiet-don-hang/{maCthd}', [AdminController::class, 'getChiT
 Route::post('/update-chi-tiet-don-hang/{maCthd}', [AdminController::class, 'updateChiTietHoaDon']);
 
 Route::get('/list-danh-thu', [AdminController::class, 'getListDanhThu']);
+Route::get('/list-danh-thu-the-loai', [AdminController::class, 'getBieuDoDoanhThuTheLoai']);
 
 
 
