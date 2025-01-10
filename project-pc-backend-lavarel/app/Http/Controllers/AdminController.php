@@ -434,7 +434,7 @@ class AdminController extends Controller
                 'NHA_SAN_XUAT' => 'nullable|string|max:255',
                 'RAM' => 'nullable|string|max:255',
                 'ROM' => 'nullable|string|max:255',
-                'ANHSP' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'ANHSP' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:20480',
                 'GHI_CHU_SP' => 'nullable|string',
             ]);
 
@@ -489,7 +489,7 @@ class AdminController extends Controller
                 'NHA_SAN_XUAT' => 'nullable|string|max:255',
                 'RAM' => 'nullable|string|max:255',
                 'ROM' => 'nullable|string|max:255',
-                'ANHSP' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'ANHSP' => 'sometimes|file|image|mimes:jpeg,png,jpg,gif|max:20480',
                 'GHI_CHU_SP' => 'nullable|string',
             ]);
 

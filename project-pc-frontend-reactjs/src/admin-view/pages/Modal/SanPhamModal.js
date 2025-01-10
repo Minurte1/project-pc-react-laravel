@@ -86,7 +86,7 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
             handleClose(); // Đóng modal sau khi xử lý xong
         } catch (error) {
             console.error("Lỗi khi xử lý sản phẩm:", error);
-            enqueueSnackbar(`Đã xảy ra lỗi. Vui lòng thử lại. Cụ thể là ${error}`, { variant: "error" });
+            enqueueSnackbar(`Đã xảy ra lỗi. Vui lòng thử lại. Cụ thể là ${error.response?.data?.message || error.message}`, { variant: "error" });
         }
     };
 
