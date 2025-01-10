@@ -191,7 +191,7 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
                     <Row className="mb-3">
                         <Col md={6}>
                             <Form.Group controlId="GHI_CHU_CTHD">
-                                <Form.Label>Ghi chú khác</Form.Label>
+                                <Form.Label>Ghi chú khác của khách</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     name="GHI_CHU_CTHD"
