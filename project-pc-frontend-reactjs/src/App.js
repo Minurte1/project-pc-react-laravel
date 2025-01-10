@@ -87,10 +87,11 @@ const MainLayout = () => (
 );
 
 const AdminLayout = () => (
-  <>
+  <GuardRoute requiredRole="admin">
     <Routes>
       <Route path="/*" element={<AdminRouter />} />
     </Routes>
-  </>
+  </GuardRoute>
 );
+
 export default App;

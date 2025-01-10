@@ -17,25 +17,6 @@ import Dashboard from "../admin-view/pages/Dashboard";
 import Cart from "./view-page/cart";
 import CartThanhToan from "./view-page/thanhToanCart";
 
-function ProtectedRoute({ element, allowedRoles }) {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    return <Navigate to="/login" replace />; // Điều hướng nếu không có token
-  }
-
-  try {
-    const decoded = jwt_decode(token);
-    if (allowedRoles.includes(decoded.role)) {
-      return element; // Hiển thị thành phần nếu vai trò hợp lệ
-    } else {
-      return <Navigate to="/" replace />; // Điều hướng nếu vai trò không hợp lệ
-    }
-  } catch (error) {
-    console.error("Token decoding error:", error);
-    return <Navigate to="/login" replace />; // Điều hướng nếu có lỗi
-  }
-}
-
 const RouterView = () => {
   const element = useRoutes([
     {

@@ -30,7 +30,6 @@ const AdminLogin = () => {
         );
 
         setUser(userInfo.data);
-        console.log("User Info:", userInfo.data);
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
