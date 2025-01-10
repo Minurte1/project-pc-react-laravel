@@ -13,8 +13,8 @@ class OrderController extends Controller
     {
         // Truy vấn các đơn hàng có GHI_CHU_HOA_DON là "Đang chờ thanh toán"
         $orders = DB::table('hoadon')
-            ->join('chi_tiet_hoa__on', 'hoadon.MAHD', '=', 'chi_tiet_hoa__on.MAHD')
-            ->join('sanpham', 'chi_tiet_hoa__on.MASP', '=', 'sanpham.MASP')
+            ->join('chi_tiet_hoa_don', 'hoadon.MAHD', '=', 'chi_tiet_hoa_don.MAHD')
+            ->join('sanpham', 'chi_tiet_hoa_don.MASP', '=', 'sanpham.MASP')
             ->join('khachhang', 'hoadon.MA_KH', '=', 'khachhang.MA_KH')
             ->join('tai_khoan', 'khachhang.MA_KH', '=', 'tai_khoan.MA_KH')
             ->join('phan_quyen', 'tai_khoan.MA_PHAN_QUYEN', '=', 'phan_quyen.MA_PHAN_QUYEN')
@@ -25,14 +25,14 @@ class OrderController extends Controller
                 'hoadon.DIA_CHI_SHIP',
                 'hoadon.SDT_LIEN_HE_KH',
                 'hoadon.GHI_CHU_HOA_DON',
-                'chi_tiet_hoa__on.MASP',
+                'chi_tiet_hoa_don.MASP',
                 'sanpham.TENSP',
                 'sanpham.DON_GIA',
                 'sanpham.ANHSP',
                 'sanpham.GHI_CHU_SP',
-                'chi_tiet_hoa__on.SO_LUONG',
-                'chi_tiet_hoa__on.GIAM_GIA',
-                'chi_tiet_hoa__on.GHI_CHU_CTHD',
+                'chi_tiet_hoa_don.SO_LUONG',
+                'chi_tiet_hoa_don.GIAM_GIA',
+                'chi_tiet_hoa_don.GHI_CHU_CTHD',
                 // Thông tin khách hàng
                 'khachhang.MA_KH',
                 'khachhang.SDT_KH',
@@ -116,8 +116,8 @@ class OrderController extends Controller
  {
      // Truy vấn các đơn hàng có GHI_CHU_HOA_DON là "Đang chờ thanh toán"
      $orders = DB::table('hoadon')
-         ->join('chi_tiet_hoa__on', 'hoadon.MAHD', '=', 'chi_tiet_hoa__on.MAHD')
-         ->join('sanpham', 'chi_tiet_hoa__on.MASP', '=', 'sanpham.MASP')
+         ->join('chi_tiet_hoa_don', 'hoadon.MAHD', '=', 'chi_tiet_hoa_don.MAHD')
+         ->join('sanpham', 'chi_tiet_hoa_don.MASP', '=', 'sanpham.MASP')
          ->join('khachhang', 'hoadon.MA_KH', '=', 'khachhang.MA_KH')
          ->join('tai_khoan', 'khachhang.MA_KH', '=', 'tai_khoan.MA_KH')
          ->join('phan_quyen', 'tai_khoan.MA_PHAN_QUYEN', '=', 'phan_quyen.MA_PHAN_QUYEN')
@@ -128,14 +128,14 @@ class OrderController extends Controller
              'hoadon.DIA_CHI_SHIP',
              'hoadon.SDT_LIEN_HE_KH',
              'hoadon.GHI_CHU_HOA_DON',
-             'chi_tiet_hoa__on.MASP',
+             'chi_tiet_hoa_don.MASP',
              'sanpham.TENSP',
              'sanpham.DON_GIA',
              'sanpham.ANHSP',
              'sanpham.GHI_CHU_SP',
-             'chi_tiet_hoa__on.SO_LUONG',
-             'chi_tiet_hoa__on.GIAM_GIA',
-             'chi_tiet_hoa__on.GHI_CHU_CTHD',
+             'chi_tiet_hoa_don.SO_LUONG',
+             'chi_tiet_hoa_don.GIAM_GIA',
+             'chi_tiet_hoa_don.GHI_CHU_CTHD',
              // Thông tin khách hàng
              'khachhang.MA_KH',
              'khachhang.SDT_KH',
@@ -220,8 +220,8 @@ class OrderController extends Controller
   {
       // Truy vấn các đơn hàng có GHI_CHU_HOA_DON là "Đang chờ thanh toán"
       $orders = DB::table('hoadon')
-          ->join('chi_tiet_hoa__on', 'hoadon.MAHD', '=', 'chi_tiet_hoa__on.MAHD')
-          ->join('sanpham', 'chi_tiet_hoa__on.MASP', '=', 'sanpham.MASP')
+          ->join('chi_tiet_hoa_don', 'hoadon.MAHD', '=', 'chi_tiet_hoa_don.MAHD')
+          ->join('sanpham', 'chi_tiet_hoa_don.MASP', '=', 'sanpham.MASP')
           ->join('khachhang', 'hoadon.MA_KH', '=', 'khachhang.MA_KH')
           ->join('tai_khoan', 'khachhang.MA_KH', '=', 'tai_khoan.MA_KH')
           ->join('phan_quyen', 'tai_khoan.MA_PHAN_QUYEN', '=', 'phan_quyen.MA_PHAN_QUYEN')
@@ -232,14 +232,14 @@ class OrderController extends Controller
               'hoadon.DIA_CHI_SHIP',
               'hoadon.SDT_LIEN_HE_KH',
               'hoadon.GHI_CHU_HOA_DON',
-              'chi_tiet_hoa__on.MASP',
+              'chi_tiet_hoa_don.MASP',
               'sanpham.TENSP',
               'sanpham.DON_GIA',
               'sanpham.ANHSP',
               'sanpham.GHI_CHU_SP',
-              'chi_tiet_hoa__on.SO_LUONG',
-              'chi_tiet_hoa__on.GIAM_GIA',
-              'chi_tiet_hoa__on.GHI_CHU_CTHD',
+              'chi_tiet_hoa_don.SO_LUONG',
+              'chi_tiet_hoa_don.GIAM_GIA',
+              'chi_tiet_hoa_don.GHI_CHU_CTHD',
               // Thông tin khách hàng
               'khachhang.MA_KH',
               'khachhang.SDT_KH',
@@ -322,8 +322,8 @@ class OrderController extends Controller
   {
       // Truy vấn các đơn hàng có GHI_CHU_HOA_DON là "Đang chờ thanh toán"
       $orders = DB::table('hoadon')
-          ->join('chi_tiet_hoa__on', 'hoadon.MAHD', '=', 'chi_tiet_hoa__on.MAHD')
-          ->join('sanpham', 'chi_tiet_hoa__on.MASP', '=', 'sanpham.MASP')
+          ->join('chi_tiet_hoa_don', 'hoadon.MAHD', '=', 'chi_tiet_hoa_don.MAHD')
+          ->join('sanpham', 'chi_tiet_hoa_don.MASP', '=', 'sanpham.MASP')
           ->join('khachhang', 'hoadon.MA_KH', '=', 'khachhang.MA_KH')
           ->join('tai_khoan', 'khachhang.MA_KH', '=', 'tai_khoan.MA_KH')
           ->join('phan_quyen', 'tai_khoan.MA_PHAN_QUYEN', '=', 'phan_quyen.MA_PHAN_QUYEN')
@@ -334,14 +334,14 @@ class OrderController extends Controller
               'hoadon.DIA_CHI_SHIP',
               'hoadon.SDT_LIEN_HE_KH',
               'hoadon.GHI_CHU_HOA_DON',
-              'chi_tiet_hoa__on.MASP',
+              'chi_tiet_hoa_don.MASP',
               'sanpham.TENSP',
               'sanpham.DON_GIA',
               'sanpham.ANHSP',
               'sanpham.GHI_CHU_SP',
-              'chi_tiet_hoa__on.SO_LUONG',
-              'chi_tiet_hoa__on.GIAM_GIA',
-              'chi_tiet_hoa__on.GHI_CHU_CTHD',
+              'chi_tiet_hoa_don.SO_LUONG',
+              'chi_tiet_hoa_don.GIAM_GIA',
+              'chi_tiet_hoa_don.GHI_CHU_CTHD',
               // Thông tin khách hàng
               'khachhang.MA_KH',
               'khachhang.SDT_KH',

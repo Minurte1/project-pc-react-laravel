@@ -208,7 +208,7 @@ class CartController extends Controller
     
         // Thêm chi tiết hóa đơn
         foreach ($cartItems as $item) {
-            DB::table('chi_tiet_hoa__on')->insert([
+            DB::table('chi_tiet_hoa_don')->insert([
                 'MAHD' => $maHd,
                 'MASP' => $item->MASP,
                 'SO_LUONG' => $item->SO_LUONG_SP,

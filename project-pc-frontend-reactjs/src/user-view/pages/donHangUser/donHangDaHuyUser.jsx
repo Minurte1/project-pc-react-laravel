@@ -131,7 +131,12 @@ const DonHang_DaHuy_User = () => {
               <Grid container spacing={2}>
                 {/* Duyệt qua các sản phẩm trong đơn hàng */}
                 {selectedOrder.products?.map((item) => (
-                  <Grid item xs={12} md={6} key={item.MASP}>
+                  <Grid
+                    item
+                    xs={12}
+                    md={selectedOrder.products.length === 1 ? 12 : 6}
+                    key={item.MASP}
+                  >
                     <Card sx={{ padding: 2 }}>
                       <Box
                         sx={{
@@ -162,7 +167,7 @@ const DonHang_DaHuy_User = () => {
                         </Box>
                         <img
                           style={{ width: "100px", height: "100px" }}
-                          src={`${api}/images/${item.ANHSP}`}
+                          src={`http://localhost:8000/images/${item.ANHSP}`}
                           alt={item.TENSP}
                         />
                       </Box>

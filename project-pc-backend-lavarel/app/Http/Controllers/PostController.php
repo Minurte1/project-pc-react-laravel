@@ -398,7 +398,7 @@ class PostController extends Controller
             FROM 
                 HoaDon AS hd
             JOIN 
-                chi_tiet_hoa__on AS ct ON hd.MaHD = ct.MaHD
+                chi_tiet_hoa_don AS ct ON hd.MaHD = ct.MaHD
             JOIN 
                 khachhang AS kh ON hd.MA_KH = kh.MA_KH
             JOIN 
