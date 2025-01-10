@@ -85,6 +85,7 @@ Route::get('/list-danh-thu', [AdminController::class, 'getListDanhThu']);
 //AuthController
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/loginGoogle', [AuthController::class, 'loginGoogle']);
 
 //CustomerController
 Route::put('/customers/{maKh}', [CustomerController::class, 'updateCustomerInfo']);

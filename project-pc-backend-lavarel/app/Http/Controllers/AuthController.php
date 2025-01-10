@@ -105,4 +105,80 @@ class AuthController extends Controller
 
         return response()->json(['token' => $jwt], 200);
     }
+
+    public function loginGoogle(Request $request)
+    {
+        $email = $request->email;
+
+        // Kiểm tra xem email đã có trong hệ thống chưa
+        $user = DB::table('tai_khoan')->where('TEN_DANG_NHAP', $email)->first();
+
+        // Nếu chưa có tài khoản, tạo mới khách hàng và tài khoản
+        if (!$user) {
+            DB::beginTransaction();
+            try {
+                // Tạo mới khách hàng
+                $khachHangId = DB::table('khachhang')->insertGetId([
+                    'SDT_KH' => null, // Bạn có thể thêm thông tin từ Google nếu cần
+                    'TEN_KHACH_HANG' => $email,
+                    'DIA_CHI' => null, // Cũng có thể thêm từ Google nếu cần
+                    'GHI_CHU_KH' => 'Khách hàng đăng nhập qua Google',
+                ]);
+
+                // Tạo mới tài khoản
+                $taiKhoanId = DB::table('tai_khoan')->insertGetId([
+                    'MA_PHAN_QUYEN' => 2, // Quyền mặc định là 2 cho khách hàng
+                    'MA_KH' => $khachHangId,
+                    'TEN_DANG_NHAP' => $email,
+                    'MAT_KHAU' => Hash::make($email), // Tạo mật khẩu tạm
+                ]);
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'error' => 'Đã xảy ra lỗi khi tạo tài khoản!',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+        } else {
+            // Nếu tài khoản đã tồn tại, lấy thông tin người dùng
+            $user = DB::table('tai_khoan')
+                ->join('phan_quyen', 'tai_khoan.MA_PHAN_QUYEN', '=', 'phan_quyen.MA_PHAN_QUYEN')
+                ->join('khachhang', 'tai_khoan.MA_KH', '=', 'khachhang.MA_KH')
+                ->where('tai_khoan.TEN_DANG_NHAP', $email)
+                ->select(
+                    'tai_khoan.MA_TK',
+                    'tai_khoan.TEN_DANG_NHAP',
+                    'phan_quyen.TEN_PHAN_QUYEN',
+                    'khachhang.TEN_KHACH_HANG',
+                    'khachhang.SDT_KH',
+                    'khachhang.DIA_CHI'
+                )
+                ->first();
+        }
+
+        // Tạo JWT token
+        $tokenPayload = [
+            'MA_TK' => $user->MA_TK,
+            'TEN_DANG_NHAP' => $user->TEN_DANG_NHAP,
+            'TEN_PHAN_QUYEN' => $user->TEN_PHAN_QUYEN,
+            'TEN_KHACH_HANG' => $user->TEN_KHACH_HANG,
+            'SDT_KH' => $user->SDT_KH,
+            'DIA_CHI' => $user->DIA_CHI,
+            'iat' => time(),
+            'exp' => time() + env('JWT_EXPIRATION', 36000), // Lấy từ biến môi trường, mặc định 10 giờ
+        ];
+
+        $key = env('JWT_SECRET', 'BaoVipPro');
+        $jwt = JWT::encode($tokenPayload, $key, 'HS256');
+
+        return response()->json(['token' => $jwt], 200);
+    }
+
+
+
+
+
+
 }
