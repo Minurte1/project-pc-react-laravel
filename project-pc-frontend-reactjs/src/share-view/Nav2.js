@@ -189,7 +189,7 @@ const Nav2 = () => {
               </MenuItem>
 
               <MenuItem
-                onClick={handleLogout}
+                onClick={() => handleLogout()}
                 style={{
                   display: "flex",
                   alignItems: "center",
