@@ -101,7 +101,11 @@ const DonHang = () => {
 
     const columns = [
         { field: "id", headerName: "ID", width: 100 },
-        { field: "TEN_KHACH_HANG", headerName: "Tên", width: 150 },
+        { field: "TEN_KHACH_HANG", headerName: "Tên khách hàng", width: 150 },
+        { field: "GHI_CHU_KH", headerName: "Loại khách", width: 150 },
+        { field: "DIA_CHI_SHIP", headerName: "Địa chỉ giao hàng", width: 150 },
+        { field: "SDT_LIEN_HE_KH", headerName: "Số điện thoại", width: 150 },
+        { field: "GHI_CHU_HOA_DON", headerName: "Trạng thái hóa đơn", width: 150 },
         {
             field: "ANHSP",
             headerName: "Ảnh sản phẩm",
@@ -110,16 +114,13 @@ const DonHang = () => {
                 <img
                     src={`http://localhost:8000/images/${params.row.ANHSP}`}
                     alt="Ảnh sản phẩm"
-                    style={{ width: 50, height: 50, objectFit: "cover" }} // Điều chỉnh kích thước ảnh
+                    style={{ width: 50, height: 50, objectFit: "cover" }}
                 />
             ),
         },
-        { field: "GHI_CHU_KH", headerName: "Loại khách", width: 150 },
         { field: "SO_LUONG", headerName: "Số lượng", width: 150 },
         { field: "GIAM_GIA", headerName: "Giảm giá", width: 150 },
         { field: "DON_GIA", headerName: "Đơn giá", width: 150 },
-        { field: "DIA_CHI_SHIP", headerName: "Địa chỉ nhân hàng", width: 150 },
-        { field: "GHI_CHU_HOA_DON", headerName: "Trạng thái", width: 150 },
         {
             field: "actions",
             headerName: "Hành động",
@@ -133,7 +134,6 @@ const DonHang = () => {
                     >
                         Sửa
                     </button>
-
                     <button
                         className="btn btn-danger btn-sm mx-1"
                         onClick={() => handleDelete(params.row.MAHD)}
@@ -144,6 +144,23 @@ const DonHang = () => {
             ),
         },
     ];
+
+    const rows = listDonhang.flatMap((item) =>
+        item.chiTiet.map((ct) => ({
+            id: ct.MA_CTHD, // Mỗi chi tiết sẽ có một ID riêng
+            MA_KH: item.MA_KH,
+            SDT_KH: item.SDT_KH,
+            TEN_KHACH_HANG: item.TEN_KHACH_HANG,
+            DIA_CHI_SHIP: item.DIA_CHI_SHIP,
+            SDT_LIEN_HE_KH: item.SDT_LIEN_HE_KH,
+            GHI_CHU_HOA_DON: item.GHI_CHU_HOA_DON,
+            SO_LUONG: ct.SO_LUONG,
+            GIAM_GIA: ct.GIAM_GIA,
+            DON_GIA: ct.DON_GIA,
+            ANHSP: ct.ANHSP,
+            GHI_CHU_CTHD: ct.GHI_CHU_CTHD,
+        }))
+    );
 
     return (
         <div className="mt-2">
@@ -166,7 +183,13 @@ const DonHang = () => {
                 Thêm
             </button>
             <div style={{ height: 'auto', width: "100%" }}>
-                <DataGrid rows={filteredData} columns={columns} pageSize={5} />
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                />
             </div>
             <DonHangModal
                 show={showModal}

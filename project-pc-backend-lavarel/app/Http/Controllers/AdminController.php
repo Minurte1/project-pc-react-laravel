@@ -229,7 +229,6 @@ class AdminController extends Controller
 
     public function getDonHang()
     {
-        // Truy vấn dữ liệu giỏ hàng của 1 người dùng
         $listDonHang = DB::select("
         SELECT 
         khachhang.*,
@@ -243,13 +242,11 @@ class AdminController extends Controller
         JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.MAHD = hoadon.MAHD
         JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
         JOIN theloai ON theloai.MATL = sanpham.MATL
-
         ", );
 
-        // Nếu không có sản phẩm nào trong giỏ hàng, trả về mảng rỗng và tổng số tiền = 0
         if (empty($listDonHang)) {
             return response()->json([
-                'message' => 'No items found in the cart for this user.',
+                'message' => 'Không có hóa đơn nào',
                 'data' => [],
             ]);
         }
@@ -258,6 +255,57 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'ok',
             'data' => $listDonHang
+        ]);
+    }
+
+    public function getDonHang2()
+    {
+        // Lấy danh sách hóa đơn
+        $listHoaDon = DB::select("
+            SELECT 
+                khachhang.*,
+                hoadon.*
+            FROM khachhang
+            JOIN tai_khoan ON tai_khoan.MA_KH = khachhang.MA_KH
+            JOIN hoadon ON hoadon.MA_KH = khachhang.MA_KH
+        ");
+
+        // Lấy chi tiết hóa đơn
+        $listChiTietHoaDon = DB::select("
+            SELECT 
+                chi_tiet_hoa_don.*,
+                sanpham.*,
+                theloai.*
+            FROM chi_tiet_hoa_don
+            JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
+            JOIN theloai ON theloai.MATL = sanpham.MATL
+        ");
+
+        // Nếu không có hóa đơn nào
+        if (empty($listHoaDon)) {
+            return response()->json([
+                'message' => 'Không có hóa đơn nào',
+                'data' => [],
+            ]);
+        }
+
+        // Tạo mảng chứa các hóa đơn kèm chi tiết của từng hóa đơn
+        foreach ($listHoaDon as $key => $hoaDon) {
+            // Lọc chi tiết hóa đơn tương ứng với MAHD của hóa đơn hiện tại
+            $hoaDonDetails = [];
+            foreach ($listChiTietHoaDon as $chiTiet) {
+                if ($hoaDon->MAHD == $chiTiet->MAHD) {
+                    $hoaDonDetails[] = $chiTiet;
+                }
+            }
+            // Thêm chi tiết vào mỗi hóa đơn
+            $listHoaDon[$key]->chiTiet = $hoaDonDetails;
+        }
+
+        // Trả về kết quả
+        return response()->json([
+            'message' => 'ok',
+            'data' => $listHoaDon
         ]);
     }
 
