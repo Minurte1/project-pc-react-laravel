@@ -66,7 +66,7 @@ export const createAccount = async (account) => {
 // Đăng nhập (Login)
 export const login = async (email, password) => {
     try {
-        console.log("Email: ", email, " Pass: ", password)
+        // console.log("Email: ", email, " Pass: ", password)
         const response = await axios.post(`${API_URL}/login`, { email, password });
         // Assuming the response includes a token
         const { token } = response.data;

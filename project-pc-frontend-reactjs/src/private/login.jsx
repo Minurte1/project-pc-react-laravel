@@ -32,7 +32,7 @@ const Login = () => {
       const token = await login(email, password);
 
       // Giải mã token và log ra console
-      console.log("token: ", token);
+      // console.log("token: ", token);
       const decodedToken = jwtDecode(token);
       console.log("Decoded Token:", decodedToken);
 
