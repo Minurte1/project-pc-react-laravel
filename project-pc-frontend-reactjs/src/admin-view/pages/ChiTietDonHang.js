@@ -1,57 +1,35 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom"; // Import useLocation và useParams
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { enqueueSnackbar } from "notistack";
 import { Link } from "react-router-dom"; // Import Link từ react-router-dom
-import DonHangModal from "./Modal/DonHangModal"
-const DonHang = () => {
+import ChiTietDonhangModal from "./Modal/ChiTietDonhangModal"
+const ChiTietDonHang = () => {
     const api = process.env.URL_NODE;
-    const [listUsers, setListUsers] = useState([]);
+    const location = useLocation(); // Lấy location từ react-router-dom
+    const { mahd } = useParams();  // Lấy MAHD từ URL params
+
     const [listSanPham, setListSanPham] = useState([]);
-    const [listDonhang, setListDonhang] = useState([]);
     const [listDonhangChiTiet, setListDonhangChiTiet] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchText, setSearchText] = useState(""); // Lưu giá trị tìm kiếm
     const [showModal, setShowModal] = useState(false);
-    const [selectedDonHang, setSelectedDonHang] = useState("");
+    const [selectedChiTietDonHang, setSelectedChiTietDonHang] = useState("");
     useEffect(() => {
-        // Giả lập API call để lấy danh sách người dùng
         fetchDonhang();
-        fetchUsers();
         fetchSanPham();
     }, []);
-    // const fetchDonhang = async () => {
-    //     const response = await axios.get(
-    //         `http://localhost:8000/api/list-don-hang`
-    //     );
-    //     const dataWithId = response?.data?.data?.map((user, index) => ({
-    //         ...user,
-    //         id: index + 1,
-    //     }));
-    //     setListDonhang(dataWithId || []);
-    //     setFilteredData(dataWithId || []); // Cập nhật dữ liệu khi tải
-    // };
+
     const fetchDonhang = async () => {
-        const response = await axios.get(
-            `http://localhost:8000/api/list-don-hang2`
-        );
-        const dataWithIdHD = response?.data?.listHoaDon?.map((user, index) => ({
+        const response = await axios.post(`http://localhost:8000/api/get-chi-tiet-don-hang/${mahd}`);
+        const dataWithIdHD = response?.data?.data?.map((user, index) => ({
             ...user,
-            id: `HD-${index + 1}-${user.MAHD}`,
+            id: `HDCT-${index + 1}-${user.MAHD}`,
         }));
         setFilteredData(dataWithIdHD || []); // Cập nhật dữ liệu khi tải
-        setListDonhang(dataWithIdHD || []);
-    };
-    const fetchUsers = async () => {
-        const response = await axios.get(
-            `http://localhost:8000/api/list-user`
-        );
-        const dataWithId = response?.data?.data?.map((user, index) => ({
-            ...user,
-            id: index + 1,
-        }));
-        setListUsers(dataWithId || []);
+        setListDonhangChiTiet(dataWithIdHD || []);
     };
     const fetchSanPham = async () => {
         const response = await axios.get(
@@ -69,7 +47,7 @@ const DonHang = () => {
         setSearchText(value);
 
         // Lọc dữ liệu dựa trên giá trị tìm kiếm
-        const filtered = listDonhang.filter((donhang) => {
+        const filtered = listDonhangChiTiet.filter((donhang) => {
             return (
                 (donhang.TEN_KHACH_HANG?.toLowerCase()?.includes(value) || '') ||
                 (donhang.SDT_KH?.toLowerCase()?.includes(value) || '') ||
@@ -84,7 +62,7 @@ const DonHang = () => {
     };
 
     const handleShowModal = (donhang) => {
-        setSelectedDonHang(donhang);
+        selectedChiTietDonHang(donhang);
         setShowModal(true)
     };
 
@@ -98,9 +76,9 @@ const DonHang = () => {
             return; // Hủy nếu người dùng không xác nhận
         }
 
-        const response = await axios.post(`http://localhost:8000/api/xoa-don-hang/${MAHD}`);
+        // xóa
 
-        enqueueSnackbar(`${response.data.message}`, { variant: "info" });
+        // enqueueSnackbar(`${response.data.message}`, { variant: "info" });
         fetchDonhang();
     };
 
@@ -117,16 +95,6 @@ const DonHang = () => {
             width: 250,
             renderCell: (params) => (
                 <>
-                    {/* Thêm thẻ Link để điều hướng đến trang chi tiết */}
-                    <Link
-                        to={{
-                            pathname: `/chitiet-don-hang/${params.row.MAHD}`,
-                            state: { detailData: params.row } // Truyền dữ liệu qua state
-                        }}
-                        className="btn btn-info btn-sm"
-                    >
-                        Xem thêm
-                    </Link>
                     <button
                         type="button"
                         className="btn btn-warning btn-sm mx-1"
@@ -148,7 +116,7 @@ const DonHang = () => {
 
     return (
         <div className="mt-2">
-            <h5 className="card-title mb-4">Quản lý đơn hàng</h5>
+            <h5 className="card-title mb-4">Quản lý chi tiết đơn hàng</h5>
             {/* Ô tìm kiếm */}
             <div className="mb-3">
                 <input
@@ -159,24 +127,14 @@ const DonHang = () => {
                     className="form-control"
                 />
             </div>
-            <button
-                type="button"
-                className="btn btn-success"
-                onClick={() => setShowModal(true)}
-            >
-                Thêm
-            </button>
-            <div style={{ height: 'auto', width: "100%" }}>
-                <DataGrid rows={filteredData} columns={columns} pageSize={5} />
-            </div>
-            <DonHangModal
+            <ChiTietDonhangModal
                 show={showModal}
                 handleClose={() => {
                     setShowModal(false);
-                    setSelectedDonHang("");
+                    setSelectedChiTietDonHang("");
                 }}
-                donhang={selectedDonHang}
-                listUsers={listUsers}
+                chitietdonhang={setSelectedChiTietDonHang}
+                mahd={mahd}
                 listSanPham={listSanPham}
                 handleSubmit={handleSaveSanPham}
             />
@@ -184,4 +142,4 @@ const DonHang = () => {
     );
 };
 
-export default DonHang;
+export default ChiTietDonHang;

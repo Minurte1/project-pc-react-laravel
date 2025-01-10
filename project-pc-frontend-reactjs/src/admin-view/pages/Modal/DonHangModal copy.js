@@ -9,6 +9,10 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
         DIA_CHI_SHIP: "",
         SDT_LIEN_HE_KH: "",
         GHI_CHU_HOA_DON: "",
+        MASP: "",
+        SO_LUONG: "",
+        GIAM_GIA: "",
+        GHI_CHU_CTHD: "",
     });
 
     useEffect(() => {
@@ -20,6 +24,10 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
                 DIA_CHI_SHIP: "",
                 SDT_LIEN_HE_KH: "",
                 GHI_CHU_HOA_DON: "",
+                MASP: "",
+                SO_LUONG: "",
+                GIAM_GIA: "",
+                GHI_CHU_CTHD: "",
             });
         }
     }, [donhang, show]);
@@ -84,7 +92,27 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
                                 </Form.Control>
                             </Form.Group>
                         </Col>
+                        <Col md={12}>
+                            <Form.Group controlId="MASP">
+                                <Form.Label>Sản phẩm</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    name="MASP"
+                                    value={formData.MASP}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="">Chọn sản phẩm</option>
+                                    {listSanPham.map((sanpham) => (
+                                        <option key={sanpham.MASP} value={sanpham.MASP}>
+                                            {sanpham.TENSP}
+                                        </option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
+                        </Col>
                     </Row>
+
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group controlId="DIA_CHI_SHIP">
@@ -95,6 +123,35 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
                                     value={formData.DIA_CHI_SHIP}
                                     onChange={handleChange}
                                     placeholder="Nhập địa chỉ nhận hàng"
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
+                    <Row className="mb-3">
+                        <Col md={6}>
+                            <Form.Group controlId="SO_LUONG">
+                                <Form.Label>Số lượng</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="SO_LUONG"
+                                    value={formData.SO_LUONG}
+                                    onChange={handleChange}
+                                    placeholder="Nhập số lượng"
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group controlId="GIAM_GIA">
+                                <Form.Label>Giảm giá (%)</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="GIAM_GIA"
+                                    value={formData.GIAM_GIA}
+                                    onChange={handleChange}
+                                    placeholder="Nhập phần trăm giảm giá"
                                     required
                                 />
                             </Form.Group>
@@ -128,6 +185,20 @@ const DonHangModal = ({ show, handleClose, donhang, listUsers, listSanPham, hand
                                     <option value="Đơn thanh toán thành công">Đơn thanh toán thành công</option>
                                     <option value="Đơn hàng đã hủy">Đơn hàng đã hủy</option>
                                 </Form.Control>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row className="mb-3">
+                        <Col md={6}>
+                            <Form.Group controlId="GHI_CHU_CTHD">
+                                <Form.Label>Ghi chú khác</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    name="GHI_CHU_CTHD"
+                                    value={formData.GHI_CHU_CTHD}
+                                    onChange={handleChange}
+                                    placeholder="Nhập ghi chú chi tiết"
+                                />
                             </Form.Group>
                         </Col>
                     </Row>

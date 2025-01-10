@@ -289,23 +289,11 @@ class AdminController extends Controller
             ]);
         }
 
-        // Tạo mảng chứa các hóa đơn kèm chi tiết của từng hóa đơn
-        foreach ($listHoaDon as $key => $hoaDon) {
-            // Lọc chi tiết hóa đơn tương ứng với MAHD của hóa đơn hiện tại
-            $hoaDonDetails = [];
-            foreach ($listChiTietHoaDon as $chiTiet) {
-                if ($hoaDon->MAHD == $chiTiet->MAHD) {
-                    $hoaDonDetails[] = $chiTiet;
-                }
-            }
-            // Thêm chi tiết vào mỗi hóa đơn
-            $listHoaDon[$key]->chiTiet = $hoaDonDetails;
-        }
-
         // Trả về kết quả
         return response()->json([
             'message' => 'ok',
-            'data' => $listHoaDon
+            'listHoaDon' => $listHoaDon,
+            'listChiTietHoaDon' => $listChiTietHoaDon
         ]);
     }
 
@@ -625,10 +613,6 @@ class AdminController extends Controller
             'DIA_CHI_SHIP' => 'required|string|max:255',
             'SDT_LIEN_HE_KH' => 'required|string|max:15',
             'GHI_CHU_HOA_DON' => 'nullable|string|max:500',
-            'MASP' => 'required|integer',
-            'SO_LUONG' => 'required|integer|min:1',
-            'GIAM_GIA' => 'nullable|numeric|min:0|max:100',
-            'GHI_CHU_CTHD' => 'nullable|string|max:500',
         ]);
 
         try {
@@ -641,15 +625,6 @@ class AdminController extends Controller
                 'DIA_CHI_SHIP' => $request->DIA_CHI_SHIP,
                 'SDT_LIEN_HE_KH' => $request->SDT_LIEN_HE_KH,
                 'GHI_CHU_HOA_DON' => $request->GHI_CHU_HOA_DON,
-            ]);
-
-            // Thêm chi tiết hóa đơn
-            DB::table('chi_tiet_hoa_don')->insert([
-                'MASP' => $request->MASP,
-                'MAHD' => $maHoaDon,
-                'SO_LUONG' => $request->SO_LUONG,
-                'GIAM_GIA' => $request->GIAM_GIA ?? 0,
-                'GHI_CHU_CTHD' => $request->GHI_CHU_CTHD ?? null,
             ]);
 
             // Commit transaction
@@ -680,10 +655,6 @@ class AdminController extends Controller
             'DIA_CHI_SHIP' => 'required|string|max:255',
             'SDT_LIEN_HE_KH' => 'required|string|max:15',
             'GHI_CHU_HOA_DON' => 'nullable|string|max:500',
-            'MASP' => 'required|integer',
-            'SO_LUONG' => 'required|integer|min:1',
-            'GIAM_GIA' => 'nullable|numeric|min:0|max:100',
-            'GHI_CHU_CTHD' => 'nullable|string|max:500',
         ]);
 
         try {
@@ -704,14 +675,6 @@ class AdminController extends Controller
                 'DIA_CHI_SHIP' => $request->DIA_CHI_SHIP,
                 'SDT_LIEN_HE_KH' => $request->SDT_LIEN_HE_KH,
                 'GHI_CHU_HOA_DON' => $request->GHI_CHU_HOA_DON,
-            ]);
-
-            // Cập nhật thông tin chi tiết hóa đơn
-            DB::table('chi_tiet_hoa_don')->where('MAHD', $id)->update([
-                'MASP' => $request->MASP,
-                'SO_LUONG' => $request->SO_LUONG,
-                'GIAM_GIA' => $request->GIAM_GIA ?? 0,
-                'GHI_CHU_CTHD' => $request->GHI_CHU_CTHD ?? null,
             ]);
 
             // Commit transaction
@@ -763,6 +726,44 @@ class AdminController extends Controller
 
             return response()->json([
                 'message' => 'Đã xảy ra lỗi khi xóa đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getChiTietHoaDon($mahd)
+    {
+        try {
+            // Thực thi câu lệnh SQL trực tiếp để lấy chi tiết hóa đơn theo MAHD
+            $chiTietHoaDon = DB::select(
+                '
+            SELECT 
+            chi_tiet_hoa_don.*,
+            sanpham.*,
+            theloai.*
+            FROM chi_tiet_hoa_don
+            JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
+            JOIN theloai ON theloai.MATL = sanpham.MATL 
+            WHERE MAHD = ?',
+                [$mahd]
+            );
+
+            // Kiểm tra xem có chi tiết hóa đơn không
+            if (empty($chiTietHoaDon)) {
+                return response()->json([
+                    'message' => 'Không tìm thấy chi tiết hóa đơn với MAHD: ' . $mahd,
+                ], 404);
+            }
+
+            // Trả về dữ liệu chi tiết hóa đơn
+            return response()->json([
+                'message' => 'Lấy chi tiết hóa đơn thành công!',
+                'data' => $chiTietHoaDon,
+            ]);
+        } catch (\Exception $e) {
+            // Xử lý lỗi nếu có
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi lấy chi tiết hóa đơn.',
                 'error' => $e->getMessage(),
             ], 500);
         }

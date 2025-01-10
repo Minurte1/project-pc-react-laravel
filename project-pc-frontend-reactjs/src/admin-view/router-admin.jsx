@@ -4,6 +4,8 @@ import { useRoutes, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import DonHang from "./pages/DonHang";
+import ChiTietDonHang from "./pages/ChiTietDonHang"; // Import trang chi tiết đơn hàng
+
 import SanPham from "./pages/SanPham";
 import TheLoai from "./pages/TheLoai";
 import Settings from "./pages/Settings";
@@ -17,6 +19,7 @@ const AdminRouter = () => {
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/nguoi-dung", element: <Users /> },
     { path: "/don-hang", element: <DonHang /> },
+    { path: "/chitiet-don-hang/:mahd", element: <ChiTietDonHang /> },
     { path: "/san-pham", element: <SanPham /> },
     { path: "/the-loai", element: <TheLoai /> },
     { path: "/*", element: <Navigate to="/" replace /> },

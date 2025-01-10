@@ -49,6 +49,7 @@ Route::delete('/cart/{maKh}/remove/{maSp}', [CartController::class, 'removeCart'
 Route::get('/list-phan-quyen', [AdminController::class, 'getListPhanQuyen']);
 Route::get('/list-user', [AdminController::class, 'getListUser']);
 Route::get('/list-don-hang', [AdminController::class, 'getDonHang']);
+Route::get('/list-don-hang2', [AdminController::class, 'getDonHang2']);
 Route::get('/list-san-pham', [AdminController::class, 'getSanPham']);
 Route::get('/list-the-loai', [AdminController::class, 'getTheLoai']);
 
@@ -67,6 +68,8 @@ Route::post('/xoa-khach-hang/{id}', [AdminController::class, 'deleteUser']);
 Route::post('/save-don-hang', [AdminController::class, 'createDonHang']);
 Route::post('/update-don-hang/{id}', [AdminController::class, 'updateDonHang']);
 Route::post('/xoa-don-hang/{id}', [AdminController::class, 'deleteDonHang']);
+
+Route::post('/get-chi-tiet-don-hang/{id}', [AdminController::class, 'getChiTietHoaDon']);
 
 Route::get('/list-danh-thu', [AdminController::class, 'getListDanhThu']);
 
