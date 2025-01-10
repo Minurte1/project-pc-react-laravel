@@ -90,6 +90,10 @@ Route::get('/orders/pending/{maTk}', [OrderController::class, 'getPendingOrders'
 Route::get('/orders/success/{maTk}', [OrderController::class, 'getSuccessOrders']);
 Route::get('/orders/cancel/{maTk}', [OrderController::class, 'getCancelOrders']);
 Route::get('/orders/all/{maTk}', [OrderController::class, 'getAllOrders']);
+    //update status order
+    Route::put('/orders/{maTk}/{maHd}/update-note', [OrderController::class, 'updateOrderNote']);
+
+
 
 // Route cho API /user với middleware auth:sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

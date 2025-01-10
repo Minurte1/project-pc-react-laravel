@@ -8,7 +8,7 @@ const SanPhamTatCa = () => {
     <>
       <Nav2 />
       <ListSanPham />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

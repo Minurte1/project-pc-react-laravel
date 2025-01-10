@@ -420,8 +420,49 @@ class OrderController extends Controller
       ]);
   }
 
+//Update 
+public function updateOrderNote(Request $request, $maTk, $maHd)
+{
+    // Lấy dữ liệu đầu vào
+    $note = $request->input('GHI_CHU_HOA_DON');
 
+    // Kiểm tra nếu không có dữ liệu
+    if (!$note) {
+        return response()->json([
+            'message' => 'No note provided for update.',
+        ], 400);
+    }
 
+    // Kiểm tra hóa đơn có tồn tại với tài khoản không
+    $orderExists = DB::table('hoadon')
+        ->join('tai_khoan', 'hoadon.MA_KH', '=', 'tai_khoan.MA_KH')
+        ->where('tai_khoan.MA_TK', $maTk)
+        ->where('hoadon.MAHD', $maHd)
+        ->exists();
+
+    if (!$orderExists) {
+        return response()->json([
+            'message' => 'Order not found for this user.',
+        ], 404);
+    }
+
+    // Cập nhật ghi chú cho hóa đơn
+    $updated = DB::table('hoadon')
+        ->join('tai_khoan', 'hoadon.MA_KH', '=', 'tai_khoan.MA_KH')
+        ->where('tai_khoan.MA_TK', $maTk)
+        ->where('hoadon.MAHD', $maHd)
+        ->update(['hoadon.GHI_CHU_HOA_DON' => $note]);
+
+    if ($updated) {
+        return response()->json([
+            'message' => 'Order note updated successfully.',
+        ]);
+    }
+
+    return response()->json([
+        'message' => 'Failed to update order note.',
+    ], 500);
+}
   
 }
 

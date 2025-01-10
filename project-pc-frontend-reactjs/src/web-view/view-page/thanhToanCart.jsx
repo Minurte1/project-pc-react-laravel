@@ -75,18 +75,60 @@ const CartThanhToan = () => {
     }));
   };
   const handleThanhToanCart = async () => {
-    try {
-      await axios.post(`http://localhost:8000/api/cart/checkout`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    // Validate form data
+    if (!formData.DiaChiShip.trim()) {
+      enqueueSnackbar("Địa chỉ giao hàng không được để trống!", {
+        variant: "error",
       });
+      return;
+    }
 
+    if (!formData.SdtShip.trim()) {
+      enqueueSnackbar("Số điện thoại không được để trống!", {
+        variant: "error",
+      });
+      return;
+    }
+
+    if (!/^\d{10}$/.test(formData.SdtShip)) {
+      enqueueSnackbar("Số điện thoại phải gồm 10 chữ số hợp lệ!", {
+        variant: "error",
+      });
+      return;
+    }
+
+    if (formData.ChiTietHoaDon.length === 0) {
+      enqueueSnackbar("Giỏ hàng của bạn đang trống!", { variant: "error" });
+      return;
+    }
+
+    // Nếu tất cả hợp lệ, tiếp tục xử lý
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/cart/checkout`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.message === "Checkout completed successfully.") {
+        enqueueSnackbar("Đơn hàng của bạn đã được ghi nhận !!", {
+          variant: "success",
+        });
+      } else {
+        enqueueSnackbar(response.data.message, { variant: "info" });
+      }
       navigate("/cart");
     } catch (error) {
       console.error("Error fetching cart:", error);
+      enqueueSnackbar("Đã có lỗi xảy ra khi thanh toán. Vui lòng thử lại!", {
+        variant: "error",
+      });
     }
   };
+
   return (
     <>
       <Nav2 />
@@ -134,7 +176,7 @@ const CartThanhToan = () => {
                   />
                 </label>
                 <br />
-                <label className="muahang-label">
+                {/* <label className="muahang-label">
                   <input
                     type="text"
                     className="muahang-input"
@@ -143,7 +185,7 @@ const CartThanhToan = () => {
                     value={formData.GhiChu}
                     onChange={handleInputChange}
                   />
-                </label>
+                </label> */}
                 <p className="thanhtoan">Hình thức thanh toán khi nhận hàng</p>
               </div>
             </div>

@@ -53,13 +53,14 @@ const TatCaDonHangUser = () => {
   const handleUpdateStatusCanceled = async (orderId) => {
     try {
       // Gửi yêu cầu cập nhật trạng thái "Đã hủy"
-      const response = await axios.put(`${api}/don-hang/${orderId}/canceled`);
+      const response = await axios.put(
+        `http://localhost:8000/api/orders/${userInfo.MA_TK}/${orderId}/update-note`,
+        {
+          GHI_CHU_HOA_DON: "Đơn hàng đã hủy",
+        }
+      );
 
-      if (response.data.EC === 1) {
-        enqueueSnackbar(response.data.EM); // Thông báo thành công
-      } else {
-        enqueueSnackbar(response.data.EM); // Thông báo lỗi
-      }
+      enqueueSnackbar(response.data.message, { variant: "info" });
     } catch (err) {
       console.error("Error updating order status:", err);
       enqueueSnackbar("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
@@ -85,9 +86,9 @@ const TatCaDonHangUser = () => {
               variant="body2"
               sx={{
                 color:
-                  order.TRANGTHAI === "Đơn thanh toán thành công"
+                  order.GHI_CHU_HOA_DON === "Đơn thanh toán thành công"
                     ? "#4ca944"
-                    : order.TRANGTHAI === "Đơn hàng đã hủy"
+                    : order.GHI_CHU_HOA_DON === "Đơn hàng đã hủy"
                     ? "#c6463f"
                     : "#cca70b",
               }}
@@ -119,7 +120,7 @@ const TatCaDonHangUser = () => {
             <Button
               onClick={() => handleOpenModal(order)}
               variant="outlined"
-              sx={{ marginTop: 1 }}
+              sx={{ marginTop: 1, ml: 2 }}
             >
               Xem chi tiết
             </Button>
