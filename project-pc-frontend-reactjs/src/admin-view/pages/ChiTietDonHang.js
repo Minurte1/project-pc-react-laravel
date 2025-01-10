@@ -130,7 +130,7 @@ const ChiTietDonHang = () => {
 
     return (
         <div className="mt-2">
-            <h5 className="card-title mb-4">Quản lý chi tiết đơn hàng</h5>
+            <h5 className="card-title mb-4">Quản lý hóa đơn số HD-{mahd}</h5>
             {/* Ô tìm kiếm */}
             <div className="mb-3">
                 <input
