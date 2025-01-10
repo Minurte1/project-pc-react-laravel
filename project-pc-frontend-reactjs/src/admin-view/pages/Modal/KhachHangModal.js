@@ -169,7 +169,7 @@ const KhachHangModal = ({ show, handleClose, khachhang, listPhanQuyen, handleSub
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group controlId="GHI_CHU_KH">
-                                <Form.Label>Ghi chú</Form.Label>
+                                <Form.Label>Loại khách hàng</Form.Label>
                                 <Form.Control
                                     as="select"
                                     name="GHI_CHU_KH"
@@ -177,10 +177,8 @@ const KhachHangModal = ({ show, handleClose, khachhang, listPhanQuyen, handleSub
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="Khách hàng mới.">Khách hàng mới.</option>
-                                    <option value="Khách hàng thân thiết.">Khách hàng thân thiết.</option>
-                                    <option value="Khách hàng VIP.">Khách hàng VIP.</option>
-                                    <option value="Khách hàng bị khóa tài khoản">Khách hàng bị khóa tài khoản</option>
+                                    <option value="Đang hoạt động">Đang hoạt động</option>
+                                    <option value="Ngưng hoạt động">Ngưng hoạt động</option>
                                 </Form.Control>
                             </Form.Group>
                         </Col>
