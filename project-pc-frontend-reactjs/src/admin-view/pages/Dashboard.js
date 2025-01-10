@@ -27,6 +27,7 @@ const Dashboard = () => {
         );
         const dataWithId = response?.data?.data?.map((user, index) => ({
             ...user,
+            TONG_DOANH_THU2: user.TONG_DOANH_THU + " VNĐ",
             id: index + 1,
         }));
         setListDoanhThu(dataWithId || []);
@@ -87,7 +88,7 @@ const Dashboard = () => {
         },
         { field: "DON_GIA", headerName: "Đơn giá (VNĐ)", width: 200 },
         { field: "TENTL", headerName: "Loại", width: 150 },
-        { field: "TONG_DOANH_THU", headerName: "Tổng doanh thu", width: 150 },
+        { field: "TONG_DOANH_THU2", headerName: "Tổng doanh thu", width: 150 },
     ];
 
     return (

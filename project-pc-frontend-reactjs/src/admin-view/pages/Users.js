@@ -50,6 +50,8 @@ const Users = () => {
         user.SDT_KH?.toLowerCase()?.includes(value) ||
         "" ||
         user.DIA_CHI?.toString()?.includes(value) ||
+        "" ||
+        user.GHI_CHU_KH?.toString()?.includes(value) ||
         ""
       );
     });
@@ -86,6 +88,7 @@ const Users = () => {
     { field: "TEN_DANG_NHAP", headerName: "Email", width: 150 },
     { field: "SDT_KH", headerName: "Điện thoại", width: 150 },
     { field: "DIA_CHI", headerName: "Địa chỉ", width: 150 },
+    { field: "GHI_CHU_KH", headerName: "Trạng thái", width: 150 },
     {
       field: "actions",
       headerName: "Hành động",

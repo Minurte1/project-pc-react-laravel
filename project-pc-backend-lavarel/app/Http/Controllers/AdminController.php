@@ -256,12 +256,20 @@ JOIN theloai ON theloai.MATL = sanpham.MATL
     {
         // Lấy danh sách hóa đơn
         $listHoaDon = DB::select("
-            SELECT 
-                khachhang.*,
-                hoadon.*
-            FROM khachhang
-            JOIN tai_khoan ON tai_khoan.MA_KH = khachhang.MA_KH
-            JOIN hoadon ON hoadon.MA_KH = khachhang.MA_KH
+        SELECT 
+        khachhang.MA_KH, khachhang.SDT_KH, khachhang.TEN_KHACH_HANG, khachhang.DIA_CHI, khachhang.GHI_CHU_KH,
+        hoadon.MAHD, hoadon.DIA_CHI_SHIP, hoadon.SDT_LIEN_HE_KH, hoadon.GHI_CHU_HOA_DON,
+        COALESCE(SUM(sanpham.DON_GIA * chi_tiet_hoa_don.SO_LUONG * (1 - chi_tiet_hoa_don.GIAM_GIA / 100)), 0) AS TONG_DOANH_THU
+        FROM khachhang
+        JOIN tai_khoan ON tai_khoan.MA_KH = khachhang.MA_KH
+        JOIN hoadon ON hoadon.MA_KH = khachhang.MA_KH
+        JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.MAHD = hoadon.MAHD
+        JOIN sanpham ON sanpham.MASP = chi_tiet_hoa_don.MASP
+        GROUP BY 
+        khachhang.MA_KH, khachhang.SDT_KH, khachhang.TEN_KHACH_HANG, khachhang.DIA_CHI, khachhang.GHI_CHU_KH,
+        hoadon.MAHD, hoadon.DIA_CHI_SHIP, hoadon.SDT_LIEN_HE_KH, hoadon.GHI_CHU_HOA_DON
+        ORDER BY 
+        hoadon.MAHD DESC;
         ");
 
         // Lấy chi tiết hóa đơn
