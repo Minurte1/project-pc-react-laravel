@@ -1,10 +1,11 @@
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { verifyAdmin } from "../services/userAccountService";
+import { jwtDecode } from "jwt-decode";
 
 const GuardRoute = ({ element: Element, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -12,10 +13,11 @@ const GuardRoute = ({ element: Element, ...rest }) => {
       const accessToken = Cookies.get("accessToken");
       if (accessToken) {
         try {
-          const isAdmin = await verifyAdmin(accessToken);
-          setIsAuthenticated(isAdmin);
+          const decoded = jwtDecode(accessToken);
+          console.log("g decoded: ", decoded)
+          setUserData(decoded);
+          setIsAuthenticated(true)
         } catch (error) {
-          // console.error("Error verifying admin:", error);
           setIsAuthenticated(false);
         }
       } else {

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 10, 2025 lúc 07:53 AM
+-- Thời gian đã tạo: Th1 10, 2025 lúc 07:50 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `chi_tiet_hoa__on`
+-- Cấu trúc bảng cho bảng `chi_tiet_hoa_don`
 --
 
-CREATE TABLE `chi_tiet_hoa__on` (
+CREATE TABLE `chi_tiet_hoa_don` (
   `MA_CTHD` int(11) NOT NULL,
   `MASP` int(11) NOT NULL,
   `MAHD` int(11) NOT NULL,
@@ -37,16 +37,15 @@ CREATE TABLE `chi_tiet_hoa__on` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `chi_tiet_hoa__on`
+-- Đang đổ dữ liệu cho bảng `chi_tiet_hoa_don`
 --
 
-INSERT INTO `chi_tiet_hoa__on` (`MA_CTHD`, `MASP`, `MAHD`, `SO_LUONG`, `GIAM_GIA`, `GHI_CHU_CTHD`) VALUES
-(1, 1, 1, 1, '0%', 'Đơn hàng đầu tiên.'),
-(2, 3, 2, 1, '5%', 'Giảm giá cho khách hàng thân thiết.'),
-(3, 5, 3, 1, '10%', 'Giảm giá đặc biệt cho khách hàng mới.'),
-(4, 15, 4, 1, '0', NULL),
-(5, 1, 5, 1, '0', NULL),
-(6, 15, 5, 1, '0', NULL);
+INSERT INTO `chi_tiet_hoa_don` (`MA_CTHD`, `MASP`, `MAHD`, `SO_LUONG`, `GIAM_GIA`, `GHI_CHU_CTHD`) VALUES
+(1, 1, 1, 1, '0', 'Đơn hàng đầu tiên.'),
+(2, 3, 2, 1, '0', 'Giảm giá cho khách hàng thân thiết.'),
+(3, 5, 3, 1, '0', 'Giảm giá đặc biệt cho khách hàng mới.'),
+(4, 2, 4, 1, '1', 'Dễ vỡ'),
+(5, 2, 5, 1, '1', 'Dễ vỡ');
 
 -- --------------------------------------------------------
 
@@ -88,11 +87,11 @@ CREATE TABLE `hoadon` (
 --
 
 INSERT INTO `hoadon` (`MAHD`, `MA_KH`, `DIA_CHI_SHIP`, `SDT_LIEN_HE_KH`, `GHI_CHU_HOA_DON`) VALUES
-(1, 1, 'Hà Nội', '0912345678', 'Đơn hàng đầu tiên.'),
-(2, 2, 'Đà Nẵng', '0987654321', 'Giao hàng trong vòng 2 ngày.'),
-(3, 3, 'Hồ Chí Minh', '0901234567', 'Yêu cầu giao hàng gấp.'),
-(4, 4, 'aaaaa', 'aaaaa', 'Đang chờ thanh toán'),
-(5, 4, 'sdadasdas', '0334222111', 'Đang chờ thanh toán');
+(1, 1, 'Hà Nội', '0912345678', 'Đơn thanh toán thành công'),
+(2, 2, 'Đà Nẵng', '0987654321', 'Đơn đang chờ xử lý'),
+(3, 3, 'Hồ Chí Minh', '0901234567', 'Đơn hàng đã hủy'),
+(4, 1, 'Trà vinh', '0372701722', 'Đơn thanh toán thành công'),
+(5, 1, 'Trà vinh', '0372701722', 'Đơn thanh toán thành công');
 
 -- --------------------------------------------------------
 
@@ -116,7 +115,8 @@ INSERT INTO `khachhang` (`MA_KH`, `SDT_KH`, `TEN_KHACH_HANG`, `DIA_CHI`, `GHI_CH
 (1, '0912345678', 'Nguyễn Văn A', 'Hà Nội', 'Khách hàng VIP.'),
 (2, '0987654321', 'Trần Thị B', 'Đà Nẵng', 'Khách hàng thân thiết.'),
 (3, '0901234567', 'Lê Văn C', 'Hồ Chí Minh', 'Khách hàng mới.'),
-(4, NULL, 'admin', 'admin', NULL);
+(4, '0213654897', 'Nguyễn Lâm Quốc Bảo', 'Trà Vinh', NULL),
+(6, NULL, 'Nguyễn Lâm Quốc Bảo', 'Trà Vinh', NULL);
 
 -- --------------------------------------------------------
 
@@ -165,26 +165,28 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`MASP`, `MATL`, `TENSP`, `DON_GIA`, `TON_KHO_SP`, `CHIP`, `MAIN`, `VGA`, `NHA_SAN_XUAT`, `RAM`, `ROM`, `ANHSP`, `GHI_CHU_SP`) VALUES
-(1, 1, 'PC Gaming Entry Level', '10000000', 50, 'null', 'null', 'null', 'HP', 'null', 'null', '1736490309_1108_1798319e79d7bc89e5c6.jpg', 'Máy tính PC chơi game giá rẻ.'),
-(2, 1, 'PC Workstation', '25000000', 30, 'null', 'null', 'null', 'Dell', 'null', 'null', '1736490417_pc-game.png', 'Máy tính làm việc chuyên nghiệp cho đồ họa.'),
-(3, 1, 'PC Gaming Mid Range', '60000000', 20, 'null', 'null', 'null', 'Asus', 'null', 'null', '1736490436_10239_340784857_799984757660921_1932046047919300131_n.jpg', 'Máy tính PC chơi game hiệu suất tốt.'),
-(4, 1, 'PC Gaming High-End', '120000000', 10, 'null', 'null', 'null', 'MSI', 'null', 'null', '1736490462_pc-i9-13900k-rtx-4090.jpg', 'Máy tính PC chơi game cao cấp.'),
-(5, 1, 'PC Gaming Premium', '200000000', 5, 'null', 'null', 'null', 'Alienware', 'null', 'null', '1736490375_27016-khung-pc.jpg', 'Máy tính PC chơi game hàng đầu, hiệu suất cực cao.'),
-(6, 1, 'PC Mini Gaming', '15000000', 40, 'null', 'null', 'null', 'Lenovo', 'null', 'null', '1736490478_10609_2b81bef92315f74bae04.jpg', 'PC mini dành cho game thủ di động.'),
-(7, 1, 'PC All-in-One', '30000000', 25, 'null', 'null', 'null', 'Acer', 'null', 'null', '1736490493_images.jpg', 'Máy tính All-in-One tiết kiệm không gian.'),
-(8, 1, 'PC Desktop Văn Phòng', '20000000', 35, 'null', 'null', 'null', 'Asus', 'null', 'null', '1736490554_images (1).jpg', 'Máy tính văn phòng hiệu suất cao.'),
-(9, 1, 'PC Gaming Ultra', '175000000', 15, 'null', 'null', 'null', 'Razer', 'null', 'null', '1736490586_maxresdefault.jpg', 'Máy tính chơi game hiệu suất cực cao.'),
-(10, 1, 'PC Lắp Ráp Tùy Chỉnh', '50000000', 20, 'null', 'null', 'null', 'Tự Lắp', 'null', 'null', '1736490601_hq720.jpg', 'Máy tính lắp ráp theo yêu cầu người dùng.'),
-(11, 1, 'PC Gaming High Performance', '95000000', 10, 'null', 'null', 'null', 'Corsair', 'null', 'null', '1736490616_vn-11134207-7r98o-lmhaa5xaysbj8a.jpg', 'Máy tính chơi game với hiệu suất hàng đầu.'),
-(12, 1, 'PC Đồ Họa Chuyên Nghiệp', '180000000', 8, 'null', 'null', 'null', 'NVIDIA', 'null', 'null', '1736490637_images (2).jpg', 'Máy tính đồ họa cho designer chuyên nghiệp.'),
-(13, 1, 'PC Gaming Budget', '12000000', 60, 'null', 'null', 'null', 'MSI', 'null', 'null', '1736490687_vn-11134207-7r98o-lnbb9l41ft9p79.jpg', 'Máy tính chơi game giá rẻ cho học sinh.'),
-(14, 1, 'PC Trạm Làm Việc Cao Cấp', '300000000', 5, 'null', 'null', 'null', 'Apple', 'null', 'null', '1736490704_case-pc-be-ca-mixie-nemo-28w-264.jpg', 'Máy tính trạm cho công việc thiết kế đồ họa.'),
-(15, 1, 'PC Văn Phòng Tiết Kiệm', '10000000', 70, 'null', 'null', 'null', 'HP', 'null', 'null', '1736490723_case-pc-be-ca-mixie-nemo-28b-mau-den-mat-kinh-trong-suot-size-340-x-270-x-350-mm-.jpg', 'Máy tính văn phòng với giá hợp lý.'),
-(16, 2, 'PC Gaming VR Ready', '120000000', 12, 'null', 'null', 'null', 'Alienware', 'null', 'null', '1736490753_images (3).jpg', 'Máy tính chơi game VR với hiệu suất cao.'),
-(17, 2, 'PC Workstation Đồ Họa', '250000000', 6, 'null', 'null', 'null', 'Dell', 'null', 'null', '1736490770_71xviGM3-qL.jpg', 'Máy tính workstation cho thiết kế đồ họa chuyên nghiệp.'),
-(18, 2, 'PC Gaming Entry-Level', '9000000', 50, 'null', 'null', 'null', 'Gigabyte', 'null', 'null', '1736490791_images (4).jpg', 'Máy tính chơi game dành cho người mới bắt đầu.'),
-(19, 2, 'PC Chiến Thắng', '50000000', 30, 'null', 'null', 'null', 'Cooler Master', 'null', 'null', '1736490808_images (5).jpg', 'Máy tính chơi game với thiết kế độc đáo và hiệu suất cao.'),
-(20, 2, 'PC Văn Phòng Năng Động', '15000000', 45, 'null', 'null', 'null', 'Asrock', 'null', 'null', '1736490824_images (6).jpg', 'Máy tính văn phòng với hiệu suất tốt và giá cả hợp lý.');
+(1, 1, 'PC Gaming Entry Level', '10000000', 50, 'null', 'null', 'null', 'HP', 'null', 'null', '1736445099_anh-meo-53.jpg', 'Máy tính PC chơi game giá rẻ.'),
+(2, 1, 'PC Workstation', '25000000', 30, 'null', 'null', 'null', 'Dell', 'null', 'null', '1736445106_anh-meo-53.jpg', 'Máy tính làm việc chuyên nghiệp cho đồ họa.'),
+(3, 1, 'PC Gaming Mid Range', '60000000', 20, 'i9', 'null', 'Intel Iris Xe Graphics', 'Asus', '16GB', 'null', '1736445137_anh-meo-53.jpg', 'Máy tính PC chơi game hiệu suất tốt.'),
+(4, 1, 'PC Gaming High-End', '120000000', 10, 'null', 'null', 'null', 'MSI', 'null', 'null', '1736445113_anh-meo-53.jpg', 'Máy tính PC chơi game cao cấp.'),
+(5, 1, 'PC Gaming Premium', '200000000', 5, 'null', 'null', 'null', 'Alienware', 'null', 'null', '1736445124_anh-meo-53.jpg', 'Máy tính PC chơi game hàng đầu, hiệu suất cực cao.'),
+(6, 1, 'PC Mini Gaming', '15000000', 40, 'null', 'null', 'null', 'Lenovo', 'null', 'null', '1736445144_anh-meo-53.jpg', 'PC mini dành cho game thủ di động.'),
+(7, 1, 'PC All-in-One', '30000000', 25, 'null', 'null', 'null', 'Acer', 'null', 'null', '1736445151_anh-meo-53.jpg', 'Máy tính All-in-One tiết kiệm không gian.'),
+(8, 1, 'PC Desktop Văn Phòng', '20000000', 35, 'null', 'null', 'null', 'Asus', 'null', 'null', '1736445158_anh-meo-53.jpg', 'Máy tính văn phòng hiệu suất cao.'),
+(9, 1, 'PC Gaming Ultra', '175000000', 15, 'null', 'null', 'null', 'Razer', 'null', 'null', '1736445166_anh-meo-53.jpg', 'Máy tính chơi game hiệu suất cực cao.'),
+(10, 1, 'PC Lắp Ráp Tùy Chỉnh', '50000000', 20, 'null', 'null', 'null', 'Tự Lắp', 'null', 'null', '1736445173_anh-meo-53.jpg', 'Máy tính lắp ráp theo yêu cầu người dùng.'),
+(11, 1, 'PC Gaming High Performance', '95000000', 10, 'null', 'null', 'null', 'Corsair', 'null', 'null', '1736445180_anh-meo-53.jpg', 'Máy tính chơi game với hiệu suất hàng đầu.'),
+(12, 1, 'PC Đồ Họa Chuyên Nghiệp', '180000000', 8, NULL, NULL, NULL, 'NVIDIA', NULL, NULL, 'link_anh_12.jpg', 'Máy tính đồ họa cho designer chuyên nghiệp.'),
+(13, 1, 'PC Gaming Budget', '12000000', 60, NULL, NULL, NULL, 'MSI', NULL, NULL, 'link_anh_13.jpg', 'Máy tính chơi game giá rẻ cho học sinh.'),
+(14, 1, 'PC Trạm Làm Việc Cao Cấp', '300000000', 5, NULL, NULL, NULL, 'Apple', NULL, NULL, 'link_anh_14.jpg', 'Máy tính trạm cho công việc thiết kế đồ họa.'),
+(15, 1, 'PC Văn Phòng Tiết Kiệm', '10000000', 70, NULL, NULL, NULL, 'HP', NULL, NULL, 'link_anh_15.jpg', 'Máy tính văn phòng với giá hợp lý.'),
+(16, 2, 'PC Gaming VR Ready', '120000000', 12, NULL, NULL, NULL, 'Alienware', NULL, NULL, 'link_anh_16.jpg', 'Máy tính chơi game VR với hiệu suất cao.'),
+(17, 2, 'PC Workstation Đồ Họa', '250000000', 6, NULL, NULL, NULL, 'Dell', NULL, NULL, 'link_anh_17.jpg', 'Máy tính workstation cho thiết kế đồ họa chuyên nghiệp.'),
+(18, 2, 'PC Gaming Entry-Level', '9000000', 50, NULL, NULL, NULL, 'Gigabyte', NULL, NULL, 'link_anh_18.jpg', 'Máy tính chơi game dành cho người mới bắt đầu.'),
+(19, 2, 'PC Chiến Thắng', '50000000', 30, NULL, NULL, NULL, 'Cooler Master', NULL, NULL, 'link_anh_19.jpg', 'Máy tính chơi game với thiết kế độc đáo và hiệu suất cao.'),
+(20, 2, 'PC Văn Phòng Năng Động', '15000000', 45, NULL, NULL, NULL, 'Asrock', NULL, NULL, 'link_anh_20.jpg', 'Máy tính văn phòng với hiệu suất tốt và giá cả hợp lý.'),
+(21, 1, 'aaaaaaaaaaaa', '1', 2, 'aaaaaaaaaaaa', 'aaaaaaaaaaaa', 'aaaaaaaaaaaa', 'aaaaaaaaaaaa', 'aaaaaaaaaaaa', 'aaaaaaaaaaaa', '1736287227_anh-meo-53.jpg', 'aaaaaaaaaaaa'),
+(22, 1, 'aaaaaaaaggggg', '1', 1, 'aaaaaaaaggggg', 'aaaaaaaaggggg', 'aaaaaaaaggggg', 'aaaaaaaaggggg', 'aaaaaaaaggggg', 'aaaaaaaaggggg', '1736287576_YrTtSIz8-wallha.com.jpg', 'aaaaaaaaggggg');
 
 -- --------------------------------------------------------
 
@@ -208,7 +210,7 @@ INSERT INTO `tai_khoan` (`MA_TK`, `MA_PHAN_QUYEN`, `MA_KH`, `TEN_DANG_NHAP`, `MA
 (1, 1, 1, 'nguyenvana', 'password123'),
 (2, 2, 2, 'tranthib', 'password456'),
 (3, 1, 3, 'levanc', 'password789'),
-(4, 1, 4, 'admin@gmail.com', '$2y$10$6PlUhQ42AQ733GEXeZ4/qO0HAxf4UXdHmoD1k6/S4jQkEqnL4vjwC');
+(6, 1, 6, 'baoquoczero@gmail.com', '$2y$10$rKqM0NYfL/Hl/HDnDVrWpOX6EQFDGriyXx5Nldvpjb4alS4igqvq6');
 
 -- --------------------------------------------------------
 
@@ -236,9 +238,9 @@ INSERT INTO `theloai` (`MATL`, `TENTL`, `MO_TA_TL`, `GHI_CHU_TL`) VALUES
 --
 
 --
--- Chỉ mục cho bảng `chi_tiet_hoa__on`
+-- Chỉ mục cho bảng `chi_tiet_hoa_don`
 --
-ALTER TABLE `chi_tiet_hoa__on`
+ALTER TABLE `chi_tiet_hoa_don`
   ADD PRIMARY KEY (`MA_CTHD`),
   ADD KEY `FK_CO_CHI_TIET` (`MAHD`),
   ADD KEY `FK_CO_SAN_PHAM` (`MASP`);
@@ -295,22 +297,22 @@ ALTER TABLE `theloai`
 --
 
 --
--- AUTO_INCREMENT cho bảng `chi_tiet_hoa__on`
+-- AUTO_INCREMENT cho bảng `chi_tiet_hoa_don`
 --
-ALTER TABLE `chi_tiet_hoa__on`
+ALTER TABLE `chi_tiet_hoa_don`
   MODIFY `MA_CTHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `MAHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `MAHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `MA_KH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `MA_KH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `phan_quyen`
@@ -322,28 +324,28 @@ ALTER TABLE `phan_quyen`
 -- AUTO_INCREMENT cho bảng `sanpham`
 --
 ALTER TABLE `sanpham`
-  MODIFY `MASP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `MASP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `tai_khoan`
 --
 ALTER TABLE `tai_khoan`
-  MODIFY `MA_TK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `MA_TK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `theloai`
 --
 ALTER TABLE `theloai`
-  MODIFY `MATL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `MATL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Các ràng buộc cho bảng `chi_tiet_hoa__on`
+-- Các ràng buộc cho bảng `chi_tiet_hoa_don`
 --
-ALTER TABLE `chi_tiet_hoa__on`
+ALTER TABLE `chi_tiet_hoa_don`
   ADD CONSTRAINT `FK_CO_CHI_TIET` FOREIGN KEY (`MAHD`) REFERENCES `hoadon` (`MAHD`),
   ADD CONSTRAINT `FK_CO_SAN_PHAM` FOREIGN KEY (`MASP`) REFERENCES `sanpham` (`MASP`);
 

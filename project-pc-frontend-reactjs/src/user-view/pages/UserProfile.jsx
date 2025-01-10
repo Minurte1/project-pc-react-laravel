@@ -147,7 +147,6 @@ const UserProfile = () => {
       </Box>
     );
   }
-  console.log("user", userData);
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", p: 4 }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
