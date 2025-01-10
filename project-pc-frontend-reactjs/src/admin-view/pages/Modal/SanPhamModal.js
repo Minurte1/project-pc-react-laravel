@@ -262,13 +262,13 @@ const SanPhamModal = ({ show, handleClose, sanpham, listTheLoai, handleSubmit })
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group controlId="GHI_CHU_SP">
-                                <Form.Label>Ghi chú</Form.Label>
+                                <Form.Label>Mô tả</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     name="GHI_CHU_SP"
                                     value={formData.GHI_CHU_SP}
                                     onChange={handleChange}
-                                    placeholder="Nhập ghi chú"
+                                    placeholder="Nhập mô tả"
                                 />
                             </Form.Group>
                         </Col>

@@ -124,9 +124,10 @@ const KhachHangModal = ({ show, handleClose, khachhang, listPhanQuyen, handleSub
                                     type="text"
                                     name="TEN_DANG_NHAP"
                                     value={formData.TEN_DANG_NHAP}
-                                    onChange={handleChange}
+                                    // onChange={handleChange}
                                     placeholder="Nhập tên đăng nhập"
                                     required
+                                    disabled
                                 />
                             </Form.Group>
                         </Col>
@@ -136,13 +137,14 @@ const KhachHangModal = ({ show, handleClose, khachhang, listPhanQuyen, handleSub
                             <Form.Group controlId="MAT_KHAU">
                                 <Form.Label>Mật khẩu</Form.Label>
                                 <Form.Control
-                                    // type="password"
-                                    type="text"
+                                    type="password"
+                                    // type="text"
                                     name="MAT_KHAU"
                                     value={formData.MAT_KHAU}
-                                    onChange={handleChange}
+                                    // onChange={handleChange}
                                     placeholder="Nhập mật khẩu"
                                     required={!khachhang}
+                                    disabled
                                 />
                             </Form.Group>
                         </Col>

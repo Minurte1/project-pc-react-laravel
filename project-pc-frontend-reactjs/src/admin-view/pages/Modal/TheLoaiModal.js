@@ -98,13 +98,13 @@ const TheLoaiModal = ({ show, handleClose, theLoai, handleSubmit }) => {
                     <Row className="mb-3">
                         <Col md={12}>
                             <Form.Group controlId="GHI_CHU_TL">
-                                <Form.Label>Ghi chú</Form.Label>
+                                <Form.Label>Mô tả</Form.Label>
                                 <Form.Control
                                     as="textarea"
                                     name="GHI_CHU_TL"
                                     value={formData.GHI_CHU_TL}
                                     onChange={handleChange}
-                                    placeholder="Nhập ghi chú"
+                                    placeholder="Nhập mô tả"
                                 />
                             </Form.Group>
                         </Col>
