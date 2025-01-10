@@ -21,9 +21,6 @@ const GuardRoute = ({ children, requiredRole }) => {
       setUserData(null);
       setIsLoggedIn(false);
     }
-  };
-  useEffect(() => {
-    updateAuthStatus();
     if (!userData) {
       // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
       return <Navigate to="/Desktop" replace />;
@@ -32,6 +29,9 @@ const GuardRoute = ({ children, requiredRole }) => {
     if (!isAdmin) {
       return <Navigate to="/" replace />;
     }
+  };
+  useEffect(() => {
+    updateAuthStatus();
   }, []);
 
   return children;

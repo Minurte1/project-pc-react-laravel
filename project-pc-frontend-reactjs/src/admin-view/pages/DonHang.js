@@ -120,7 +120,7 @@ const DonHang = () => {
                     {/* Thêm thẻ Link để điều hướng đến trang chi tiết */}
                     <Link
                         to={{
-                            pathname: `/chitiet-don-hang/${params.row.MAHD}`,
+                            pathname: `/admin/chi-tiet-don-hang/${params.row.MAHD}`,
                             state: { detailData: params.row } // Truyền dữ liệu qua state
                         }}
                         className="btn btn-info btn-sm"

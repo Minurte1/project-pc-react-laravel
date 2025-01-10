@@ -61,8 +61,8 @@ const ChiTietDonHang = () => {
         setFilteredData(filtered); // Cập nhật dữ liệu sau khi lọc
     };
 
-    const handleShowModal = (donhang) => {
-        selectedChiTietDonHang(donhang);
+    const handleShowModal = (chitietdonhang) => {
+        setSelectedChiTietDonHang(chitietdonhang);
         setShowModal(true)
     };
 
@@ -83,29 +83,43 @@ const ChiTietDonHang = () => {
     };
 
     const columns = [
-        { field: "id", headerName: "Mã", width: 100 },
-        { field: "TEN_KHACH_HANG", headerName: "Tên", width: 150 },
-        { field: "SDT_LIEN_HE_KH", headerName: "Số điện thoại", width: 150 },
-        { field: "GHI_CHU_KH", headerName: "Loại khách", width: 150 },
-        { field: "DIA_CHI_SHIP", headerName: "Địa chỉ nhân hàng", width: 150 },
-        { field: "GHI_CHU_HOA_DON", headerName: "Trạng thái", width: 150 },
+        { field: "id", headerName: "ID", width: 100 },
+        { field: "TENSP", headerName: "Sản phẩm", width: 150 },
+        {
+            field: "ANHSP", headerName: "Ảnh", width: 150, renderCell: (params) => (
+                <img
+                    src={`http://localhost:8000/images/${params.row.ANHSP}`}
+                    alt="Ảnh sản phẩm"
+                    style={{ width: 50, height: 50, objectFit: "cover" }}
+                />
+            )
+        },
+        { field: "TENTL", headerName: "Loại", width: 150 },
+        { field: "DON_GIA", headerName: "Đơn giá", width: 150 },
+        { field: "TON_KHO_SP", headerName: "Tồn kho", width: 100 },
+        { field: "NHA_SAN_XUAT", headerName: "Nhà sản xuất", width: 150 },
+        { field: "CHIP", headerName: "Chip", width: 150 },
+        { field: "MAIN", headerName: "Main", width: 150 },
+        { field: "VGA", headerName: "VGA", width: 150 },
+        { field: "RAM", headerName: "RAM", width: 150 },
+        { field: "ROM", headerName: "ROM", width: 150 },
         {
             field: "actions",
             headerName: "Hành động",
-            width: 250,
+            width: 150,
             renderCell: (params) => (
                 <>
                     <button
                         type="button"
-                        className="btn btn-warning btn-sm mx-1"
+                        className="btn btn-warning"
                         onClick={() => handleShowModal(params.row)}
                     >
                         Sửa
                     </button>
-
                     <button
-                        className="btn btn-danger btn-sm mx-1"
-                        onClick={() => handleDelete(params.row.MAHD)}
+                        type="button"
+                        className="btn btn-danger mx-1"
+                        onClick={() => handleDelete(params.row.MASP)}
                     >
                         Xóa
                     </button>
@@ -127,13 +141,16 @@ const ChiTietDonHang = () => {
                     className="form-control"
                 />
             </div>
+            <div style={{ height: 'auto', width: "100%" }}>
+                <DataGrid rows={filteredData} columns={columns} pageSize={5} />
+            </div>
             <ChiTietDonhangModal
                 show={showModal}
                 handleClose={() => {
                     setShowModal(false);
                     setSelectedChiTietDonHang("");
                 }}
-                chitietdonhang={setSelectedChiTietDonHang}
+                chitietdonhang={selectedChiTietDonHang}
                 mahd={mahd}
                 listSanPham={listSanPham}
                 handleSubmit={handleSaveSanPham}

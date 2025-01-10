@@ -19,7 +19,6 @@ const Dashboard = () => {
     const [barDataDoanhThu, setBarDataDoanhThu] = useState(null);
 
     useEffect(() => {
-        // Giả lập API call để lấy danh sách người dùng
         fetchDoanhThu();
     }, []);
     const fetchDoanhThu = async () => {

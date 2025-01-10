@@ -38,7 +38,7 @@ const ChiTietDonHangModal = ({ show, handleClose, chitietdonhang, mahd, listSanP
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
+        enqueueSnackbar("Đợi một chút!", { variant: "info" });
         try {
             if (chitietdonhang) {
                 // Cập nhật chi tiết đơn hàng

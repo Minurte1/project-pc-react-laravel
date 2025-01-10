@@ -70,6 +70,7 @@ Route::post('/update-don-hang/{id}', [AdminController::class, 'updateDonHang']);
 Route::post('/xoa-don-hang/{id}', [AdminController::class, 'deleteDonHang']);
 
 Route::post('/get-chi-tiet-don-hang/{id}', [AdminController::class, 'getChiTietHoaDon']);
+Route::post('/update-chi-tiet-don-hang/{id}', [AdminController::class, 'updateChiTietHoaDon']);
 
 Route::get('/list-danh-thu', [AdminController::class, 'getListDanhThu']);
 

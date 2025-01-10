@@ -769,6 +769,46 @@ class AdminController extends Controller
         }
     }
 
+    public function updateChiTietHoaDon(Request $request, $maCthd)
+    {
+        // Validate dữ liệu đầu vào
+        $request->validate([
+            'MASP' => 'required|integer',
+            'SO_LUONG' => 'required|integer|min:1',
+            'GIAM_GIA' => 'nullable|numeric|min:0',
+            'GHI_CHU_CTHD' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            // Thực hiện cập nhật chi tiết hóa đơn dựa vào MA_CTHD
+            $updatedRows = DB::table('chi_tiet_hoa_don')
+                ->where('MA_CTHD', $maCthd)
+                ->update([
+                    'MASP' => $request->MASP,
+                    'SO_LUONG' => $request->SO_LUONG,
+                    'GIAM_GIA' => $request->GIAM_GIA ?? 0,
+                    'GHI_CHU_CTHD' => $request->GHI_CHU_CTHD ?? null,
+                ]);
+
+            // Kiểm tra nếu không có dòng nào được cập nhật
+            if ($updatedRows === 0) {
+                return response()->json([
+                    'message' => 'Không tìm thấy chi tiết hóa đơn với MA_CTHD: ' . $maCthd,
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'Cập nhật chi tiết hóa đơn thành công!',
+            ]);
+        } catch (\Exception $e) {
+            // Xử lý lỗi nếu có
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi cập nhật chi tiết hóa đơn.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function getListDanhThu()
     {
         // Truy vấn dữ liệu giỏ hàng của 1 người dùng

@@ -19,7 +19,7 @@ const AdminRouter = () => {
     { path: "/dashboard", element: <Dashboard /> },
     { path: "/nguoi-dung", element: <Users /> },
     { path: "/don-hang", element: <DonHang /> },
-    { path: "/chitiet-don-hang/:mahd", element: <ChiTietDonHang /> },
+    { path: "/chi-tiet-don-hang/:mahd", element: <ChiTietDonHang /> },
     { path: "/san-pham", element: <SanPham /> },
     { path: "/the-loai", element: <TheLoai /> },
     { path: "/*", element: <Navigate to="/" replace /> },
