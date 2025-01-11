@@ -679,6 +679,40 @@ JOIN theloai ON theloai.MATL = sanpham.MATL
                 'GHI_CHU_HOA_DON' => $request->GHI_CHU_HOA_DON,
             ]);
 
+            // Kiểm tra trạng thái GHI_CHU_HOA_DON và cập nhật tồn kho
+            if ($hoaDon->GHI_CHU_HOA_DON != $request->GHI_CHU_HOA_DON) {
+                // Nếu trạng thái hóa đơn thay đổi thành "Đơn thanh toán thành công"
+                if ($request->GHI_CHU_HOA_DON == "Đơn thanh toán thành công") {
+                    // Kiểm tra tồn kho trước khi trừ
+                    $chiTietHoaDon = DB::table('chi_tiet_hoa_don')->where('MAHD', $id)->get();
+                    foreach ($chiTietHoaDon as $cthd) {
+                        $tonKho = DB::table('sanpham')->where('MASP', $cthd->MASP)->value('TON_KHO_SP');
+                        if ($tonKho < $cthd->SO_LUONG) {
+                            // Nếu không đủ tồn kho
+                            DB::rollBack();
+                            return response()->json([
+                                'message' => 'Không đủ tồn kho cho sản phẩm ' . $cthd->MASP,
+                            ], 400);
+                        }
+                    }
+
+                    // Nếu tồn kho đủ, trừ tồn kho cho từng sản phẩm trong chi tiết hóa đơn
+                    foreach ($chiTietHoaDon as $cthd) {
+                        DB::table('sanpham')->where('MASP', $cthd->MASP)
+                            ->decrement('TON_KHO_SP', $cthd->SO_LUONG);
+                    }
+                }
+                // Nếu trạng thái hóa đơn thay đổi thành "Đơn hàng đã hủy" hoặc "Đơn đang chờ xử lý"
+                elseif (in_array($request->GHI_CHU_HOA_DON, ["Đơn hàng đã hủy", "Đơn đang chờ xử lý"])) {
+                    // Cộng lại tồn kho cho từng sản phẩm trong chi tiết hóa đơn
+                    $chiTietHoaDon = DB::table('chi_tiet_hoa_don')->where('MAHD', $id)->get();
+                    foreach ($chiTietHoaDon as $cthd) {
+                        DB::table('sanpham')->where('MASP', $cthd->MASP)
+                            ->increment('TON_KHO_SP', $cthd->SO_LUONG);
+                    }
+                }
+            }
+
             // Commit transaction
             DB::commit();
 
