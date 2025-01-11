@@ -92,12 +92,18 @@ const ListSanPham = () => {
         priceFilter === "0"
           ? item.DON_GIA > 0
           : priceFilter === "10000000"
-          ? item.DON_GIA < 10000000
-          : priceFilter === "20000000"
-          ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
-          : priceFilter === "30000000"
-          ? item.DON_GIA > 20000000
-          : true
+            ? item.DON_GIA < 10000000
+            : priceFilter === "20000000"
+              ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
+              : priceFilter === "30000000"
+                ? item.DON_GIA < 30000000 && item.DON_GIA >= 20000000
+                : priceFilter === "40000000"
+                  ? item.DON_GIA < 40000000 && item.DON_GIA >= 30000000
+                  : priceFilter === "50000000"
+                    ? item.DON_GIA < 100000000 && item.DON_GIA >= 40000000  // Từ 40 triệu đến 100 triệu
+                    : priceFilter === "100000000"
+                      ? item.DON_GIA >= 100000000 // Trên 100 triệu
+                      : true
       );
 
   const sortedData =
@@ -122,65 +128,138 @@ const ListSanPham = () => {
         <div className="tieude">
           <h1>Danh Sách Sản Phẩm</h1>
         </div>
+
         <div className="Searchfillter">
-          <div className="container_TimKiem">
-            <label className="TimKiem_label">
+          <div className="container_TimKiem mb-3">
+            <label className="form-label">
               <b>Tìm kiếm</b>
             </label>
             <input
-              className="TimKiem_input TimKiem_input-hover-green"
-              placeholder="tìm kiếm sản phẩm"
+              type="text"
+              className="form-control"
+              placeholder="Tìm kiếm sản phẩm"
               value={searchTerm}
               onChange={handleSearchChange}
             />
           </div>
-          <div className="fillter_TimKiem">
-            <label className="container_InputRadio_TimKiem">
+
+          <div className="fillter_TimKiem mx-3">
+            {/* Lọc Tất cả */}
+            <div className="form-check">
               <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="0"
                 checked={priceFilter === "0"}
                 onChange={() => handlePriceFilterChange("0")}
+                id="all"
               />
-              Tất cả
-              <span className="checkmark"></span>
-            </label>
-            <label className="container_InputRadio_TimKiem">
+              <label className="form-check-label" htmlFor="all">
+                Tất cả
+              </label>
+            </div>
+
+            {/* Lọc Dưới 10 Triệu */}
+            <div className="form-check">
               <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="10000000"
                 checked={priceFilter === "10000000"}
                 onChange={() => handlePriceFilterChange("10000000")}
+                id="under10M"
               />
-              Dưới 10 Triệu
-              <span className="checkmark"></span>
-            </label>
-            <label className="container_InputRadio_TimKiem">
+              <label className="form-check-label" htmlFor="under10M">
+                Dưới 10 Triệu
+              </label>
+            </div>
+
+            {/* Lọc Từ 10 triệu đến 20 triệu */}
+            <div className="form-check">
               <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="20000000"
                 checked={priceFilter === "20000000"}
                 onChange={() => handlePriceFilterChange("20000000")}
+                id="10to20M"
               />
-              Từ 10 triệu đến 20 triệu
-              <span className="checkmark"></span>
-            </label>
-            <label className="container_InputRadio_TimKiem">
+              <label className="form-check-label" htmlFor="10to20M">
+                Từ 10 triệu đến 20 triệu
+              </label>
+            </div>
+
+            {/* Lọc Từ 20 triệu đến 30 triệu */}
+            <div className="form-check">
               <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="30000000"
                 checked={priceFilter === "30000000"}
                 onChange={() => handlePriceFilterChange("30000000")}
+                id="20to30M"
               />
-              Trên 20 triệu
-              <span className="checkmark"></span>
-            </label>
-            <label className="container_InputRadio_TimKiem">
+              <label className="form-check-label" htmlFor="20to30M">
+                Từ 20 triệu đến 30 triệu
+              </label>
+            </div>
+
+            {/* Lọc Từ 30 triệu đến 40 triệu */}
+            <div className="form-check">
               <input
+                className="form-check-input"
+                type="radio"
+                name="priceFilter"
+                value="40000000"
+                checked={priceFilter === "40000000"}
+                onChange={() => handlePriceFilterChange("40000000")}
+                id="30to40M"
+              />
+              <label className="form-check-label" htmlFor="30to40M">
+                Từ 30 triệu đến 40 triệu
+              </label>
+            </div>
+
+            {/* Lọc Từ 40 triệu đến 100 triệu */}
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="priceFilter"
+                value="50000000"
+                checked={priceFilter === "50000000"}
+                onChange={() => handlePriceFilterChange("50000000")}
+                id="40to100M"
+              />
+              <label className="form-check-label" htmlFor="40to100M">
+                Từ 40 triệu đến 100 triệu
+              </label>
+            </div>
+
+            {/* Lọc Trên 100 triệu */}
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="priceFilter"
+                value="100000000"
+                checked={priceFilter === "100000000"}
+                onChange={() => handlePriceFilterChange("100000000")}
+                id="above100M"
+              />
+              <label className="form-check-label" htmlFor="above100M">
+                Trên 100 triệu
+              </label>
+            </div>
+
+            {/* Lọc Giá tăng dần */}
+            <div className="form-check">
+              <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="asc"
@@ -189,12 +268,17 @@ const ListSanPham = () => {
                   handlePriceFilterChange("0");
                   handleSortChange();
                 }}
+                id="priceAsc"
               />
-              Giá tăng dần
-              <span className="checkmark"></span>
-            </label>
-            <label className="container_InputRadio_TimKiem">
+              <label className="form-check-label" htmlFor="priceAsc">
+                Giá tăng dần
+              </label>
+            </div>
+
+            {/* Lọc Giá giảm dần */}
+            <div className="form-check">
               <input
+                className="form-check-input"
                 type="radio"
                 name="priceFilter"
                 value="desc"
@@ -203,12 +287,15 @@ const ListSanPham = () => {
                   handlePriceFilterChange("0");
                   handleSortChange();
                 }}
+                id="priceDesc"
               />
-              Giá giảm dần
-              <span className="checkmark"></span>
-            </label>
+              <label className="form-check-label" htmlFor="priceDesc">
+                Giá giảm dần
+              </label>
+            </div>
           </div>
         </div>
+
         <ul className="products">
           {sortedData &&
             sortedData.length > 0 &&
