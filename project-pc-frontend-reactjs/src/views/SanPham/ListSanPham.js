@@ -92,18 +92,18 @@ const ListSanPham = () => {
         priceFilter === "0"
           ? item.DON_GIA > 0
           : priceFilter === "10000000"
-            ? item.DON_GIA < 10000000
-            : priceFilter === "20000000"
-              ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
-              : priceFilter === "30000000"
-                ? item.DON_GIA < 30000000 && item.DON_GIA >= 20000000
-                : priceFilter === "40000000"
-                  ? item.DON_GIA < 40000000 && item.DON_GIA >= 30000000
-                  : priceFilter === "50000000"
-                    ? item.DON_GIA < 100000000 && item.DON_GIA >= 40000000  // Từ 40 triệu đến 100 triệu
-                    : priceFilter === "100000000"
-                      ? item.DON_GIA >= 100000000 // Trên 100 triệu
-                      : true
+          ? item.DON_GIA < 10000000
+          : priceFilter === "20000000"
+          ? item.DON_GIA < 20000000 && item.DON_GIA >= 10000000
+          : priceFilter === "30000000"
+          ? item.DON_GIA < 30000000 && item.DON_GIA >= 20000000
+          : priceFilter === "40000000"
+          ? item.DON_GIA < 40000000 && item.DON_GIA >= 30000000
+          : priceFilter === "50000000"
+          ? item.DON_GIA < 100000000 && item.DON_GIA >= 40000000 // Từ 40 triệu đến 100 triệu
+          : priceFilter === "100000000"
+          ? item.DON_GIA >= 100000000 // Trên 100 triệu
+          : true
       );
 
   const sortedData =
@@ -130,11 +130,15 @@ const ListSanPham = () => {
         </div>
 
         <div className="Searchfillter">
-          <div className="container_TimKiem mb-3">
+          <div
+            className="container_TimKiem mb-3 "
+            style={{ marginLeft: "50px" }}
+          >
             <label className="form-label">
               <b>Tìm kiếm</b>
             </label>
             <input
+              style={{ width: "400px" }}
               type="text"
               className="form-control"
               placeholder="Tìm kiếm sản phẩm"
