@@ -30,7 +30,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="site-footer_Footer mt-4">
+    <footer className="site-footer_Footer mt-5">
       <div className="container_Footer">
         <div className="row_Footer">
           <div className="W30__Footer">

@@ -132,7 +132,7 @@ const CartThanhToan = () => {
   return (
     <>
       <Nav2 />
-      <div id="yourFormId">
+      <div id="yourFormId" className="mb-5 pb-5">
         <div className="muahang-container">
           <div className="container-setup">
             <div className="muahang-giay-info">
@@ -278,6 +278,7 @@ const CartThanhToan = () => {
           </div>
         </div>
       </div>
+      <div className="mb-5"><hr /></div>
     </>
   );
 };

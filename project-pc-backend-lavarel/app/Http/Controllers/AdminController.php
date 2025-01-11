@@ -836,7 +836,7 @@ JOIN theloai ON theloai.MATL = sanpham.MATL
         GROUP BY 
             sanpham.MASP, sanpham.TENSP, sanpham.DON_GIA, sanpham.ANHSP, theloai.MATL, theloai.TENTL
         ORDER BY 
-            TONG_DOANH_THU DESC;
+            TONG_DOANH_THU DESC
         ", );
 
         if (empty($listDoanhThu)) {
