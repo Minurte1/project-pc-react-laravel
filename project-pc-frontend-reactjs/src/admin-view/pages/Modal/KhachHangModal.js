@@ -42,15 +42,15 @@ const KhachHangModal = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("formData", formData);
     try {
       if (khachhang) {
         // Cập nhật khách hàng
@@ -189,7 +189,7 @@ const KhachHangModal = ({
                 <Form.Control
                   as="select"
                   name="GHI_CHU_KH"
-                  value={formData.GHI_CHU_KH}
+                  value={formData.GHI_CHU_KH || "Đang hoạt động"} // Giá trị mặc định nếu không có
                   onChange={handleChange}
                   required
                 >

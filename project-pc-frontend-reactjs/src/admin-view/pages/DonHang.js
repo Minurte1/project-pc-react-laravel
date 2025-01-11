@@ -132,12 +132,12 @@ const DonHang = () => {
           >
             Sửa
           </button>
-          <button
+          {/* <button
             className="btn btn-danger btn-sm mx-1"
             onClick={() => handleDelete(params.row.MAHD)}
           >
             Xóa
-          </button>
+          </button> */}
         </>
       ),
     },
@@ -148,6 +148,7 @@ const DonHang = () => {
       <h5 className="card-title mb-4">Quản lý đơn hàng</h5>
       <div className="mb-3">
         <input
+          style={{ width: "400px" }}
           type="text"
           value={searchText}
           onChange={handleSearch}
@@ -157,7 +158,7 @@ const DonHang = () => {
       </div>
 
       {/* Dropdown Lọc Trạng Thái */}
-      <div className="mb-3">
+      <div style={{ width: "400px" }} className="mb-3">
         <label>Lọc theo trạng thái:</label>
         <select
           className="form-control"

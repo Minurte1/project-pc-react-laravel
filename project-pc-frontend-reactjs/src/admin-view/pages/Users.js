@@ -119,6 +119,7 @@ const Users = () => {
       {/* Ô tìm kiếm */}
       <div className="mb-3">
         <input
+          style={{ width: "400px" }}
           type="text"
           value={searchText}
           onChange={handleSearch}
