@@ -66,7 +66,7 @@ const Nav2 = () => {
             </div>
           </a>
           <div className="ml-auto_Nav2">
-            <a onClick={() => navigate("/Desktop")} className="nav-item_Nav2">
+            {/* <a onClick={() => navigate("/Desktop")} className="nav-item_Nav2">
               <img src={desktop} alt="Desktop logo" />
               <span>Desktop</span>
             </a>
@@ -80,7 +80,7 @@ const Nav2 = () => {
             </a>
             <a onClick={() => navigate("/All")} className="nav-item_Nav2">
               Tất Cả
-            </a>
+            </a> */}
           </div>
 
           <div className="cart-div_Nav2">
@@ -133,8 +133,8 @@ const Nav2 = () => {
               }}
             >
               {userData &&
-              userData.TEN_PHAN_QUYEN &&
-              userData.TEN_PHAN_QUYEN === "Admin" ? (
+                userData.TEN_PHAN_QUYEN &&
+                userData.TEN_PHAN_QUYEN === "Admin" ? (
                 <MenuItem
                   onClick={() => navigate("/admin")}
                   style={{
