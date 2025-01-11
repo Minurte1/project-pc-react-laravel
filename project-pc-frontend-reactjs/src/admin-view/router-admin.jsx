@@ -12,8 +12,11 @@ import Settings from "./pages/Settings";
 import NavBarAdmin from "./components/navBarAdmin";
 import HeaderAdmin from "./components/headerAdmin";
 import Nav2 from "../share-view/Nav2";
+import { useSelector } from "react-redux";
 
 const AdminRouter = () => {
+  const { isAuthenticated, userInfo } = useSelector((state) => state.auth);
+
   const routes = [
     { path: "/", element: <Dashboard /> },
     { path: "/dashboard", element: <Dashboard /> },
@@ -26,6 +29,11 @@ const AdminRouter = () => {
   ];
 
   const element = useRoutes(routes);
+
+  // Điều kiện kiểm tra quyền truy cập
+  if (!isAuthenticated || userInfo.TEN_PHAN_QUYEN !== "Admin") {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div>

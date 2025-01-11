@@ -53,13 +53,14 @@ const DonHang_DangXuLy_User = () => {
   const handleUpdateStatusCanceled = async (orderId) => {
     try {
       // Gửi yêu cầu cập nhật trạng thái "Đã hủy"
-      const response = await axios.put(`${api}/don-hang/${orderId}/canceled`);
-
-      if (response.data.EC === 1) {
-        enqueueSnackbar(response.data.EM); // Thông báo thành công
-      } else {
-        enqueueSnackbar(response.data.EM); // Thông báo lỗi
-      }
+      const response = await axios.put(
+        `http://localhost:8000/api/orders/${userInfo.MA_TK}/${orderId}/update-note`,
+        {
+          GHI_CHU_HOA_DON: "Đơn hàng đã hủy",
+        }
+      );
+      fetchOrders();
+      enqueueSnackbar(response.data.message, { variant: "info" });
     } catch (err) {
       console.error("Error updating order status:", err);
       enqueueSnackbar("Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.");
